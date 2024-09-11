@@ -1,0 +1,37 @@
+{
+  "name": "ahoi",
+  "description": "A Node.js web application for posting and renting boats",
+  "version": "1.0.0",
+  "main": "src/index.mjs",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "echo \"Error: no seed specified\" && exit 1",
+    "start": "node --env-file=.env --experimental-sqlite --watch --experimental-default-type=module src/index.mjs"
+  },
+  "homepage": "https://ahoi.app#readme",
+  "keywords": ["node.js", "sqlite", "web components", "aws lightsail"],
+  "author": {
+    "name": "Kiko Ferrer",
+    "email": "ffcatala@gmail.com",
+    "url": "https://kikoferrer.com/"
+  },
+  "contributors": [
+    {
+      "name": "Kiko Ferrer",
+      "email": "ffcatala@gmail.com",
+      "url": "https://kikoferrer.com/"
+    },
+    {
+      "name": "Florian Cords",
+      "email": "fcords@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "os": ["darwin", "linux"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fferrer89/ahoi.git"
+  }
+}
