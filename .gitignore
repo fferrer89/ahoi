@@ -38,7 +38,7 @@ jspm_packages/
 # dot-env environment variable files
 # .env -> environment variables for production environment
 .env
-.env
+.env.development
 .env.test
 .env.stage
 
