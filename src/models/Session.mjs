@@ -1,66 +1,118 @@
 // Sessions Management
-// 1. Set up the SQLite Database and create a table to store session data:
 import { DatabaseSync } from 'node:sqlite';
+import Database from './Database.mjs';
+const inMemoryDb = new DatabaseSync(':memory:'); // Database is open (similar to db.open()) // In-Memory database
 
-// 2. Create a Session Manager singletonClass (Session.mjs):
-/**
- * // Access the singleton instance
- * const session = new Session();
- * session.createSession();
- *
- * // Attempt to create another instance
- * const anotherSession = new Session();
- * console.log(session === anotherSession); // Output: true
- */
-class Session { // Class that provides methods for creating and retrieving sessions
-    static #sessionInstance;
-    #sessionExpireTime;
-    constructor(sessionExpireTime=3600000) {
-        // 3600000 milliseconds ==== 1 hour
-        if (Session.#sessionInstance) {
-            return Session.#sessionInstance;
-        }
-        this.#sessionExpireTime = sessionExpireTime;
-        this.db = new DatabaseSync(':memory:'); // Database is open (similar to db.open()) // In-Memory database
-        // this.db = new DatabaseSync('./data/sessions'); // In-Disk database
-        // this.db = new DatabaseSync('./data/db'); // In-Disk database
-        this.db.exec(`
-              CREATE TABLE sessions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                userId INTEGER,
-                expires INTEGER
-              ) STRICT
-            `);
-        Session.#sessionInstance = this;
-    }
-    async createSession(userId=null) {
-        // method that generates a unique ID, stores the sessions data in the database, and returns the sessions ID.
-        const expires = Date.now() + this.#sessionExpireTime; // 1 hour from now
-        const insert = this.db.prepare(`INSERT INTO sessions (userId, expires) VALUES (?, ?)`);
-        const session = insert.run(userId, expires);
-        return session.lastInsertRowid; // the sessions id
+export default class Session { // Class that provides methods for creating and retrieving sessions
+    static #db = inMemoryDb; // Database is open (similar to db.open()) // In-Memory database
+    static #dbTableName = 'sessions';
+    static {
+        Session.db.exec(`
+        CREATE TABLE IF NOT EXISTS ${Session.#dbTableName} (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            userId INTEGER,
+            expireTime INTEGER,
+            createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')), 
+            createdAtStr TEXT DEFAULT (DATETIME('now'))) 
+            STRICT`);
     }
 
-    async getSession(id) {
-        id = parseInt(id);
-        // method that retrieves session data based on the session ID, checks if it has expired, and deletes it if necessary.
-        const query = this.db.prepare(`SELECT id, userId, expires FROM sessions WHERE id = ? LIMIT 1`); // Same as statement from above
-        const session = query.get(id);
-        if (session) {
-            const expires = Date.now();
-            if (expires < session.expires) {
-                return session.id;
-            } else {
-                return await this.removeSession(id);
-            }
-        } else {
-            return null;
+    /**
+     * The record id as stored in the session database. Its value will be undefined if the session has not been stored
+     * in the database.
+     */
+    #id;
+    /**
+     * The created date of the session in the database in UTC (The number of seconds that have elapsed from
+     * January 1, 1970, 00:00:00 until the time the record was created). To convert it to a JS date use the
+     * following formula: 'new Date(createdAt * 1000)'; Since a Unix timestamp is in seconds, we need to multiply it
+     * by 1000 to convert it to milliseconds.
+     */
+    #createdAt;
+    #expireTime; // Expiration time in milliseconds
+    #userId;
+
+    /**
+     *  3,600,000 milliseconds == 3,600 seconds == 1 hour
+     *
+     * @param expireTime number of seconds in UTC (time elapsed since January 1, 1970, 00:00:00) that the session will
+     * last
+     * @param storeInDb
+     * @param userId
+     */
+    constructor(expireTime = 3_600, storeInDb=false, userId=null) {
+        this.#expireTime = expireTime; // 1 hour from now
+        this.#userId = userId;
+        this.#createdAt = Math.floor(Date.now() / 1000); // Created time in UTC seconds
+        if (storeInDb) {
+            this.#id = Database.insert(this);
         }
     }
-    async removeSession(id) {
-        const del = this.db.prepare(`DELETE FROM sessions WHERE id = ?`);
-        const session = del.run(id);
+    static get db() {
+        return this.#db;
+    }
+    static get dbTableName() {
+        return this.#dbTableName;
+    }
+
+    /**
+     * Returns
+     * @param id
+     * @return {id, userId, expireTime, createdAt}
+     */
+    static getSessionFromDb(id) {
+        const session = Database.query(this.db, this.dbTableName, id);
         return session;
     }
+    static isSessionDbExpired(createdAt, expireTime) {
+        const expireAtUtc = createdAt + expireTime;
+        const utcNow = Math.floor(Date.now() / 1000);
+        return (expireAtUtc < utcNow);
+    }
+
+    get db() {
+        return Session.#db;
+    }
+    get dbTableName() {
+        return Session.#dbTableName;
+    }
+    get dbMutableFieldNames() {
+        return ['expireTime', 'userId'];
+    }
+    get dbMutableFieldValues() {
+        return [this.expireTime, this.userId];
+    }
+    get id() {
+        return this.#id;
+    }
+    get createdAt() {
+        return this.#createdAt;
+    }
+    get expireTime() {
+        return this.#expireTime;
+    }
+    get userId() {
+        return this.#userId;
+    }
+    isSessionExpired() {
+        const expireAtUtc = this.#createdAt + this.expireTime;
+        const utcNow = Math.floor(Date.now() / 1000);
+        return (expireAtUtc < utcNow);
+    }
 }
-export default Session;
+
+// const session = new Session(1, true);
+// setTimeout(() => {
+//     console.log(`session.id: ${session.id}`);
+//     console.log(`session.createdAt: ${session.createdAt}`);
+//     console.info(session.isSessionExpired());
+//     let sess = Session.getSessionFromDb(session.id);
+//     console.log(sess);
+//     console.log('-------------');
+//     Database.delete(session);
+//     Session.getSessionFromDb(session.id);
+//     console.log('-------------');
+//     console.info(session.isSessionExpired());
+//     }, 4000);
+// console.log(session);
+// console.info(session.isSessionExpired());
