@@ -1,4 +1,4 @@
-import * as fs from "node:fs/promises";
+import fs from "node:fs/promises";
 import path from "node:path";
 import.meta.url // This is defined exactly the same as it is in browsers providing the URL of the current module file.
 
