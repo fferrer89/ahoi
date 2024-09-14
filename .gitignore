@@ -50,3 +50,10 @@ jspm_packages/
 
 # macOS specific files and directories
 .DS_Store
+
+# SSL certificate for encrypting communication (HTTPS) between a client and a server (using TLS/SSL).
+.sslCertificate
+certificate*
+csr.pem
+private-key.pem
+*.pem

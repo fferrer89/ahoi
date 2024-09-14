@@ -10,10 +10,6 @@ export default class Database {
         const dbTable = data.dbTableName;
         const fieldNames = data.dbMutableFieldNames;
         const fieldValues = data.dbMutableFieldValues;
-        console.log('Database.insert();');
-        // console.log(dbTable);
-        // console.log(fieldNames);
-        // console.log(fieldValues);
         const insert = data.db.prepare(
             `INSERT INTO ${dbTable} (${fieldNames.join()}) VALUES (${'?,'.repeat(fieldValues.length).slice(0, -1)})`
         );
