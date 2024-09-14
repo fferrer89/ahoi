@@ -1,6 +1,6 @@
 // Sessions Management
 import { DatabaseSync } from 'node:sqlite';
-import Database from './Database.mjs';
+import Database from './database.mjs';
 const inMemoryDb = new DatabaseSync(':memory:'); // Database is open (similar to db.open()) // In-Memory database
 
 export default class Session { // Class that provides methods for creating and retrieving sessions
@@ -40,7 +40,7 @@ export default class Session { // Class that provides methods for creating and r
      * @param storeInDb
      * @param userId
      */
-    constructor(expireTime = 3_600, storeInDb=false, userId=null) {
+    constructor(expireTime = 3600, storeInDb=false, userId=null) {
         this.#expireTime = expireTime; // 1 hour from now
         this.#userId = userId;
         this.#createdAt = Math.floor(Date.now() / 1000); // Created time in UTC seconds
