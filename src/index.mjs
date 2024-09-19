@@ -32,7 +32,7 @@ server.on('request', async (req, res) => {
     // When an HTTP request hits the server, this node application will call the functions below.
     try {
         middlewares(req, res);
-        routes(req, res);
+        !res.writableEnded && routes(req, res);
     } catch (err) {
         errorHandling(err, req, res)
     }

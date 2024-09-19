@@ -1,6 +1,7 @@
-import fs from "node:fs/promises";
+import fsSync from "node:fs";
+import fs from "node:fs/promises"; // Async
 import path from "node:path";
-import.meta.url // This is defined exactly the same as it is in browsers providing the URL of the current module file.
+import Layout from "../views/layout.mjs";
 
 /**
  * Route handler for the home page
@@ -37,7 +38,7 @@ export default async function homeRoute(req, res) {
         case 'HEAD':
             try {
                 const homePagePath = path.resolve('src/static/index.html');
-                const homePageFileStats = await fs.stat(homePagePath);
+                const homePageFileStats = fsSync.statSync(homePagePath);
                 // homePageFileStats.mtime; // The timestamp (UTC) indicating the last time this file was modified.
                 // homePageFileStats.size; // The size of the file in bytes. 1024000 bits = 1MB
                 // homePageFileStats.birthtime; // The timestamp indicating the creation time of this file.
@@ -58,16 +59,17 @@ export default async function homeRoute(req, res) {
             break;
         case 'GET':
             const acceptContentType = req?.headers['accept'];
-            if (acceptContentType === "*/*" || acceptContentType.startsWith("text/*") || acceptContentType.startsWith("text/html")) {
-                // */*, text/*, or text/html
+            if (acceptContentType.includes( "*/*") || acceptContentType.includes("text/*") || acceptContentType.includes("text/html")) {
                 try {
+                    const layout = Layout({page: { title: 'Home'}});
+                    await fs.writeFile('build/index.html', layout, {encoding: 'utf8'});
                     let homePage;
-                    const homePagePath = path.resolve('src/static/index.html');
+                    const homePagePath = path.resolve('build/index.html');
                     const homePageFileStats = await fs.stat(homePagePath);
                     homePage = await fs.readFile(homePagePath, { encoding: 'utf8' });
                     res.writeHead(200,
                         {
-                            'Content-Type': 'text/html; charset=UTF-8', 'Content-Length': homePageFileStats.size,
+                            'Content-Type': 'text/html; charset=UTF-8','Content-Length': homePageFileStats.size,
                             'Last-Modified': homePageFileStats.mtime
                         }
                     );
@@ -84,7 +86,6 @@ export default async function homeRoute(req, res) {
             break;
         case 'POST':
             const reqContentType = req?.headers['Content-Type'];
-            console.log(`CT: ${reqContentType}`);
             if (reqContentType === "*/*" || reqContentType?.startsWith("application/*") || reqContentType?.startsWith("application/json")) {
                 // */*, application/*, or application/json
             } else {
