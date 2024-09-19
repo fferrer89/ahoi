@@ -4,7 +4,7 @@ const ENV = process.env.ENV ? process.env.ENV : 'development';
  * by the next middlewares, routes, route handlers, and/or controllers.
  */
 export default function responseHeaders(req, res) {
-    console.info('-loggerMiddleware');
+    console.info('-responseHeadersMiddleware');
     res.setHeader('Server', 'Node.js'); // res.writeHead(204, {'Server': 'Apache'}); in later code overrides this
     res.setHeader('Content-Language', 'en-us');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
