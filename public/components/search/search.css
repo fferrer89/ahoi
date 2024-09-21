@@ -1,0 +1,38 @@
+li {
+    list-style: none;
+}
+select[aria-visited=false] {
+    color: #999;
+}
+select[aria-visited=true] {
+    color: initial;
+}
+select option[value="boatType"] {
+    display: none;
+}
+input[type=date] {
+    color: #999;
+}
+input[type=date]:user-valid{
+    color: initial;
+}
+
+
+::slotted(*) {
+    /* To style ANY slotted content */
+}
+:host {
+    /* Apply default style to this component (search-ahoi). The style in the "normal/light DOM" take precedence over this style*/
+}
+:host-context(section) {
+    /*Style only applies to this custom component (HOST element)search-ahoi that is inside of a section html element*/
+    color: orange;
+}
+
+:where(input, button, textarea, select, input::file-selector-button) {
+    /*To make sure form controls inherit the font styling of their containers*/
+    font: inherit;
+    font-size: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+}

@@ -1,0 +1,74 @@
+/*This file covers the most basic aspects of styling your HTML, with selectors such as body, a, main, hr, etc. as well as a few
+“reset” rules such as box-sizing: border-box. Also put basic typographical style rules for tags like h1, p, blockquote,
+etc. Also add default styles for form, input, button, etc. Mostly concerned with styling semantic HTML tags and common
+layouts.*/
+
+/*The first declared layer gets the lowest priority and the last declared layer gets the highest priority. A rule in
+'resets' would be applied even if it has lower specificity than the rule in 'globals'.*/
+@layer globals, resets;
+
+@layer resets {
+    /*-------------   Reset Rules   ----------------*/
+    html {
+        box-sizing: border-box; /*If changing the width, padding and border are contained/‘inside’ within the width*/
+        text-size-adjust: none; /*Optional to ensure that your layouts on mobile phones won’t inadvertently trigger a
+         change where font sizes are suddenly larger than you’re expecting*/
+    }
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    p, h1, h2, h3, h4, h5, h6, blockquote {
+        /*Optionally add ‘ul, ol, blockquote, figure’ if needed*/
+        overflow-wrap: break-word;
+    }
+    :where(img, svg, video) {
+        /*To make sure images won’t overflow their container, so that a large image will not destroy its container for example*/
+        /*:where() has lowest specificity, so this rule-set will be overridden if there is another rule-set in any of the elements (img, svg, video) anywhere in the css files*/
+        max-inline-size: 100%; /*equivalent to ‘max-width: 100%’*/
+        block-size: auto; /*equivalent to ‘height: auto’*/
+    }
+    :where(input, button, textarea, select, input::file-selector-button) {
+        /*To make sure form controls inherit the font styling of their containers*/
+        font: inherit;
+        font-size: inherit;
+        color: inherit;
+        letter-spacing: inherit;
+    }
+
+    /*Optional resets:*/
+    :where(a[href], area, button, input:not([type="text"], [type="email"], [type="number"], [type="password"], [type=""], [type="tel"], [type="url"]), label[for], select, summary, [tabindex]:not([tabindex*="-"])) {
+        /*Set the cursor to a pointer (aka a hand) for certain elements*/
+        cursor: pointer;
+    }
+}
+
+@layer globals {
+    /*-------------   Semantic elements   ----------------*/
+    html {
+        /*height: 100%;*/
+    }
+    body {
+        /*background-color: var(--secondary-color);*/
+        /*color: white;*/
+        font-family: 'Open Sans', sans-serif;
+    }
+    [autocapitalize="characters"] {
+        text-transform: uppercase;
+    }
+    a {
+        text-decoration: none;
+        color: inherit; /*inherit: Get the property from the parent element*/
+    }
+    ul {
+        list-style: none;
+        padding-inline-start: 0;
+    }
+    li {
+        list-style: none;
+    }
+
+}

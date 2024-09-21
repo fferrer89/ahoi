@@ -1,0 +1,12 @@
+/*Design Tokens: Contains css properties for project borders, colors, fonts, sizes, transitions, … */
+:root {
+    /* Base Design Tokens */
+    --primary-color: #30D5C8; /*Turquoise*/
+    --secondary-color: #002662; /*Dark blue*/
+
+    /* Semantic Design Tokens */
+    --main-content-width: 1200px;
+    --main-content-width-sm: 1000px;
+
+    --padding-inline-layout: 2rem;
+}
