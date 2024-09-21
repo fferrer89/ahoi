@@ -2,6 +2,8 @@ import fsSync from "node:fs";
 import fs from "node:fs/promises"; // Async
 import path from "node:path";
 import Layout from "../views/layout.mjs";
+import Home from "../views/pages/home.mjs";
+
 
 /**
  * Route handler for the home page
@@ -61,7 +63,8 @@ export default async function homeRoute(req, res) {
             const acceptContentType = req?.headers['accept'];
             if (acceptContentType.includes( "*/*") || acceptContentType.includes("text/*") || acceptContentType.includes("text/html")) {
                 try {
-                    const layout = Layout({page: { title: 'Home'}});
+                    const home = Home();
+                    const layout = Layout({page: { title: 'Home'}}, [home]);
                     await fs.writeFile('build/index.html', layout, {encoding: 'utf8'});
                     let homePage;
                     const homePagePath = path.resolve('build/index.html');

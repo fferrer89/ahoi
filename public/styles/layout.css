@@ -1,0 +1,8 @@
+/*For page layout and structure (header, footer, content).
+ Use this file to set up styles for common layouts (e.g.: hgroup > :where(h1,h2) {…}) throughout your HTML templates)*/
+
+/*-------------   Layouts   ----------------*/
+/*Header-Footer layout.*/
+body:has(header:first-child + main:nth-child(2) + footer:last-child) {
+}
+

@@ -22,11 +22,13 @@ import handleBody from "./handleBody.mjs";
  *   - Caching: It can cache responses to improve performance and reduce load on the server.
  *
  * Common examples of middleware:
- *   - Authentication middleware: Verifies user credentials and grants or denies access to protected resources (e.g.: /dashboard).
+ *   - Authentication middleware: Verifies user credentials and grants or denies access to protected resources (e.g.:
+ *   /dashboard).
  *   - Logging middleware: Records information about incoming and outgoing requests for analysis and troubleshooting.
  *   - Body parsing middleware: Parses request bodies (for example, JSON, form data) for processing.
  *   - CORS middleware: Enables cross-origin resource sharing, allowing requests from different domains.
  *   - Rate limiting middleware: Limits the number of requests a client can make within a specific time frame.
+ *
  * @param req
  * @param res
  */
