@@ -9,6 +9,5 @@
     /* Semantic Design Tokens */
     --main-content-width: 1200px;
     --main-content-width-sm: 1000px;
-
-    --padding-inline-layout: 2rem;
+    --padding-inline-layout: clamp(1.5rem, 6vw, 6rem);
 }

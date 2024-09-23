@@ -50,11 +50,23 @@ layouts.*/
 @layer globals {
     /*-------------   Semantic elements   ----------------*/
     html {
-        /*height: 100%;*/
+        scroll-behavior: smooth; /* Enable smooth scrolling for the entire page */
+    }
+    h1 {
+        font-size: 4rem;
+    }
+    h2 {
+        font-size: 3.5rem;
+        font-weight: 350;
+    }
+    h3 {
+        font-size: 1.8rem;
+        font-weight: 350;
+    }
+    h4 {
+        font-size: 1.2rem;
     }
     body {
-        /*background-color: var(--secondary-color);*/
-        /*color: white;*/
         font-family: Inter, 'Open Sans', sans-serif;
     }
     [autocapitalize="characters"] {
