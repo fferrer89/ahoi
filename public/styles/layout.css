@@ -5,6 +5,58 @@
 /*Header-Footer layout.*/
 body:has(header:first-child + main:nth-child(2) + footer:last-child) {
 }
+/*Two-column layout (section > hgroup and figure > img OR figure > img and section > hgroup)*/
+section:has( > section:first-child + figure:nth-child(2) > img, > figure:first-child + section:nth-child(2) > hgroup) {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-block: 4rem;
+    > figure {
+        margin-inline: 0;
+        margin-block-end: 0;
+        position: relative;
+        > figcaption {
+            position: absolute;
+            z-index: 1;
+            color: white;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            width: 90%;
+            > h2 {
+                font-size: 4rem;
+                letter-spacing: 6px;
+            }
+        }
+    }
+    > section {
+        padding-inline-start: 3rem;
+        padding-inline-end: 6rem;
+        > hgroup {
+            margin-block: 4rem;
+            > h3 {
+                color: #0047AB;
+            }
+        }
+    }
+    @media (max-width: 1200px) {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        > section {
+            padding-inline: 4rem;
+            > hgroup > p {
+                max-width: 800px;
+            }
+        }
+    }
+    @media (max-width: 640px) {
+        > section {
+            padding-inline: 2rem;
+        }
+    }
+}
 
 /*The global part attribute makes a shadow tree element visible to its parent DOM. In this way, you can apply CSS
 styles to elements in the shadow tree from outside of it.*/
@@ -25,6 +77,7 @@ body > header {
     align-items: center;
     width: 100%;
     background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 1px 5px dimgray;
     &:has(+ main > section[data-layout-variant="hero"]) {
         /*Applies to page headers that contain a hero section. It targets the header section*/
         position: fixed;
@@ -83,15 +136,49 @@ body > header {
          }
     }
 }
+
+/*Page footer structure*/
+body > footer {
+    padding-inline: clamp(1rem, 3vw, 3rem);
+    padding-block: clamp(0.5rem, 1.5vw, 2rem);;
+    background-color: var(--tertiary-color);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    > * {
+        max-width: 400px;
+    }
+    > section:has(a[href^='/boats']) {
+        & li {
+            padding-block: 3px;
+        }
+    }
+    > address {
+        > a {
+            padding-inline: 0.5rem;
+            & path:hover {
+                fill: rgba(48, 213, 200, 0.6);
+            }
+        }
+    }
+    @media screen and (max-width: 1000px) {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding-block: clamp(1.5rem, 3vw, 2.5rem);
+    }
+}
+
 /*Hero structure*/
-section[data-layout-variant=hero] {
+section[data-layout-variant*=hero] {
     > h1 {
-        font-size: xxx-large;
         font-weight: 350;
         text-align: center;
     }
     > search-ahoi {
-        margin: 3rem 0.5rem;
+        margin: 4rem 0.5rem;
     }
     color: white;
     display: flex;
@@ -101,10 +188,6 @@ section[data-layout-variant=hero] {
 
     height: 100vh;
     width: 100vw;
-    background-image: url(/public/assets/images/white-sailing-boat-at-dusk.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
 
     /*Image overlay*/
     position: relative;
@@ -118,5 +201,64 @@ section[data-layout-variant=hero] {
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.3);
+    }
+}
+
+/*-------------   Specific element styles   ----------------*/
+main#home {
+    > section:first-of-type {
+        background-image: url(/public/assets/images/white-sailing-boat-at-dusk.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
+}
+section#how-it-works {
+    padding-inline: var(--padding-inline-layout);
+    > h2 {
+        color: var(--primary-color);
+        margin-block-end: 0;
+    }
+    & h3 {
+        color: #0047AB;
+    }
+    & hgroup {
+        > h4 {
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+    }
+    > section {
+        padding-block: clamp(1rem, 3vw, 3rem);
+        /*padding-block: 2rem;*/
+        &:not(:first-of-type) {
+            border-top: 2px solid rgba(128, 128, 128, 0.5);;
+        }
+        > h3 + section {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 60px;
+        }
+    }
+    @media screen and (max-width: 1000px) {
+        > section > h3 + section {
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+    }
+    @media screen and (max-width: 500px) {
+        text-align: center;
+        & hgroup {
+            > h4 {
+                justify-content: center;
+                gap: 2px;
+            }
+        }
+        > section > h3 + section {
+            grid-template-columns: 1fr;
+            gap: 2px;
+        }
     }
 }

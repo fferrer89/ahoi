@@ -26,7 +26,7 @@ export default function Home(props, children) {
     // ${searchTemplate && `<script type="module" src="/public/components/search/search.mjs"></script>`}
     return (
         html`
-            <main>
+            <main id="home">
                 <section data-layout-variant="hero">
                     <h1>Rent any boat anywhere</h1>
                     <search-ahoi max-years-ahead-reservation="4">
