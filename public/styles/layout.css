@@ -6,3 +6,117 @@
 body:has(header:first-child + main:nth-child(2) + footer:last-child) {
 }
 
+/*The global part attribute makes a shadow tree element visible to its parent DOM. In this way, you can apply CSS
+styles to elements in the shadow tree from outside of it.*/
+/*search-ahoi::part(form-search) {*/
+/*<form action="./boats" method="GET" part="form-search">*/
+
+/*}*/
+
+
+/*Page header structure*/
+body > header {
+    container-name: page-header;
+    container-type: inline-size;
+    color: var(--secondary-color);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    &:has(+ main > section[data-layout-variant="hero"]) {
+        /*Applies to page headers that contain a hero section. It targets the header section*/
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 2;
+    }
+    > nav {
+        /*Global navigation bar Structure*/
+        margin-inline: 40px;
+        > ul {
+            > li {
+                display: inline-block;
+                &:has(a[href$='signup']) {
+                    color: white;
+                    background-color: var(--primary-color);
+                    border-radius: 5px;
+                    padding-block: 10px;
+                    > a:hover {
+                        color: var(--secondary-color);
+                    }
+                }
+                > a {
+                    padding-inline: 1.6rem;
+                    &:hover {
+                        color: var(--primary-color);
+                    }
+                }
+            }
+        }
+    }
+    @container page-header (max-width: 850px) {
+        /*Applies when the width of the 'body > header' element is narrower than 800px*/
+        > nav {
+            > ul {
+                > li:has(a[href$='#how-it-works']) {
+                    display: none;
+                }
+            }
+        }
+    }
+    @container page-header (max-width: 650px) {
+        > nav {
+            > ul {
+                > li:has(a[href$='#find-your-crew']) {
+                    display: none;
+                }
+            }
+        }
+    }
+    @media (max-width: 500px) {
+        /*Applies when the width screen is narrower than 768px*/
+        justify-content: space-between;
+         > nav, > figure {
+             margin-inline: 15px;
+         }
+    }
+}
+/*Hero structure*/
+section[data-layout-variant=hero] {
+    > h1 {
+        font-size: xxx-large;
+        font-weight: 350;
+        text-align: center;
+    }
+    > search-ahoi {
+        margin: 3rem 0.5rem;
+    }
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+    width: 100vw;
+    background-image: url(/public/assets/images/white-sailing-boat-at-dusk.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+
+    /*Image overlay*/
+    position: relative;
+    z-index: 1;
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+}

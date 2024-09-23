@@ -3,6 +3,8 @@
     /* Base Design Tokens */
     --primary-color: #30D5C8; /*Turquoise*/
     --secondary-color: #002662; /*Dark blue*/
+    --tertiary-color: #F2F2F2; /*Light Gray*/
+
 
     /* Semantic Design Tokens */
     --main-content-width: 1200px;

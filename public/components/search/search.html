@@ -1,62 +1,68 @@
-<template id="search-template" >
+<template id="search-template">
     <link rel="stylesheet" href="/public/components/search/search.css">
     <search>
-        <form action="./boats" method="GET">
+        <form action="./boats" method="GET" part="form-search">
+            <!--part: to control what flows out of your component (from Shadow DOM to Light/Normal DOM) in terms of its styling
+            API. When an element has a 'part', it then can be targeted via the '::part()' pseudo-element in any stylesheet
+            authored outside of the component.-->
+            <!--The global part attribute (part="form-search") makes a shadow tree element visible to its parent DOM. In
+            this way, you can apply CSS styles to elements in the shadow tree from outside of it.-->
             <ul>
                 <li>
                     <label for="location">
-                        <svg width="24" height="32" viewBox="0 0 24 32" fill="none"
+                        <svg width="22" height="30" viewBox="0 0 24 32" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
                             <path d="M13.4812 31.2C16.6875 27.1875 24 17.4625 24 12C24 5.375 18.625 0 12 0C5.375 0 0 5.375 0 12C0 17.4625 7.3125 27.1875 10.5188 31.2C11.2875 32.1562 12.7125 32.1562 13.4812 31.2ZM12 8C13.0609 8 14.0783 8.42143 14.8284 9.17157C15.5786 9.92172 16 10.9391 16 12C16 13.0609 15.5786 14.0783 14.8284 14.8284C14.0783 15.5786 13.0609 16 12 16C10.9391 16 9.92172 15.5786 9.17157 14.8284C8.42143 14.0783 8 13.0609 8 12C8 10.9391 8.42143 9.92172 9.17157 9.17157C9.92172 8.42143 10.9391 8 12 8Z"
                                   fill="#7F7F7F"/>
                         </svg>
+                        <input list="suggested-locations" name="location" id="location"
+                               aria-label="Location" placeholder="Location" required
+                        >
+                        <datalist id="suggested-locations">
+                            <option value="Chicago, IL">
+                            <option value="Boston, MA">
+                            <option value="Newport, RI">
+                            <option value="Marblehead, MA">
+                            <option value="Miami, FL">
+                        </datalist>
                     </label>
-                    <input list="suggested-locations" name="location" id="location"
-                           aria-label="Location" placeholder="Location" required
-                    >
-                    <datalist id="suggested-locations">
-                        <option value="Chicago, IL">
-                        <option value="Boston, MA">
-                        <option value="Newport, RI">
-                        <option value="Marblehead, MA">
-                        <option value="Miami, FL">
-                    </datalist>
                 </li>
                 <li>
                     <label for="date">
-                        <svg width="28" height="32" viewBox="0 0 28 32" fill="none"
+                        <svg width="26" height="30" viewBox="0 0 28 32" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
                             <path d="M8 0C9.10625 0 10 0.89375 10 2V4H18V2C18 0.89375 18.8937 0 20 0C21.1063 0 22 0.89375 22 2V4H25C26.6562 4 28 5.34375 28 7V10H0V7C0 5.34375 1.34375 4 3 4H6V2C6 0.89375 6.89375 0 8 0ZM0 12H28V29C28 30.6562 26.6562 32 25 32H3C1.34375 32 0 30.6562 0 29V12ZM4 17V19C4 19.55 4.45 20 5 20H7C7.55 20 8 19.55 8 19V17C8 16.45 7.55 16 7 16H5C4.45 16 4 16.45 4 17ZM12 17V19C12 19.55 12.45 20 13 20H15C15.55 20 16 19.55 16 19V17C16 16.45 15.55 16 15 16H13C12.45 16 12 16.45 12 17ZM21 16C20.45 16 20 16.45 20 17V19C20 19.55 20.45 20 21 20H23C23.55 20 24 19.55 24 19V17C24 16.45 23.55 16 23 16H21ZM4 25V27C4 27.55 4.45 28 5 28H7C7.55 28 8 27.55 8 27V25C8 24.45 7.55 24 7 24H5C4.45 24 4 24.45 4 25ZM13 24C12.45 24 12 24.45 12 25V27C12 27.55 12.45 28 13 28H15C15.55 28 16 27.55 16 27V25C16 24.45 15.55 24 15 24H13ZM20 25V27C20 27.55 20.45 28 21 28H23C23.55 28 24 27.55 24 27V25C24 24.45 23.55 24 23 24H21C20.45 24 20 24.45 20 25Z"
                                   fill="#7F7F7F"/>
                         </svg>
+                        <input type="text" name="date" id="date" placeholder="Date" aria-label="Rent Date" required>
                     </label>
-                    <input type="text" name="date" id="date" placeholder="Date" aria-label="Rent Date" required>
                 </li>
                 <li>
                     <label for="boat-type">
-                        <svg width="36" height="32" viewBox="0 0 36 32" fill="none"
+                        <svg width="34" height="30" viewBox="0 0 36 32" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
                             <path d="M15.6823 1.00229C15.6823 0.564788 15.9635 0.177288 16.3823 0.0460378C16.801 -0.0852122 17.251 0.0710379 17.501 0.427288L31.501 20.4273C31.7135 20.7335 31.7385 21.1335 31.5698 21.4648C31.401 21.796 31.0573 22.0023 30.6823 22.0023H16.6823C16.1323 22.0023 15.6823 21.5523 15.6823 21.0023V1.00229ZM12.9385 6.03354C13.376 6.15229 13.6823 6.54604 13.6823 7.00229V21.0023C13.6823 21.5523 13.2323 22.0023 12.6823 22.0023H4.68227C4.32602 22.0023 3.99477 21.8148 3.81977 21.5023C3.64477 21.1898 3.63852 20.8148 3.81352 20.5023L11.8135 6.50229C12.0385 6.10854 12.501 5.91479 12.9385 6.03354ZM0.0385244 25.271C-0.142726 24.6335 0.338524 24.0023 1.00102 24.0023H34.3635C35.026 24.0023 35.5073 24.6335 35.326 25.271L35.076 26.1648C34.101 29.621 30.9573 32.0023 27.3698 32.0023H7.99477C4.40727 32.0023 1.26352 29.621 0.288524 26.171L0.0385244 25.2773V25.271Z"
                                   fill="#7F7F7F"/>
                         </svg>
+                        <select name="boatType" id="boat-type" aria-label="Boat Type" aria-visited="false" required>
+                            <option value="boatType">Boat Type</option>
+                            <option value="all">All</option>
+                            <option value="sailboat">Sailboat</option>
+                            <option value="motorboat">Motorboat</option>
+                        </select>
                     </label>
-                    <select name="boatType" id="boat-type" aria-label="Boat Type" aria-visited="false" required>
-                        <option value="boatType">Boat Type</option>
-                        <option value="all">All</option>
-                        <option value="sail">Sail</option>
-                        <option value="motorboat">Motorboat</option>
-                    </select>
+                </li>
+                <li>
+                    <button type="submit">
+                        <svg width="25" height="25" viewBox="0 0 32 32" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M26 13C26 15.8687 25.0688 18.5188 23.5 20.6688L31.4125 28.5875C32.1937 29.3687 32.1937 30.6375 31.4125 31.4188C30.6313 32.2 29.3625 32.2 28.5812 31.4188L20.6688 23.5C18.5188 25.075 15.8687 26 13 26C5.81875 26 0 20.1812 0 13C0 5.81875 5.81875 0 13 0C20.1812 0 26 5.81875 26 13ZM13 22C14.1819 22 15.3522 21.7672 16.4442 21.3149C17.5361 20.8626 18.5282 20.1997 19.364 19.364C20.1997 18.5282 20.8626 17.5361 21.3149 16.4442C21.7672 15.3522 22 14.1819 22 13C22 11.8181 21.7672 10.6478 21.3149 9.55585C20.8626 8.46392 20.1997 7.47177 19.364 6.63604C18.5282 5.80031 17.5361 5.13738 16.4442 4.68508C15.3522 4.23279 14.1819 4 13 4C11.8181 4 10.6478 4.23279 9.55585 4.68508C8.46392 5.13738 7.47177 5.80031 6.63604 6.63604C5.80031 7.47177 5.13738 8.46392 4.68508 9.55585C4.23279 10.6478 4 11.8181 4 13C4 14.1819 4.23279 15.3522 4.68508 16.4442C5.13738 17.5361 5.80031 18.5282 6.63604 19.364C7.47177 20.1997 8.46392 20.8626 9.55585 21.3149C10.6478 21.7672 11.8181 22 13 22Z"
+                                  fill="white"
+                            />
+                        </svg>
+                    </button>
                 </li>
             </ul>
-            <button type="submit">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path d="M26 13C26 15.8687 25.0688 18.5188 23.5 20.6688L31.4125 28.5875C32.1937 29.3687 32.1937 30.6375 31.4125 31.4188C30.6313 32.2 29.3625 32.2 28.5812 31.4188L20.6688 23.5C18.5188 25.075 15.8687 26 13 26C5.81875 26 0 20.1812 0 13C0 5.81875 5.81875 0 13 0C20.1812 0 26 5.81875 26 13ZM13 22C14.1819 22 15.3522 21.7672 16.4442 21.3149C17.5361 20.8626 18.5282 20.1997 19.364 19.364C20.1997 18.5282 20.8626 17.5361 21.3149 16.4442C21.7672 15.3522 22 14.1819 22 13C22 11.8181 21.7672 10.6478 21.3149 9.55585C20.8626 8.46392 20.1997 7.47177 19.364 6.63604C18.5282 5.80031 17.5361 5.13738 16.4442 4.68508C15.3522 4.23279 14.1819 4 13 4C11.8181 4 10.6478 4.23279 9.55585 4.68508C8.46392 5.13738 7.47177 5.80031 6.63604 6.63604C5.80031 7.47177 5.13738 8.46392 4.68508 9.55585C4.23279 10.6478 4 11.8181 4 13C4 14.1819 4.23279 15.3522 4.68508 16.4442C5.13738 17.5361 5.80031 18.5282 6.63604 19.364C7.47177 20.1997 8.46392 20.8626 9.55585 21.3149C10.6478 21.7672 11.8181 22 13 22Z"
-                          fill="white"
-                    />
-                </svg>
-            </button>
-<!--            <slot name="submit-button"></slot>-->
         </form>
     </search>
 </template>

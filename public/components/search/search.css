@@ -1,38 +1,135 @@
-li {
-    list-style: none;
+:host-context(section) {
+    /*Style only applies to this custom component (HOST element) search-ahoi that is inside of a section html element*/
 }
-select[aria-visited=false] {
-    color: #999;
+:host(search-ahoi) {
+    /* Apply default style to this component (search-ahoi). The style in the "normal/light DOM" take precedence over this style*/
+    display: inline-block;
+    background-color: var(--tertiary-color);
+    padding-inline-start: clamp(1px, 1.5vw, 20px);
+    padding-inline-end: 3px;
+    padding-block: 4px;
+    border-radius: 50px;
 }
-select[aria-visited=true] {
-    color: initial;
+ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(0rem, 1vw, 1.4rem);
+    > li {
+        display: inline-block;
+        height: 100%;
+        margin-inline-start: clamp(0.2rem, 1.5vw, 1.3rem);
+    }
 }
-select option[value="boatType"] {
-    display: none;
+button {
+    border-radius: 100%;
+    padding: 8px;
+    border: none;
+    background-color: var(--primary-color);
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    &:active {
+        transform: scale(0.95);
+    }
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        z-index: 0;
+        width: 2.2rem;
+        height: 2.2rem;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        animation: pulse-border 1500ms ease-out infinite;
+    }
 }
-input[type=date] {
-    color: #999;
+@media screen and (max-width: 1000px) {
+    svg {
+        transform: scale(0.9);
+    }
 }
-input[type=date]:user-valid{
-    color: initial;
+@media screen and (max-width: 700px) {
+    svg {
+        transform: scale(0.8);
+    }
+    button {
+        padding: 4px;
+    }
 }
-
-
+@media screen and (max-width: 600px) {
+    svg {
+        transform: scale(0.7);
+    }
+    button {
+        padding: 2px;
+    }
+}
+@keyframes pulse-border {
+    0% {
+        transform: translateX(-50%) translateY(-50%) scale(1);
+        opacity: 0.4;
+    }
+    100% {
+        transform: translateX(-50%) translateY(-50%) scale(1.5);
+        opacity: 0;
+    }
+}
+select, input {
+    text-align: center;
+    font-size: clamp(9px, 1.5vw, 18px);
+    width: clamp(65px, 10vw, 140px);
+    vertical-align: middle;
+    border: none;
+    outline: none;
+}
+select {
+    &[aria-visited=true] {
+        color: initial;
+    }
+    &[aria-visited=false] {
+        color: #999;
+    }
+    > option[value="boatType"] {
+        display: none;
+    }
+}
+input {
+    /*padding-inline-end: 20px;*/
+    padding-inline-end: clamp(0rem, 1.6vw, 1.2rem);
+    border-inline-end: 1px solid #999;
+    &[type=date] {
+        color: #999;
+        &:user-valid{
+            color: initial;
+        }
+    }
+}
+label, svg, path {
+    display: inline-block;
+    vertical-align: middle;
+}
+label {
+    white-space: nowrap;
+}
+:host-context(section) {
+    /*Style only applies to this custom component (HOST element) search-ahoi that is inside of a section html element*/
+}
+/*The global part attribute makes a shadow tree element visible to its parent DOM. In this way, you can apply CSS
+styles to elements in the shadow tree from outside of it.*/
+/*The added benefit of using shadow 'parts' is you can use them as internal references within your own stylesheet.*/
+[part="form-search"] {
+}
 ::slotted(*) {
     /* To style ANY slotted content */
 }
-:host {
-    /* Apply default style to this component (search-ahoi). The style in the "normal/light DOM" take precedence over this style*/
-}
-:host-context(section) {
-    /*Style only applies to this custom component (HOST element)search-ahoi that is inside of a section html element*/
-    color: orange;
-}
-
 :where(input, button, textarea, select, input::file-selector-button) {
     /*To make sure form controls inherit the font styling of their containers*/
     font: inherit;
-    font-size: inherit;
-    color: inherit;
-    letter-spacing: inherit;
+    background-color: inherit;
 }
