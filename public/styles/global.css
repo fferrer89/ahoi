@@ -20,6 +20,7 @@ layouts.*/
     body {
         margin: 0;
         padding: 0;
+        font-family: Inter, sans-serif;
     }
     p, h1, h2, h3, h4, h5, h6, blockquote {
         /*Optionally add ‘ul, ol, blockquote, figure’ if needed*/
@@ -54,7 +55,7 @@ layouts.*/
     body {
         /*background-color: var(--secondary-color);*/
         /*color: white;*/
-        font-family: 'Open Sans', sans-serif;
+        font-family: Inter, 'Open Sans', sans-serif;
     }
     [autocapitalize="characters"] {
         text-transform: uppercase;

@@ -27,7 +27,7 @@ export default function Home(props, children) {
     return (
         html`
             <main>
-                <section id="home-hero">
+                <section data-layout-variant="hero">
                     <h1>Rent any boat anywhere</h1>
                     <search-ahoi max-years-ahead-reservation="4">
                     ${searchTemplate}
