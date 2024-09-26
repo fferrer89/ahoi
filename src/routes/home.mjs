@@ -4,7 +4,6 @@ import path from "node:path";
 import Layout from "../views/layout.mjs";
 import Home from "../views/pages/home.mjs";
 
-
 /**
  * Route handler for the home page
  *
@@ -39,7 +38,7 @@ export default async function homeRoute(req, res) {
             break;
         case 'HEAD':
             try {
-                const homePagePath = path.resolve('src/static/index.html');
+                const homePagePath = path.resolve('build/index.html');
                 const homePageFileStats = fsSync.statSync(homePagePath);
                 // homePageFileStats.mtime; // The timestamp (UTC) indicating the last time this file was modified.
                 // homePageFileStats.size; // The size of the file in bytes. 1024000 bits = 1MB
@@ -61,7 +60,8 @@ export default async function homeRoute(req, res) {
             break;
         case 'GET':
             const acceptContentType = req?.headers['accept'];
-            if (acceptContentType.includes( "*/*") || acceptContentType.includes("text/*") || acceptContentType.includes("text/html")) {
+            if (acceptContentType?.includes( "*/*") || acceptContentType?.includes("text/*") ||
+                acceptContentType?.includes("text/html")) {
                 try {
                     const home = Home();
                     const layout = Layout({page: { title: 'Home'}}, [home]);
@@ -87,26 +87,6 @@ export default async function homeRoute(req, res) {
                 res.end('Only \'text/html\' content type supported.');
             }
             break;
-        case 'POST':
-            const reqContentType = req?.headers['Content-Type'];
-            if (reqContentType === "*/*" || reqContentType?.startsWith("application/*") || reqContentType?.startsWith("application/json")) {
-                // */*, application/*, or application/json
-            } else {
-                /*
-                 MIME Type:
-                 - Format: type/subtype;optionalParameter=value
-                 - An optional parameter (optionalParameter) can be added to provide additional details.
-
-                 e.g.:
-                 application/json; charset=UTF-8
-                 text/plain; charset=UTF-8
-                 application/x-www-form-urlencoded // used in forms without files/img attached
-                 multipart/form-data // used in forms with files/img attached
-                 */
-                res.writeHead(415, {'Accept-Post': 'application/json; charset=UTF-8'}); // application/json; charset=UTF-8, text/plain
-                res.end(); // 415 Unsupported Media Type
-            }
-            break
         default:
             res.writeHead(405, {'Allow': 'OPTIONS, HEAD, GET'}); // 405 – Method Not Allowed
             res.end();

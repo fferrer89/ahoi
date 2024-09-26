@@ -1,10 +1,8 @@
 // Sessions Management
-import { DatabaseSync } from 'node:sqlite';
 import Database from './database.mjs';
-const inMemoryDb = new DatabaseSync(':memory:'); // Database is open (similar to db.open()) // In-Memory database
-
+import DB from '../../config/db.mjs';
 export default class Session { // Class that provides methods for creating and retrieving sessions
-    static #db = inMemoryDb; // Database is open (similar to db.open()) // In-Memory database
+    static #db = DB.inMemoryDBConnection; // Database is open (similar to db.open()) // In-Memory database
     static #dbTableName = 'sessions';
     static {
         Session.db.exec(`

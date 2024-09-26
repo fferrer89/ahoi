@@ -1,4 +1,4 @@
-const ENV = process.env.ENV ? process.env.ENV : 'development';
+const ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
 /**
  * Sets the response headers that are common across all the responses. A response header set here can be overriden
  * by the next middlewares, routes, route handlers, and/or controllers.
