@@ -1,6 +1,5 @@
 import html from "../utils/html.mjs";
-const ENV = process.env.ENV ? process.env.ENV : 'development';
-
+const ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
 /**
  *
  * Example:
@@ -50,7 +49,6 @@ export default function Layout(props, children) {
                                 <a href="/" ${(title === 'Home') && 'aria-current="page"'}>Home</a>
                             </li>
                         `}
-
                         ${title === 'Home' && html`
                             <li>
                                 <a href="/#how-it-works" ${(title === 'How It Works') && 'aria-current="page"'}>How It

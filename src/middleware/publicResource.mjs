@@ -1,17 +1,16 @@
-import url from 'node:url'; // The node:url module provides utilities for URL resolution and parsing.
 import path from 'node:path';
 import fs from "node:fs";
-import {fileExtensionToMIMEType} from "../utils/helpers.mjs"; // The node:path module provides utilities for working with file and directory paths
+import { fileExtensionToMIMEType } from "../utils/helpers.mjs"; // The node:path module provides utilities for working with file and directory paths
 
 // https://localhost:3000/public/styles/index.css
 export default function publicResource(req, res) {
-    const parsedUrl = url.parse(req.url, true);
-    const pathname = parsedUrl.pathname;
     // https://localhost:3000/favicon.ico
-    if (pathname.startsWith('/public') || pathname.startsWith('/favicon') && req.method === 'GET') {
+    if (req.pathname.startsWith('/public') || req.pathname.startsWith('/favicon') && req.method === 'GET') {
         console.info('-publicResourceMiddleware');
         // /public/styles/index.css -> /Users/kikoferrer/Documents/Apps/web-applications/ahoi/src/public/styles/index.css
-        const publicResourceFullPath = path.join(process.env.PWD, req.url); // FIXME: process.env.PWD ?
+        const publicResourceFullPath = path.join(process.env.NODE_APP_ROOT_DIR, req.url);
+        // console.log(process.env.NODE_APP_ROOT_DIR) // /Users/kikoferrer/Documents/Apps/web-applications/ahoi
+
         try {
             const publicResourceFileStats = fs.statSync(publicResourceFullPath); // can throw 'ENOENT' if file not found
             const fileExtension = path.extname(publicResourceFullPath);

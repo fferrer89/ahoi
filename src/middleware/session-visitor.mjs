@@ -12,21 +12,18 @@ export default function sessionVisitor(req, res) {
     const sessionName= 'ahoiSessionId';
     const expireSessionCookieSec = 3600; // Time stored as UTC timestamp, so Max-Age=3600 is UTC time now + 1 hour
     const sameSitePolicySessionCookie = 'Strict';
-    const cookies = req?.headers['cookie']?.split(';')?.map(cookie => {
-        const [name, value] = cookie?.split('=');
-        return {name, value};
-    });
-    const ahoiSessionCookie = cookies?.find(cookie => cookie?.name === sessionName);
-    console.log(`ahoiSessionCookie:  ${JSON.stringify(ahoiSessionCookie)}`);
     let ahoiSession;
-    if (ahoiSessionCookie) {
-        ahoiSession = Session.getSessionFromDb(ahoiSessionCookie.value);
+    req.cookies.ahoiSessionId;
+    if (req.cookies.ahoiSessionId) {
+        ahoiSession = Session.getSessionFromDb(req.cookies.ahoiSessionId);
         if (!ahoiSession || Session.isSessionDbExpired(ahoiSession.createdAt, ahoiSession.expireTime)) {
             ahoiSession = new Session(expireSessionCookieSec, true);
         }
     } else {
         ahoiSession = new Session(expireSessionCookieSec, true);// In-memory session store
         res.setHeader('Set-Cookie', `${sessionName}=${ahoiSession.id}; Max-Age=${expireSessionCookieSec}; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`);
+        // Set two cookies:
+        // res.setHeader('Set-Cookie', [`${sessionName}=${ahoiSession.id}; Max-Age=${expireSessionCookieSec}; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`, `ahoiPrefColor=White; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`]);
     }
     req.session = {id: ahoiSession.id, userId: ahoiSession.userId};
     console.log(`req.session:  ${JSON.stringify(req.session)}`);

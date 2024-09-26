@@ -1,3 +1,10 @@
+import https from 'node:https';
+import path from "node:path";
+import routes from "./routes/index.mjs";
+import middlewares from "./middleware/index.mjs";
+import errorHandling from "./middleware/errorHandling.mjs";
+import sslCredentials from "../config/ssl-certificate.mjs";
+
 /**
  * Entry point of the application, which initializes and runs the SERVER.
  *
@@ -9,16 +16,11 @@
  * (public/, config/, tests/, and seed.mjs) serve different purposes and aren't considered part of the core source code.
  */
 
-import https from 'node:https';
-import routes from "./routes/index.mjs";
-import middlewares from "./middleware/index.mjs";
-import errorHandling from "./middleware/errorHandling.mjs";
-import sslCredentials from "../config/ssl-certificate.mjs";
-
 const COMM_PROTOCOL = 'https';
 const HOSTNAME = process.env.HOSTNAME ? process.env.HOSTNAME : 'localhost';
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
-
+process.env.NODE_APP_ROOT_DIR = path.dirname(import.meta.dirname);
+// console.log(process.env.NODE_APP_ROOT_DIR) // /Users/kikoferrer/Documents/Apps/web-applications/ahoi
 
 /**
  * Create the HTTP server using the HTTP communication protocol with Secure Socket Layer (SSL) → HTTPS
@@ -30,12 +32,26 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const server = https.createServer(sslCredentials);
 server.on('request', async (req, res) => {
     // When an HTTP request hits the server, this node application will call the functions below.
-    try {
-        middlewares(req, res);
-        !res.writableEnded && routes(req, res);
-    } catch (err) {
-        errorHandling(err, req, res)
-    }
+    req.on('error', err => {
+        errorHandling(err, res, req);
+    });
+    let body = [];
+    req.on('data', chunk => {
+        body.push(chunk);
+    })
+    req.on('end', () => {
+        // At this point, we have the headers, method, url, and body (if present).
+        res.on('error', err => {
+            errorHandling(err, res, req);
+        });
+        req.body = body;
+        try {
+            middlewares(req, res);
+            !res.writableEnded && routes(req, res);
+        } catch (err) {
+            errorHandling(err, req, res)
+        }
+    })
 });
 
 // Activates this server, listening on a specific hostname/domain and port number

@@ -3,6 +3,7 @@ import responseHeaders from "./responseHeaders.mjs";
 import sessionVisitor from "./session-visitor.mjs";
 import publicResource from "./publicResource.mjs";
 import handleBody from "./handleBody.mjs";
+import requestHeaders from "./requestHeaders.mjs";
 
 /**
  * Middleware function that intercepts the requests and responses between a client and a server. It acts as a bridge,
@@ -33,10 +34,11 @@ import handleBody from "./handleBody.mjs";
  * @param res
  */
 export default function middlewares(req, res) {
+    requestHeaders(req, res);
     logger(req, res);
     responseHeaders(req, res);
-    publicResource(req, res);
+    handleBody(req, res);
+    publicResource(req, res); // This can end the req/res cycle (res.end()), so next statements have to check for it (!res.writableEnded)
     !res.writableEnded && sessionVisitor(req, res);
     // !res.writableEnded && protectedResources(req, res); // Authentication middleware
-    !res.writableEnded && handleBody(req, res);
 }
