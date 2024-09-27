@@ -3,6 +3,8 @@ import path from "node:path";
 import homeRoute from "./home.mjs";
 import aboutRoute from "./about.mjs";
 import boatsRoute from "./boats.mjs";
+import loginRoute from "./login.mjs";
+import signupRoute from "./signup.mjs";
 import Layout from "../views/layout.mjs";
 import NotFound from "../views/pages/not-found.mjs";
 
@@ -49,6 +51,12 @@ export default async function routes(req, res) {
         case `/users/${req.params?.userId}`: // FIXME: check whether '/users/ ' takes this route and fix it if it does
             res.writeHead(200);
             res.end(`/users/${req.params.userId}`);
+            break;
+        case '/login':
+            loginRoute(req, res);
+            break;
+        case '/signup':
+            signupRoute(req, res);
             break;
         default:
             // TODO: Mode this to a different place
