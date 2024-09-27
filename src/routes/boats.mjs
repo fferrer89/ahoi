@@ -71,12 +71,13 @@ export default async function boatsRoute(req, res) {
             // Handle Request
             let boatId;
             if (contentType?.includes("application/json") || contentType?.includes("application/x-www-form-urlencoded")) {
+                // Validate input (ownerId and type)
                 const boat = new Boat(req.body?.ownerId, req.body?.type);
                 boatId = Database.insert(boat);
             } else if (contentType?.includes("application/form-data")) {
 
             } else {
-                res.writeHead(415, {'Accept-Post': ['application/json; charset=UTF-8', 'application/x-www-form-urlencoded']});
+                res.writeHead(415, {'Accept-Post': ['application/json; charset=utf-8', 'application/x-www-form-urlencoded']});
                 res.end(); // 415 Unsupported Media Type
                 break;
             }
@@ -111,7 +112,7 @@ export default async function boatsRoute(req, res) {
                  application/x-www-form-urlencoded // used in forms without files/img attached
                  multipart/form-data // used in forms with files/img attached
                  */
-                res.writeHead(201, {'Content-Type': 'text/plain; charset=UTF-8'});
+                res.writeHead(201, {'Content-Type': 'text/plain; charset=utf-8'});
                 res.end(`boatId: ${boatId}`);
             }
             break;

@@ -64,6 +64,68 @@ styles to elements in the shadow tree from outside of it.*/
 /*<form action="./boats" method="GET" part="form-search">*/
 
 /*}*/
+/*Signup and Login Layout*/
+section:has( > form[action*=signup], > form[action*=login]) {
+    background-color: #F2F2F2;
+    > form {
+        min-width: 330px;
+        min-height: 350px;
+        border-radius: 5px;
+        border: 1px solid #7F7F7F;
+        background-color: white;
+        > header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            text-align: center;
+            & a {
+                flex-grow: 1;
+                color: #7F7F7F;
+                border-bottom: 3px solid #7F7F7F;
+                &[aria-selected="true"] {
+                    color: #0047AB;
+                    border-bottom: 3px solid #0047AB;
+                }
+                > h4 {
+                    margin-block-end: 1rem;
+                }
+            }
+        }
+        > ul {
+            padding: 10px 40px 20px;
+            @media (max-width: 500px) {
+                padding: 10px 25px 20px;
+            }
+            > li {
+                margin-block: 1.8rem;
+                &:has(fieldset) {
+                   text-align: center;
+                }
+                > input {
+                    color: black;
+                }
+                > input, > button {
+                    display: block;
+                    width: 100%;
+                    border-radius: 5px;
+                    border-width: 1px;
+                    padding: 7px 9px;
+                }
+                > button {
+                    margin-block-start: 2.5rem;
+                    background-color: var(--primary-color);
+                    &:hover {
+                        color: vargit(--secondary-color);
+                    }
+                    &:active {
+                        transform: scale(0.95);
+                    }
+                }
+            }
+
+        }
+    }
+}
 
 
 /*Page header structure*/
@@ -116,6 +178,9 @@ body > header {
                 > li:has(a[href$='#how-it-works']) {
                     display: none;
                 }
+                > li > a {
+                    padding-inline: 1rem;
+                }
             }
         }
     }
@@ -129,7 +194,7 @@ body > header {
         }
     }
     @media (max-width: 500px) {
-        /*Applies when the width screen is narrower than 768px*/
+        /*Applies when the width screen is narrower than 500*/
         justify-content: space-between;
          > nav, > figure {
              margin-inline: 15px;
@@ -188,19 +253,33 @@ section[data-layout-variant*=hero] {
 
     height: 100vh;
     width: 100vw;
+}
 
-    /*Image overlay*/
-    position: relative;
-    z-index: 1;
-    &::before {
-        content: "";
-        position: absolute;
-        z-index: -1;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.3);
+/*Fieldset Toggle structure*/
+fieldset:has(input:nth-of-type(1)):has(input:nth-of-type(2)):not(:has(input:nth-of-type(3))) {
+    border-color: var(--filter-input-color);
+    border-radius: 40px;
+    display: inline-block;
+    padding: 2px;
+    margin: 0;
+    > input {
+        appearance: none;
+        border-radius: 40px;
+        margin: 0;
+        &:checked {
+            background-color: var(--filter-input-color);
+        }
+        &:not(:checked) {
+            color: var(--filter-input-color);
+        }
+        &::before {
+            content: attr(aria-label);
+            display: inline-block;
+            width: fit-content;
+            height: fit-content;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+        }
     }
 }
 
@@ -211,6 +290,19 @@ main#home {
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center center;
+        /*Image overlay*/
+        position: relative;
+        z-index: 1;
+        &::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
     }
 }
 section#how-it-works {

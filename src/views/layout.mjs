@@ -59,16 +59,19 @@ export default function Layout(props, children) {
                                     Your Crew</a>
                             </li>
                         `}
-                        <li>
-                            <a href="/login" ${(title === 'Log In') && 'aria-current="page"'}>Log In</a>
-                        </li>
-                        <li>
-                            <a href="/signup" ${(title === 'Sign Up') && 'aria-current="page"'}>Sign Up</a>
-                        </li>
+                        ${!(title === 'Login' || title === 'Signup') && `
+                            <li>
+                                <a href="/login" ${(title === 'Log In') && 'aria-current="page"'}>Log In</a>
+                            </li>
+                            <li>
+                                <a href="/signup" ${(title === 'Sign Up') && 'aria-current="page"'}>Sign Up</a>
+                            </li>
+                        `}
                     </ul>
                 </nav>
             </header>
             ${children.map(component => html`${component}`)}
+            ${!(title === 'Signup' || title === 'Login') && `
             <footer>
                 <hgroup>
                     <h4>About Ahoi</h4>
@@ -133,7 +136,8 @@ export default function Layout(props, children) {
                         </svg>
                     </a>
                 </address>
-            </footer>
+            </footer>`
+            }
             </body>
             </html>
         `
