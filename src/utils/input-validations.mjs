@@ -110,13 +110,13 @@ const validation = {
         }
         return state;
     },
-    userType(userTypeVarName=validation.isRequired('varName'),
-           userType=validation.isRequired('varVal')) {
-        userType = this.string(userType);
+    userType(userTypeVarName=validation.isRequired('userTypeVarName'),
+           userType=validation.isRequired('userType')) {
+        userType = this.string(userTypeVarName, userType);
         if(!Object.values(ACCOUNT_TYPES).includes(userType)) {
             throw new RangeError(`${userTypeVarName} must be either ${ACCOUNT_TYPES.BOAT_RENTER} or ${ACCOUNT_TYPES.BOAT_OWNER}`);
         }
-        return userType.trim();
+        return userType;
     },
     /**
      *

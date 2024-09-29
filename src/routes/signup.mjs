@@ -2,10 +2,10 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import Layout from "../views/layout.mjs";
 import Signup from "../views/pages/signup.mjs";
-import Boat from "../models/boat.mjs";
 import Database from "../models/database.mjs";
 import User from "../models/user.mjs";
 import inputValidations from "../utils/input-validations.mjs";
+import Session from "../models/session.mjs";
 
 /**
  * Route handler for the signup page
@@ -28,7 +28,11 @@ export default async function signupRoute(req, res) {
                 acceptContentType?.includes("text/html")) {
                 try {
                     const signup = Signup();
-                    const layout = Layout({page: {title: 'Signup'}}, [signup]);
+                    const layout = Layout({
+                            page: { title: 'Signup'},
+                            user: req?.session?.user
+                        }, [signup]
+                    );
                     await fs.writeFile('build/signup.html', layout, {encoding: 'utf8'});
                     let signupPage;
                     const signupPagePath = path.resolve('build/signup.html');
@@ -81,7 +85,7 @@ export default async function signupRoute(req, res) {
                     req.body.userType = inputValidations.userType('Account Type', req.body?.userType);
                     props.values.userType = req.body.userType
                 } catch (e) {
-                    props.errorMessages.userType = e.message;
+                    props.errorMessages.generalErrorMsg = e.message;
                 }
                 try {
                     req.body.username = inputValidations.string('Username', req.body?.username);
@@ -174,7 +178,11 @@ export default async function signupRoute(req, res) {
                 }
                 if (Object.keys(props.errorMessages).length > 0) {
                     const signup = Signup(props);
-                    const layout = Layout({page: {title: 'Signup'}}, [signup]);
+                    const layout = Layout({
+                            page: { title: 'Signup'},
+                            user: req?.session?.user
+                        }, [signup]
+                    );
                     await fs.writeFile('build/signup.html', layout, {encoding: 'utf8'});
                     let signupPage;
                     const signupPagePath = path.resolve('build/signup.html');
@@ -197,6 +205,19 @@ export default async function signupRoute(req, res) {
             }
             // Update the ahoiVisitorId record (cookie) by adding the userId property?
             // Create a new cookie for the new session (ahoiSessionId)
+
+            const sessionCookieName= 'sessionId';
+            const expireSessionCookieSec = 3600; // Time stored as UTC timestamp, so Max-Age=3600 is UTC time now + 1 hour
+            const sameSitePolicySessionCookie = 'Strict';
+            let session = new Session(req.visitor.id, userId, expireSessionCookieSec, true);
+            res.setHeader('Set-Cookie', `${sessionCookieName}=${session.id}; Max-Age=${expireSessionCookieSec}; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`);
+            req.session = {
+                id: session.id, visitorId: session.visitorId, createdAt: session.createdAt, expireTime: session.expireTime,
+                user: {
+                    id: userId, username: req.body.username, userType: req.body.userType
+                }
+            };
+            console.log(`req.session (signup):  ${JSON.stringify(req.session)}`);
 
             // Handle Response
             // Content Negotiation (what body response type does the client want back?)

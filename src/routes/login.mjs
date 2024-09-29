@@ -24,7 +24,11 @@ export default async function loginRoute(req, res) {
                 acceptContentType?.includes("text/html")) {
                 try {
                     const login = Login();
-                    const layout = Layout({page: { title: 'Login'}}, [login]);
+                    const layout = Layout({
+                            page: { title: 'Login'},
+                            user: req?.session?.user
+                        }, [login]
+                    );
                     await fs.writeFile('build/login.html', layout, {encoding: 'utf8'});
                     let loginPage;
                     const loginPagePath = path.resolve('build/login.html');

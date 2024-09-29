@@ -29,20 +29,18 @@ export default function visitor(req, res) {
     let visitorCookieVal = req.cookies[visitorCookieName];
     if (visitorCookieVal) {
         visitorCookieVal = parseInt(visitorCookieVal);
-    }
-    if (visitorCookieVal) {
-        visitorCookieVal = parseInt(visitorCookieVal);
         visitor = Visitor.getVisitorFromDb(visitorCookieVal);
-        if (!visitor || Visitor.isExpiredVisitorDb(visitor.createdAt, visitor.expireTime)) {
-            visitor = new Visitor(expireVisitorCookieSec, true);
+        if (visitor && !Visitor.isExpiredVisitorDb(visitor.createdAt, visitor.expireTime)) {
+            // There is a flesh visitor cookie and it is in the db flesh as well
+            req.visitor = {id: visitor.id};
+            return;
         }
-    } else {
-        visitor = new Visitor(expireVisitorCookieSec, true);// In-memory session store
-        // The maximum age for cookies in Google Chrome is 400 days (13 months) from the time the cookie was set
-        res.setHeader('Set-Cookie', `${visitorCookieName}=${visitor.id}; Max-Age=${expireVisitorCookieSec}; SameSite=${sameSitePolicyVisitorCookie}; HttpOnly; Secure`);
-        // Set two cookies:
-        // res.setHeader('Set-Cookie', [`${visitorCookieName}=${visitorCookieName.id}; Max-Age=${expireVisitorCookieSec}; SameSite=${sameSitePolicyVisitorCookie}; HttpOnly; Secure`, `ahoiPrefColor=White; SameSite=${sameSitePolicyVisitorCookie}; HttpOnly; Secure`]);
     }
+    visitor = new Visitor(expireVisitorCookieSec, true); // In-memory session store
+    // The maximum age for cookies in Google Chrome is 400 days (13 months) from the time the cookie was set
+    res.setHeader('Set-Cookie', `${visitorCookieName}=${visitor.id}; Max-Age=${expireVisitorCookieSec}; SameSite=${sameSitePolicyVisitorCookie}; HttpOnly; Secure`);
+    // Set two cookies:
+    // res.setHeader('Set-Cookie', [`${visitorCookieName}=${visitorCookieName.id}; Max-Age=${expireVisitorCookieSec}; SameSite=${sameSitePolicyVisitorCookie}; HttpOnly; Secure`, `ahoiPrefColor=White; SameSite=${sameSitePolicyVisitorCookie}; HttpOnly; Secure`]);
     req.visitor = {id: visitor.id};
     console.log(`req.visitor:  ${JSON.stringify(req.visitor)}`);
     // await asyncLocalStorage.enterWith(req.session); // TODO: See if i keep or remove this

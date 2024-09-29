@@ -46,11 +46,22 @@ export default class Database {
      * @param data
      * @return {lastInsertRowid, changes}
      */
-    static delete(data) {
+    static deleteObj(data) {
         const dbTable = data.dbTableName;
         const del = data.db.prepare(`DELETE FROM ${dbTable} WHERE id = ?`);
         const result = del.run(data.id);
         return result; // {lastInsertRowid: 1, changes: 1}; or {lastInsertRowid: 1, changes: 0};
+    }
+    static delete(db, dbTable, recordId) {
+        if (recordId) {
+            const del = db.prepare(`DELETE FROM ${dbTable} WHERE id = ?`);
+            const result = del.run(recordId);
+            return result;
+        } else {
+            const del = db.prepare(`SELECT * FROM ${dbTable}`);
+            const result = del.run();
+            return result;
+        }
     }
     /**
      * const query = db.prepare(`SELECT id, userId, expires FROM sessions WHERE id = ? LIMIT 1`);
@@ -59,8 +70,8 @@ export default class Database {
      * @param db the database containing the database table (dbTable)
      * @param dbTable the database table name. For example: Session, User, Product, ....
      * @param recordId optional attribute
-     * @return {unknown} either the record js object form with id 'recordId' or all the record in js object form in
-     * the 'table'.
+     * @return {unknown} either the record js object form with id 'recordId', all the record in js object form in
+     * the 'table' if no id is supplied, or undefined if no records are found.
      */
     static query(db, dbTable, recordId) {
         if (recordId) {
@@ -69,7 +80,7 @@ export default class Database {
             return record;
         } else {
             const query = db.prepare(`SELECT * FROM ${dbTable}`);
-            const records = query.get(recordId);
+            const records = query.get();
             return records;
         }
     }

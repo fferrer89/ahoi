@@ -1,12 +1,14 @@
 // Sessions Management
 import Database from './database.mjs';
 import DB from '../../config/db.mjs';
+const physicalDBConnection = DB.physicalDBConnection;
 export default class Session { // Class that provides methods for creating and retrieving sessions
     static #db = DB.inMemoryDBConnection; // Database is open (similar to db.open()) // In-Memory database
     static #dbTableName = 'sessions';
     // createdAt → (Unix Time: The number of seconds since 1970-01-01 00:00:00 UTC)
     // visitors -> parent_table
     // users -> parent_table
+    // FOREIGN KEY(userId) REFERENCES physicalDBConnection.users(id) ON DELETE CASCADE
     static {
         Session.db.exec(`
         CREATE TABLE IF NOT EXISTS ${Session.#dbTableName} (
@@ -15,9 +17,8 @@ export default class Session { // Class that provides methods for creating and r
             userId INTEGER NOT NULL,
             expireTime INTEGER,
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')),
-            FOREIGN KEY(visitorId) REFERENCES visitors(id) ON DELETE CASCADE,
-            FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE
-        ) STRICT`);
+            FOREIGN KEY(visitorId) REFERENCES visitors(id) ON DELETE CASCADE
+            ) STRICT`);
     }
 
     /**
@@ -113,24 +114,8 @@ export default class Session { // Class that provides methods for creating and r
         return this.#createdAt;
     }
     isExpiredSession() {
-        const expireAtUtc = this.#createdAt + this.expireTime;
+        const expireAtUtc = this.createdAt + this.expireTime;
         const utcNow = Math.floor(Date.now() / 1000);
         return (expireAtUtc < utcNow);
     }
 }
-
-// const session = new Session(1, true);
-// setTimeout(() => {
-//     console.log(`session.id: ${session.id}`);
-//     console.log(`session.createdAt: ${session.createdAt}`);
-//     console.info(session.isSessionExpired());
-//     let sess = Session.getSessionFromDb(session.id);
-//     console.log(sess);
-//     console.log('-------------');
-//     Database.delete(session);
-//     Session.getSessionFromDb(session.id);
-//     console.log('-------------');
-//     console.info(session.isSessionExpired());
-//     }, 4000);
-// console.log(session);
-// console.info(session.isSessionExpired());

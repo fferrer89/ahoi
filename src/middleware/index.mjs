@@ -41,6 +41,6 @@ export default function middlewares(req, res) {
     handleBody(req, res);
     publicResource(req, res); // This can end the req/res cycle (res.end()), so next statements have to check for it (!res.writableEnded)
     !res.writableEnded && visitor(req, res); // Web Visitor
-    !res.writableEnded && session(req, res);
+    !res.writableEnded && session(req, res); // Auth Session
     // !res.writableEnded && protectedResources(req, res); // Authentication middleware
 }

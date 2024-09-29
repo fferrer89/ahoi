@@ -86,24 +86,8 @@ export default class Visitor { // Class that provides methods for creating and r
         return this.#createdAt;
     }
     isExpiredVisitor() {
-        const expireAtUtc = this.#createdAt + this.expireTime;
+        const expireAtUtc = this.createdAt + this.expireTime;
         const utcNow = Math.floor(Date.now() / 1000);
         return (expireAtUtc < utcNow);
     }
 }
-
-// const session = new Visitor(1, true);
-// setTimeout(() => {
-//     console.log(`session.id: ${session.id}`);
-//     console.log(`session.createdAt: ${session.createdAt}`);
-//     console.info(session.isSessionExpired());
-//     let sess = Visitor.getSessionFromDb(session.id);
-//     console.log(sess);
-//     console.log('-------------');
-//     Database.delete(session);
-//     Visitor.getVisitorFromDb(session.id);
-//     console.log('-------------');
-//     console.info(session.isSessionExpired());
-//     }, 4000);
-// console.log(session);
-// console.info(session.isSessionExpired());

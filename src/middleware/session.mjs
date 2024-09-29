@@ -1,5 +1,6 @@
 import Session from "../models/session.mjs";
 import Database from "../models/database.mjs";
+import User from "../models/user.mjs";
 // import {AsyncLocalStorage} from "async_hooks";
 // const asyncLocalStorage = new AsyncLocalStorage();
 /**
@@ -22,25 +23,44 @@ import Database from "../models/database.mjs";
 export default function session(req, res) {
     console.info('-sessionMiddleware');
     const sessionCookieName= 'sessionId';
-    const expireSessionCookieSec = 3600; // Time stored as UTC timestamp, so Max-Age=3600 is UTC time now + 1 hour
     const sameSitePolicySessionCookie = 'Strict';
     let session;
     let sessionCookieVal = req.cookies[sessionCookieName];
-    if (sessionCookieVal) {
-        sessionCookieVal = parseInt(sessionCookieVal);
+    if (!sessionCookieVal) {
+        return;
     }
-    if (sessionCookieVal) {
-        sessionCookieVal = parseInt(sessionCookieVal);
-        session = Session.getSessionFromDb(sessionCookieVal);
-        if (session || !Session.isExpiredSessionDb(session.createdAt, session.expireTime)) {
-            if (session.visitorId !== req.visitor.id) {
-                // Update the session to have the correct visitor
-                session.visitorId = req.visitor.id;
-                Database.updateAll(session);
-            }
-            req.session = {id: session.id, visitorId: session.visitorId, userId: session.userId};
-            console.log(`req.session:  ${JSON.stringify(req.session)}`);
+    sessionCookieVal = parseInt(sessionCookieVal);
+    session = Session.getSessionFromDb(sessionCookieVal);
+    if (!session) {
+        res.setHeader('Set-Cookie', `${sessionCookieName}=delete; Max-Age=0; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`);
+        return;
+    }
+    if (Session.isExpiredSessionDb(session.createdAt, session.expireTime)) {
+        // There is a session, but it is expired (stale)
+        res.setHeader('Set-Cookie', `${sessionCookieName}=${session.id}; Max-Age=0; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`);
+        Database.delete(Session.db, Session.dbTableName, session.id);
+        return;
+    }
+    // There is a session and it is not expired (flesh)
+    if (session.visitorId !== req.visitor.id) {
+        // Update the session to have the correct visitor
+        session.visitorId = req.visitor.id;
+        Database.updateAll(session);
+    }
+    // Find the related user
+    const user = Database.query(User.db, User.dbTableName, session.userId);
+    if (!user) {
+        // If user cannot be found, delete the cookie and delete the session
+        // Max-Age: A zero or negative number will expire the cookie immediately
+        res.setHeader('Set-Cookie', `${sessionCookieName}=${session.id}; Max-Age=0; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`);
+        Database.delete(Session.db, Session.dbTableName, session.id);
+    }
+    req.session = {
+        id: session.id, visitorId: session.visitorId, createdAt: session.createdAt, expireTime: session.expireTime,
+        user: {
+            id: user.id, username: user.username, userType: user.userType
         }
-    }
+    };
+    console.log(`req.session:  ${JSON.stringify(req.session)}`);
     // await asyncLocalStorage.enterWith(req.session); // TODO: See if i keep or remove this
 }
