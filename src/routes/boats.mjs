@@ -79,7 +79,7 @@ export default async function boatsRoute(req, res) {
             } else {
                 res.writeHead(415, {'Accept-Post': ['application/json; charset=utf-8', 'application/x-www-form-urlencoded']});
                 res.end(); // 415 Unsupported Media Type
-                break;
+                return;
             }
             // Handle Response
             // Content Negotiation (what body response type does the client want back?)

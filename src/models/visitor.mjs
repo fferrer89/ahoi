@@ -1,23 +1,16 @@
-// Sessions Management
 import Database from './database.mjs';
 import DB from '../../config/db.mjs';
-export default class Session { // Class that provides methods for creating and retrieving sessions
+export default class Visitor { // Class that provides methods for creating and retrieving sessions
     static #db = DB.inMemoryDBConnection; // Database is open (similar to db.open()) // In-Memory database
-    static #dbTableName = 'sessions';
+    static #dbTableName = 'visitors';
     // createdAt → (Unix Time: The number of seconds since 1970-01-01 00:00:00 UTC)
-    // visitors -> parent_table
-    // users -> parent_table
     static {
-        Session.db.exec(`
-        CREATE TABLE IF NOT EXISTS ${Session.#dbTableName} (
+        Visitor.db.exec(`
+        CREATE TABLE IF NOT EXISTS ${Visitor.#dbTableName} (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            visitorId INTEGER NOT NULL,
-            userId INTEGER NOT NULL,
             expireTime INTEGER,
-            createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')),
-            FOREIGN KEY(visitorId) REFERENCES visitors(id) ON DELETE CASCADE,
-            FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE
-        ) STRICT`);
+            createdAt INTEGER DEFAULT (STRFTIME('%s', 'now'))
+            ) STRICT`);
     }
 
     /**
@@ -33,22 +26,17 @@ export default class Session { // Class that provides methods for creating and r
      */
     #createdAt;
     #expireTime; // Expiration time in milliseconds
-    #visitorId;
-    #userId;
 
     /**
      *  3,600,000 milliseconds == 3,600 seconds == 1 hour
+     *  (365 * 24 * 60 * 60 * 10) seconds == 10 years
      *
      * @param expireTime number of seconds in UTC (time elapsed since January 1, 1970, 00:00:00) that the session will
-     * last
+     * last. The maximum age for cookies in Google Chrome is 400 days (13 months) from the time the cookie was set
      * @param storeInDb
-     * @param visitorId
-     * @param userId
      */
-    constructor(visitorId, userId, expireTime = 3600, storeInDb=false) {
-        this.#visitorId = visitorId;
-        this.#userId = userId;
-        this.#expireTime = expireTime; // 1 hour from now
+    constructor(expireTime = (365 * 24 * 60 * 60 * 10), storeInDb=false) {
+        this.#expireTime = expireTime; // 10 years from now
         this.#createdAt = Math.floor(Date.now() / 1000); // Created time in UTC seconds
         if (storeInDb) {
             this.#id = Database.insert(this);
@@ -66,45 +54,30 @@ export default class Session { // Class that provides methods for creating and r
      * @param id
      * @return {id, userId, expireTime, createdAt}
      */
-    static getSessionFromDb(id) {
-        const session = Database.query(this.db, this.dbTableName, id);
-        return session;
+    static getVisitorFromDb(id) {
+        const visitor = Database.query(this.db, this.dbTableName, id);
+        return visitor;
     }
-    static isExpiredSessionDb(createdAt, expireTime) {
+    static isExpiredVisitorDb(createdAt, expireTime) {
         const expireAtUtc = createdAt + expireTime;
         const utcNow = Math.floor(Date.now() / 1000);
         return (expireAtUtc < utcNow);
     }
 
     get db() {
-        return Session.#db;
+        return Visitor.#db;
     }
     get dbTableName() {
-        return Session.#dbTableName;
+        return Visitor.#dbTableName;
     }
     get dbImmutableFieldNames() {
-        return ['visitorId', 'userId', 'expireTime'];
+        return ['expireTime'];
     }
     get dbImmutableFieldValues() {
-        return [this.visitorId, this.userId, this.expireTime];
-    }
-    get dbMutableFieldNames() {
-        return ['visitorId'];
-    }
-    get dbMutableFieldValues() {
-        return [this.visitorId];
+        return [this.expireTime];
     }
     get id() {
         return this.#id;
-    }
-    get visitorId() {
-        return this.#visitorId;
-    }
-    set visitorId(visitorId) {
-        this.#visitorId = visitorId;
-    }
-    get userId() {
-        return this.#userId;
     }
     get expireTime() {
         return this.#expireTime;
@@ -112,23 +85,23 @@ export default class Session { // Class that provides methods for creating and r
     get createdAt() {
         return this.#createdAt;
     }
-    isExpiredSession() {
+    isExpiredVisitor() {
         const expireAtUtc = this.#createdAt + this.expireTime;
         const utcNow = Math.floor(Date.now() / 1000);
         return (expireAtUtc < utcNow);
     }
 }
 
-// const session = new Session(1, true);
+// const session = new Visitor(1, true);
 // setTimeout(() => {
 //     console.log(`session.id: ${session.id}`);
 //     console.log(`session.createdAt: ${session.createdAt}`);
 //     console.info(session.isSessionExpired());
-//     let sess = Session.getSessionFromDb(session.id);
+//     let sess = Visitor.getSessionFromDb(session.id);
 //     console.log(sess);
 //     console.log('-------------');
 //     Database.delete(session);
-//     Session.getSessionFromDb(session.id);
+//     Visitor.getVisitorFromDb(session.id);
 //     console.log('-------------');
 //     console.info(session.isSessionExpired());
 //     }, 4000);

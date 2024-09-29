@@ -68,7 +68,7 @@ styles to elements in the shadow tree from outside of it.*/
 section:has( > form[action*=signup], > form[action*=login]) {
     background-color: #F2F2F2;
     > form {
-        min-width: 330px;
+        width: clamp(330px, 25vw, 450px);
         min-height: 350px;
         border-radius: 5px;
         border: 1px solid #7F7F7F;
@@ -92,10 +92,8 @@ section:has( > form[action*=signup], > form[action*=login]) {
             }
         }
         > ul {
-            padding: 10px 40px 20px;
-            @media (max-width: 500px) {
-                padding: 10px 25px 20px;
-            }
+            margin-block: clamp(0em, 0.9vh, 0.5em);
+            padding: 10px clamp(20px, 2.4vw, 40px) 20px;
             > li {
                 margin-block: 1.8rem;
                 &:has(fieldset) {
@@ -103,26 +101,72 @@ section:has( > form[action*=signup], > form[action*=login]) {
                 }
                 > input {
                     color: black;
+                    &[type="password"] {
+                        padding-inline-end: 35px;
+                    }
+                    &:user-invalid {
+                        outline: 2px solid red;
+                        border: none;
+                    }
+                    &:has( ~ output[name$="ErrorMsg"]:not(:empty)) {
+                        outline: 2px solid red;
+                        border: none;
+                    }
                 }
-                > input, > button {
+                > input, > button[type="submit"] {
                     display: block;
                     width: 100%;
                     border-radius: 5px;
                     border-width: 1px;
                     padding: 7px 9px;
                 }
-                > button {
+                position: relative;
+                > button[type="button"].hide-show-toggle-pw {
+                    position: absolute;
+                    background-color: transparent;
+                    border: none;
+                    top: 8px;
+                    right: 5px;
+                    display: inline-block;
+                    width: 20px;
+                    height: 20px;
+                    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCA1MCA1MCI+CjxwYXRoIGQ9Ik0gMTguOTM3NSAxMi44NDM3NSBDIDguOTIxODc1IDE1LjU0Njg3NSAxLjYxMzI4MSAyMy45MjE4NzUgMS4yNSAyNC4zNDM3NSBDIDAuOTI5Njg4IDI0LjcxODc1IDAuOTI5Njg4IDI1LjI4MTI1IDEuMjUgMjUuNjU2MjUgQyAxLjY4MzU5NCAyNi4xNjAxNTYgMTEuOTg4MjgxIDM4IDI1IDM4IEMgMzguMDExNzE5IDM4IDQ4LjMxNjQwNiAyNi4xNjAxNTYgNDguNzUgMjUuNjU2MjUgQyA0OS4wNzAzMTMgMjUuMjgxMjUgNDkuMDcwMzEzIDI0LjcxODc1IDQ4Ljc1IDI0LjM0Mzc1IEMgNDguMzg2NzE5IDIzLjkyMTg3NSA0MS4wNzgxMjUgMTUuNTUwNzgxIDMxLjA2MjUgMTIuODQzNzUgQyAzNC4wMjczNDQgMTQuODEyNSAzNiAxOC4xNzE4NzUgMzYgMjIgQyAzNS45OTYwOTQgMjguMDc0MjE5IDMxLjA3NDIxOSAzMyAyNSAzMyBDIDE4LjkyNTc4MSAzMyAxNC4wMDM5MDYgMjguMDc0MjE5IDE0IDIyIEMgMTQgMTguMTcxODc1IDE1Ljk3MjY1NiAxNC44MTI1IDE4LjkzNzUgMTIuODQzNzUgWiBNIDI1IDE3IEMgMjIuMjM4MjgxIDE3IDIwIDE5LjIzODI4MSAyMCAyMiBDIDIwIDI0Ljc2MTcxOSAyMi4yMzgyODEgMjcgMjUgMjcgQyAyNy43NjE3MTkgMjcgMzAgMjQuNzYxNzE5IDMwIDIyIEMgMzAgMTkuMjM4MjgxIDI3Ljc2MTcxOSAxNyAyNSAxNyBaIj48L3BhdGg+Cjwvc3ZnPg==');
+                    background-position: 50% 50%;
+                    background-repeat: no-repeat;
+                    background-size: 100%;
+                    &:active {
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCA1MCA1MCI+CjxwYXRoIGQ9Ik0gNS45MDYyNSA0Ljk2ODc1IEMgNS44NjMyODEgNC45NzY1NjMgNS44MjAzMTMgNC45ODgyODEgNS43ODEyNSA1IEMgNS40MDYyNSA1LjA2NjQwNiA1LjEwNTQ2OSA1LjMzOTg0NCA1IDUuNzAzMTI1IEMgNC44OTQ1MzEgNi4wNzAzMTMgNS4wMDM5MDYgNi40NjA5MzggNS4yODEyNSA2LjcxODc1IEwgNDMuMjgxMjUgNDQuNzE4NzUgQyA0My42Nzk2ODggNDUuMTE3MTg4IDQ0LjMyMDMxMyA0NS4xMTcxODggNDQuNzE4NzUgNDQuNzE4NzUgQyA0NS4xMTcxODggNDQuMzIwMzEzIDQ1LjExNzE4OCA0My42Nzk2ODggNDQuNzE4NzUgNDMuMjgxMjUgTCAzNi4yNSAzNC44MTI1IEMgNDIuODI0MjE5IDMxLjI2NTYyNSA0Ny40NjQ4NDQgMjUuOTg4MjgxIDQ3Ljc1IDI1LjY1NjI1IEMgNDguMDcwMzEzIDI1LjI4MTI1IDQ4LjA3MDMxMyAyNC43MTg3NSA0Ny43NSAyNC4zNDM3NSBDIDQ3LjMxNjQwNiAyMy44Mzk4NDQgMzcuMDA3ODEzIDEyIDI1IDEyIEMgMjEuNjkxNDA2IDEyIDE4LjUzNTE1NiAxMi45MDYyNSAxNS42NTYyNSAxNC4yMTg3NSBMIDYuNzE4NzUgNS4yODEyNSBDIDYuNTExNzE5IDUuMDU4NTk0IDYuMjEwOTM4IDQuOTQ1MzEzIDUuOTA2MjUgNC45Njg3NSBaIE0gMjUgMTQgQyAyNS4zOTA2MjUgMTQgMjUuNzY5NTMxIDE0LjAzNTE1NiAyNi4xNTYyNSAxNC4wNjI1IEMgMzEuNjc1NzgxIDE0LjY0ODQzOCAzNiAxOS4zMjgxMjUgMzYgMjUgQyAzNiAyNy42Njc5NjkgMzUuMDU0Njg4IDMwLjEyNSAzMy40Njg3NSAzMi4wMzEyNSBMIDI4LjQzNzUgMjcgQyAyOC43ODUxNTYgMjYuNDEwMTU2IDI5IDI1LjczNDM3NSAyOSAyNSBDIDI5IDIyLjc4OTA2MyAyNy4yMTA5MzggMjEgMjUgMjEgQyAyNC4yNjU2MjUgMjEgMjMuNTg5ODQ0IDIxLjIxNDg0NCAyMyAyMS41NjI1IEwgMTcuOTY4NzUgMTYuNTMxMjUgQyAxOS44NzUgMTQuOTQ1MzEzIDIyLjMzMjAzMSAxNCAyNSAxNCBaIE0gMTIgMTYuMTU2MjUgQyA2LjM0NzY1NiAxOS42MjUgMi41MTE3MTkgMjQuMDM5MDYzIDIuMjUgMjQuMzQzNzUgQyAxLjkyOTY4OCAyNC43MTg3NSAxLjkyOTY4OCAyNS4yODEyNSAyLjI1IDI1LjY1NjI1IEMgMi42ODM1OTQgMjYuMTYwMTU2IDEyLjk5MjE4OCAzOCAyNSAzOCBDIDI1LjQwMjM0NCAzOCAyNS43OTI5NjkgMzcuOTcyNjU2IDI2LjE4NzUgMzcuOTM3NSBDIDI4LjM0NzY1NiAzNy43OTY4NzUgMzAuNDU3MDMxIDM3LjMyNDIxOSAzMi40Mzc1IDM2LjU5Mzc1IEwgMzAuNDA2MjUgMzQuNTYyNSBDIDI4LjgwNDY4OCAzNS40NzI2NTYgMjYuOTcyNjU2IDM2IDI1IDM2IEMgMjQuNjA5Mzc1IDM2IDI0LjIzMDQ2OSAzNS45NjQ4NDQgMjMuODQzNzUgMzUuOTM3NSBDIDE4LjMyNDIxOSAzNS4zNTE1NjMgMTQgMzAuNjcxODc1IDE0IDI1IEMgMTQgMjMuMDI3MzQ0IDE0LjUyNzM0NCAyMS4xOTUzMTMgMTUuNDM3NSAxOS41OTM3NSBaIE0gMjEuMDMxMjUgMjUuMTU2MjUgQyAyMS4xMTMyODEgMjcuMjM0Mzc1IDIyLjc2MTcxOSAyOC44ODY3MTkgMjQuODQzNzUgMjguOTY4NzUgWiI+PC9wYXRoPgo8L3N2Zz4=');
+                        background-position: 50% 50%;
+                        background-repeat: no-repeat;
+                        background-size: 100%;
+                    }
+                }
+                > button[type="submit"] {
                     margin-block-start: 2.5rem;
                     background-color: var(--primary-color);
                     &:hover {
-                        color: vargit(--secondary-color);
+                        color: var(--secondary-color);
                     }
                     &:active {
                         transform: scale(0.95);
                     }
                 }
             }
-
+        }
+        & output[name$="ErrorMsg"]:not(:empty) {
+            color: red;
+            display: block;
+            border-radius: 5px;
+            padding: 5px 0;
+            font-size: 0.8rem;
+            &::before {
+                content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA/ElEQVR4nLWUzQ3CMAyFffDzESRgBtiBDSjMwc8JtiiIEUCQCHFhE2AKLpkDuYIi2iRKkbBkqU3aL/azY6J/24WobUUmhnlmgKk+n4hayYAzUc8CWwM8DOAqrmsbS9SNQvYiAwPcPQBX8Zt+G4wkEeLeMG9kr3RqP1hgG9lb14QNaOIOzEP1QFSPrwIU1QmkcIiDnBXJSpBhXvwKOjLPS5C+BE9EWKPCmWcfkMi4QbXcl4uMSpAKFhLbMC8t8ypJ7EInYONNjXkVAeX1PiLqapOlpmSB646oE7sitxSIFel7IW/TU7RjI5c2D0biMxVRm01HyGuMZI3GyK/2BP6eICPq9xTQAAAAAElFTkSuQmCC');
+                vertical-align: middle;
+                margin-inline-end: 4px;
+            }
         }
     }
 }
@@ -277,7 +321,7 @@ fieldset:has(input:nth-of-type(1)):has(input:nth-of-type(2)):not(:has(input:nth-
             display: inline-block;
             width: fit-content;
             height: fit-content;
-            padding: 0.3rem 0.8rem;
+            padding: 4px 6px;
             cursor: pointer;
         }
     }

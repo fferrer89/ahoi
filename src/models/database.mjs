@@ -8,8 +8,8 @@ export default class Database {
      */
     static insert(data) {
         const dbTable = data.dbTableName;
-        const fieldNames = data.dbMutableFieldNames;
-        const fieldValues = data.dbMutableFieldValues;
+        const fieldNames = data.dbImmutableFieldNames;
+        const fieldValues = data.dbImmutableFieldValues;
         const insert = data.db.prepare(
             `INSERT INTO ${dbTable} (${fieldNames.join()}) VALUES (${'?,'.repeat(fieldValues.length).slice(0, -1)})`
         );
