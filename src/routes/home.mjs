@@ -64,7 +64,11 @@ export default async function homeRoute(req, res) {
                 acceptContentType?.includes("text/html")) {
                 try {
                     const home = Home();
-                    const layout = Layout({page: { title: 'Home'}}, [home]);
+                    const layout = Layout({
+                            page: { title: 'Home'},
+                            user: req?.session?.user
+                        }, [home]
+                    );
                     await fs.writeFile('build/index.html', layout, {encoding: 'utf8'});
                     let homePage;
                     const homePagePath = path.resolve('build/index.html');

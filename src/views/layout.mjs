@@ -15,7 +15,10 @@ const ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
  * @constructor
  */
 export default function Layout(props, children) {
-    const { page: {title, description} } = props;
+    const {
+        page: { title, description },
+        user
+    } = props;
     return (
         html`
             <!DOCTYPE html>
@@ -59,14 +62,25 @@ export default function Layout(props, children) {
                                     Your Crew</a>
                             </li>
                         `}
-                        ${!(title === 'Login' || title === 'Signup') && `
-                            <li>
-                                <a href="/login" ${(title === 'Log In') && 'aria-current="page"'}>Log In</a>
-                            </li>
-                            <li>
-                                <a href="/signup" ${(title === 'Sign Up') && 'aria-current="page"'}>Sign Up</a>
-                            </li>
-                        `}
+                        ${user?.id ? 
+                                `
+                                <li>
+                                    <a href="/logout" ${(title === 'Log Out') && 'aria-current="page"'}>Log Out</a>
+                                </li>
+                                <li>
+                                    <a href="/private" ${(title === 'Private') && 'aria-current="page"'}>${user.username} - ${user.userType}</a>
+                                </li>
+                                ` 
+                             : 
+                                `
+                                <li>
+                                    <a href="/login" ${(title === 'Log In') && 'aria-current="page"'}>Log In</a>
+                                </li>
+                                <li>
+                                    <a href="/signup" ${(title === 'Sign Up') && 'aria-current="page"'}>Sign Up</a>
+                                </li>
+                                `
+                        }
                     </ul>
                 </nav>
             </header>

@@ -32,6 +32,13 @@
                         
                         
                         
+                                <li>
+                                    <a href="/login" false>Log In</a>
+                                </li>
+                                <li>
+                                    <a href="/signup" false>Sign Up</a>
+                                </li>
+                                
                     </ul>
                 </nav>
             </header>
@@ -49,13 +56,32 @@
                         </header>
                         <ul>
                             <li>
-                                <input type="email" placeholder="Email" aria-label="Email">
+                                <output for="email password" name="credentialsErrorMsg"></output>
+                                <!--e.g.: Incorrect credentials provided-->
                             </li>
                             <li>
-                                <input type="password" placeholder="Password" aria-label="Password">
+                                <input type="email" name="email" id="email" placeholder="Email" autocomplete="email" 
+                                       aria-label="Email" >
+                                <output for="email" name="emailErrorMsg"></output>
+                                <!--e.g.: Please provide a properly formatted email address-->
                             </li>
                             <li>
-                                <button>Sign In</button>
+                                <input type="password" name="password" id="password" placeholder="Password"
+                                       
+                                       autocomplete="current-password" aria-label="Password">
+                                <button type="button" class="hide-show-toggle-pw"></button>
+                                <output for="password" name="passwordErrorMsg"></output>
+                            </li>
+                            <li hidden>
+                                <input type="checkbox" name="remember-credentials" id="remember-credentials"
+                                       checked>
+                                <label for="remember-credentials">Remember Me</label>
+                            </li>
+                            <li hidden>
+                                <a href="/login/reset-password">Trouble signing in?</a>
+                            </li>
+                            <li>
+                                <button type="submit">Log in</button>
                             </li>
                         </ul>
                     </form>

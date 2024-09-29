@@ -7,6 +7,7 @@ import loginRoute from "./login.mjs";
 import signupRoute from "./signup.mjs";
 import Layout from "../views/layout.mjs";
 import NotFound from "../views/pages/not-found.mjs";
+import logoutRoute from "./logout.mjs";
 
 /**
  * Route handling based on the pathname
@@ -57,6 +58,9 @@ export default async function routes(req, res) {
             break;
         case '/signup':
             signupRoute(req, res);
+            break;
+        case '/logout':
+            logoutRoute(req, res);
             break;
         default:
             // TODO: Mode this to a different place

@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "echo \"Error: no seed specified\" && exit 1",
-    "start": "node --env-file=.env  --experimental-sqlite --watch --experimental-default-type=module src/index.mjs"
+    "start": "node --env-file=.env --experimental-sqlite --experimental-default-type=module src/index.mjs",
+    "debug": "node --env-file=.env --inspect-brk --experimental-sqlite --watch --experimental-default-type=module src/index.mjs"
   },
   "homepage": "https://ahoi.app#readme",
   "keywords": ["node.js", "sqlite", "web components", "aws lightsail"],

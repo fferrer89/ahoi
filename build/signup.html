@@ -32,6 +32,13 @@
                         
                         
                         
+                                <li>
+                                    <a href="/logout" false>Log Out</a>
+                                </li>
+                                <li>
+                                    <a href="/private" false>afasd - Boat Renter</a>
+                                </li>
+                                
                     </ul>
                 </nav>
             </header>
@@ -49,22 +56,39 @@
                         </header>
                         <ul>
                             <li>
-                                <fieldset>
-                                    <input type="radio" name="user-type" value="boat-owner" checked aria-label="Boat Owner">
-                                    <input type="radio" name="user-type" value="boat-renter" aria-label="Boat Renter">
+                                <output name="generalErrorMsg"></output>
+                            </li>
+                            <li>
+                                <fieldset name="userTypeToggle">
+                                    <input type="radio" name="userType" value="Boat Renter" required
+                                           checked
+                                           
+                                           aria-label="Boat Renter">
+                                    <input type="radio" name="userType" value="Boat Owner" required
+                                           
+                                           aria-label="Boat Owner">
                                 </fieldset>
                             </li>
                             <li>
-                                <input type="email" placeholder="Email" aria-label="Email">
+                                <input type="text" name="email" id="email" placeholder="Email"
+                                       autocomplete="email" aria-label="Email" required
+                                        value= >
+                                <output for="email" name="emailErrorMsg"></output>
                             </li>
                             <li>
-                                <input type="text" placeholder="Username" aria-label="Username">
+                                <input type="text" name="username" id="username" placeholder="Username"
+                                       autocomplete="username" aria-label="Username" required minlength="1"
+                                       value=>
+                                <output for="username" name="usernameErrorMsg"></output>
                             </li>
                             <li>
-                                <input type="password" placeholder="Password" aria-label="Password">
+                                <input type="password" name="password"  id="password" placeholder="Password" 
+                                       autocomplete="new-password" aria-label="Password" required>
+                                <button type="button" class="hide-show-toggle-pw"></button>
+                                <output for="password" name="passwordErrorMsg"></output>
                             </li>
                             <li>
-                                <button>Register</button>
+                                <button type="submit">Register</button>
                             </li>
                         </ul>
                     </form>

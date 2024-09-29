@@ -19,8 +19,8 @@ export default class Boat { // Class that provides methods for creating and retr
             pricePerHour INTEGER,
             description TEXT,
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
-            createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL) 
-            STRICT`);
+            createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL
+            ) STRICT`);
     }
 
     /**
@@ -72,10 +72,10 @@ export default class Boat { // Class that provides methods for creating and retr
     get dbTableName() {
         return Boat.#dbTableName;
     }
-    get dbMutableFieldNames() {
+    get dbImmutableFieldNames() {
         return ['ownerId', 'addressId', 'type', 'pricePerHour', 'description'];
     }
-    get dbMutableFieldValues() {
+    get dbImmutableFieldValues() {
         return [this.ownerId, this.addressId, this.type, this.pricePerHour, this.description];
     }
     get id() {
