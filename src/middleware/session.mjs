@@ -18,7 +18,7 @@ import User from "../models/user.mjs";
  *   - Allowing users to access restricted content or features
  *   - Personalizing content based on user preferences or account information
  *   - Providing a secure and personalized experience for logged-in users
- * web-visits (web-session) vs auth-session (auth-session)
+ * web-visits (web-session) vs. auth-session (auth-session)
  */
 export default function session(req, res) {
     console.info('-sessionMiddleware');
@@ -50,7 +50,7 @@ export default function session(req, res) {
     // Find the related user
     const user = Database.query(User.db, User.dbTableName, session.userId);
     if (!user) {
-        // If user cannot be found, delete the cookie and delete the session
+        // If a user can't be found, delete the cookie and delete the session
         // Max-Age: A zero or negative number will expire the cookie immediately
         res.setHeader('Set-Cookie', `${sessionCookieName}=${session.id}; Max-Age=0; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`);
         Database.delete(Session.db, Session.dbTableName, session.id);

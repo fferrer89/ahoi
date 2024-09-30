@@ -13,6 +13,7 @@ import Session from "../models/session.mjs";
  * @param res
  */
 export default async function signupRoute(req, res) {
+    // TODO: Implement verify email functionality
     switch (req.method) {
         case 'OPTIONS':
             res.writeHead(204, {'Allow': 'OPTIONS, HEAD, GET, POST'}); // 204 – No Content
@@ -56,7 +57,6 @@ export default async function signupRoute(req, res) {
             }
             break;
         case 'POST':
-            // TODO: Implement verify email functionality and Implement reset-password functionality
             const contentType = req.headers['content-type'];
             const acceptContentTypePost = req?.headers['accept'];
             let userId;
@@ -159,8 +159,13 @@ export default async function signupRoute(req, res) {
                             err.errcode: 2067
                             err.errstr: "constraint failed"
                             err.message: “UNIQUE constraint failed: users.email, users.userType”
+                            ---
+                            err.code: 'ERR_SQLITE_ERROR'
+                            err.errcode: 2067
+                            err.errstr: "constraint failed"
+                            err.message: “UNIQUE constraint failed: users.email”
                              */
-                            if (err.message?.includes("users.email, users.userType")) {
+                            if (err.message?.includes("UNIQUE constraint failed: users.email")) {
                                 props.errorMessages.email= `This email already has a ${req.body?.userType?.toLowerCase()} account associated with it.`;
                             }
                             break;
@@ -203,13 +208,10 @@ export default async function signupRoute(req, res) {
                 res.end(); // 415 Unsupported Media Type
                 return;
             }
-            // Update the ahoiVisitorId record (cookie) by adding the userId property?
-            // Create a new cookie for the new session (ahoiSessionId)
-
             const sessionCookieName= 'sessionId';
             const expireSessionCookieSec = 3600; // Time stored as UTC timestamp, so Max-Age=3600 is UTC time now + 1 hour
             const sameSitePolicySessionCookie = 'Strict';
-            let session = new Session(req.visitor.id, userId, expireSessionCookieSec, true);
+            const session = new Session(req.visitor.id, userId, expireSessionCookieSec, true);
             res.setHeader('Set-Cookie', `${sessionCookieName}=${session.id}; Max-Age=${expireSessionCookieSec}; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`);
             req.session = {
                 id: session.id, visitorId: session.visitorId, createdAt: session.createdAt, expireTime: session.expireTime,

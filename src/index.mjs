@@ -5,6 +5,7 @@ import middlewares from "./middleware/index.mjs";
 import errorHandling from "./middleware/errorHandling.mjs";
 import sslCredentials from "../config/ssl-certificate.mjs";
 
+
 /**
  * Entry point of the application, which initializes and runs the SERVER.
  *

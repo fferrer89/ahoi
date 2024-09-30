@@ -1,7 +1,6 @@
 import Database from './database.mjs';
 import DB from '../../config/db.mjs';
 import { ACCOUNT_TYPES } from '../utils/constants.mjs';
-console.log(ACCOUNT_TYPES.BOAT_RENTER);
 
 export default class User { // Class that provides methods for creating and retrieving User
     static #db = DB.physicalDBConnection; // Database is open (similar to db.open()) // In-Memory database
@@ -29,19 +28,18 @@ export default class User { // Class that provides methods for creating and retr
         User.db.exec(`
         CREATE TABLE IF NOT EXISTS ${User.#dbTableName} (
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            email TEXT NOT NULL COLLATE NOCASE,
+            email TEXT NOT NULL COLLATE NOCASE UNIQUE,
             password TEXT NOT NULL,
             userType TEXT NOT NULL CHECK(userType IN ('${ACCOUNT_TYPES.BOAT_RENTER}', '${ACCOUNT_TYPES.BOAT_OWNER}', '${ACCOUNT_TYPES.ADMIN}')),
             username TEXT CHECK(LENGTH(TRIM(username)) > 0),         
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
-            UNIQUE (email, userType),
             CHECK (
                 email LIKE '%_@_%._%' AND
                 LENGTH(email) - LENGTH(REPLACE(email, '@', '')) = 1
                   )
             CHECK (
-                LENGTH(TRIM(password)) > 9 AND
+                LENGTH(TRIM(password)) > 7 AND
                 password GLOB '*[^0-9a-zA-Z ]*' AND
                 password GLOB '*[0-9]*' AND
                 password GLOB '*[a-zA-Z]*'
@@ -86,6 +84,11 @@ export default class User { // Class that provides methods for creating and retr
      */
     static getUserFromDb(id) {
         const user = Database.query(this.db, this.dbTableName, id);
+        return user;
+    }
+    static getLoginUserFromDb(email, password) {
+        const query = this.db.prepare(`SELECT * FROM ${this.dbTableName} WHERE email = ? AND password = ? LIMIT 1`);
+        const user = query.get(email, password);
         return user;
     }
 

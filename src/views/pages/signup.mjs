@@ -7,7 +7,6 @@ import html from "../../utils/html.mjs";
  * @constructor
  */
 export default function Signup(props, children) {
-    // TODO: Add event listener to client-side JS: When the user clears the input field and there is content in <output>, remove the content from <output>
     // props = {
     //     errorMessages: {
     //         generalErrorMsg: 'Please select a Boat Renter or Boat Owner account type',
@@ -64,7 +63,7 @@ export default function Signup(props, children) {
                             </li>
                             <li>
                                 <input type="password" name="password"  id="password" placeholder="Password" 
-                                       autocomplete="new-password" aria-label="Password" required>
+                                       autocomplete="new-password" aria-label="Password" required minlength="8">
                                 <button type="button" class="hide-show-toggle-pw"></button>
                                 <output for="password" name="passwordErrorMsg">${props?.errorMessages?.password}</output>
                             </li>
