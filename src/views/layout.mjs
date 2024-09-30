@@ -1,5 +1,6 @@
 import html from "../utils/html.mjs";
 const ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
+import { ACCOUNT_TYPES } from '../utils/constants.mjs';
 /**
  *
  * Example:
@@ -52,7 +53,7 @@ export default function Layout(props, children) {
                                 <a href="/" ${(title === 'Home') && 'aria-current="page"'}>Home</a>
                             </li>
                         `}
-                        ${title === 'Home' && html`
+                        ${title === 'Home' && !user?.id && html`
                             <li>
                                 <a href="/#how-it-works" ${(title === 'How It Works') && 'aria-current="page"'}>How It
                                     Works</a>
@@ -62,14 +63,31 @@ export default function Layout(props, children) {
                                     Your Crew</a>
                             </li>
                         `}
+                        <!-- Links displayed only to logged boat owner users -->
+                        ${user?.userType === ACCOUNT_TYPES.BOAT_OWNER && `
+                                <li>
+                                    <a href="/boats/?ownerId="${user.id} ${(title === 'Your Fleet') && 'aria-current="page"'}>Your Fleet</a>                 
+                                </li>
+                                <li>
+                                    <a href="/boats/bookings" ${(title === 'Your Boat Bookings') && 'aria-current="page"'}>Your Boat Bookings</a>
+                                </li>  
+                        `}
+                        <!-- Links displayed only to logged boat renter users -->
+                        ${user?.userType === ACCOUNT_TYPES.BOAT_RENTER && `
+                                <li>
+                                    <a href="/users/bookings" ${(title === 'Your Bookings') && 'aria-current="page"'}>Your Bookings</a>
+                                </li>
+                        `}
+                        <!-- Links displayed to all logged users (boat renter or boat owners) -->
                         ${user?.id ? 
-                                `
+                                `                               
+                                <li>
+                                    <a href="/users/"${user.id} ${(title === user.username) && 'aria-current="page"'}>${user.username}</a>
+                                    <!-- Change text to "Your Profile", instead of "username - userType"-->
+                                </li>
                                 <li>
                                     <a href="/logout" ${(title === 'Log Out') && 'aria-current="page"'}>Log Out</a>
-                                </li>
-                                <li>
-                                    <a href="/private" ${(title === 'Private') && 'aria-current="page"'}>${user.username} - ${user.userType}</a>
-                                </li>
+                                </li>                               
                                 ` 
                              : 
                                 `

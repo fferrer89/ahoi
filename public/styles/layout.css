@@ -156,7 +156,7 @@ section:has( > form[action*=signup], > form[action*=login]) {
                 }
             }
         }
-        & output[name$="ErrorMsg"]:not(:empty) {
+        & output[name$="ErrorMsg"]:not([name$="generalErrorMsg"]):not(:empty) {
             color: red;
             display: block;
             border-radius: 5px;
@@ -167,6 +167,15 @@ section:has( > form[action*=signup], > form[action*=login]) {
                 vertical-align: middle;
                 margin-inline-end: 4px;
             }
+        }
+        & output[name$="generalErrorMsg"]:not(:empty) {
+            color: red;
+            display: block;
+            border-radius: 5px;
+            padding: 13px 15px;
+            font-size: 0.9rem;
+            border: 1px solid red;
+            background-color: rgba(255, 0, 0, 0.1);
         }
     }
 }

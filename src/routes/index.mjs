@@ -40,18 +40,35 @@ export default async function routes(req, res) {
             aboutRoute(req, res);
             break;
         case '/boats':
+            // /boats?location=Chicago%2C+IL&date=2024-09-27&boatType=motorboat&ownerId=134
+            // /boats?ownerId=:userId -> "Your Fleet"
             boatsRoute(req, res);
             break;
         case `/boats/${req.params?.boatId}`: // FIXME: check whether '/boats/' takes this route and fix it if it does
             // boatRoute(req, res);
-            res.writeHead(200);
-            res.end(`/boats/${req.params.boatId}`);
             break;
-        case '/users':
+        case '/boats/bookings': //  Your boat reservation (for Boat Owner)
+            // /boats/bookings → "Your Boat Bookings" (Admin user can see ALL boat bookings)
+            // boatsBookingsRoute(req, res);
+            break;
+        case '/boats/bookings/:bookingId': // A specific boat reservation (for Boat Owner)
+            // boatsBookingRoute(req, res);
+            break;
+        case '/users': // ???
+            // GET returns all users and is only accessible to admin user. (Admin user can see ALL boat bookings)
+            // POST same as signup ??
             break;
         case `/users/${req.params?.userId}`: // FIXME: check whether '/users/ ' takes this route and fix it if it does
+            // /users/:userId -> "Your Profile" (To update the user personal information)
             res.writeHead(200);
             res.end(`/users/${req.params.userId}`);
+            break;
+        case `/users/bookings`:
+            // /users/bookings → "Your Bookings" (Admin user can see ALL user bookings)
+            // bookingsRoute(req, res);
+            break;
+        case `/users/bookings/:bookingId`:
+            // bookingRoute(req, res);
             break;
         case '/login':
             loginRoute(req, res);

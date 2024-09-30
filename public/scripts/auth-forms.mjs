@@ -24,8 +24,15 @@ inputElements?.forEach(input => {
     input.addEventListener('input', (event) => {
         if (input.type !== 'radio') {
             const output = document.querySelector(`output[for="${input.id}"]`);
+            let emailPasswordOutput = document.querySelector(`output[for="${input.id} password"]`);
+            if (!emailPasswordOutput) {
+                emailPasswordOutput = document.querySelector(`output[for="email ${input.id}"]`);
+            }
             if (output) {
                 output.textContent = '';
+            }
+            if (emailPasswordOutput) {
+                emailPasswordOutput.textContent = '';
             }
         }
     })

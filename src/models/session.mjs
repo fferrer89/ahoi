@@ -1,7 +1,6 @@
 // Sessions Management
-import Database from './database.mjs';
 import DB from '../../config/db.mjs';
-const physicalDBConnection = DB.physicalDBConnection;
+import Database from './database.mjs';
 export default class Session { // Class that provides methods for creating and retrieving sessions
     static #db = DB.inMemoryDBConnection; // Database is open (similar to db.open()) // In-Memory database
     static #dbTableName = 'sessions';

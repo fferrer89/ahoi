@@ -31,12 +31,17 @@
                             </li>
                         
                         
+                        <!-- Links displayed only to logged boat owner users -->
+                        
+                        <!-- Links displayed only to logged boat renter users -->
+                        
+                        <!-- Links displayed to all logged users (boat renter or boat owners) -->
                         
                                 <li>
-                                    <a href="/logout" false>Log Out</a>
+                                    <a href="/login" false>Log In</a>
                                 </li>
                                 <li>
-                                    <a href="/private" false>afasd - Boat Renter</a>
+                                    <a href="/signup" false>Sign Up</a>
                                 </li>
                                 
                     </ul>
@@ -83,7 +88,7 @@
                             </li>
                             <li>
                                 <input type="password" name="password"  id="password" placeholder="Password" 
-                                       autocomplete="new-password" aria-label="Password" required>
+                                       autocomplete="new-password" aria-label="Password" required minlength="8">
                                 <button type="button" class="hide-show-toggle-pw"></button>
                                 <output for="password" name="passwordErrorMsg"></output>
                             </li>
