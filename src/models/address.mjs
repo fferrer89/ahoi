@@ -1,5 +1,6 @@
 import Database from './database.mjs';
 import DB from '../../config/db.mjs';
+import { STATES } from "../utils/constants.mjs";
 
 /**
  * Example:
@@ -16,14 +17,18 @@ export default class Address {
         Address.db.exec(`
         CREATE TABLE IF NOT EXISTS ${Address.#dbTableName} (
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            state TEXT NOT NULL,
-            city TEXT NOT NULL,
-            country TEXT NOT NULL DEFAULT 'USA',
-            zipCode TEXT,
-            street TEXT,
+            state TEXT NOT NULL CHECK(userType IN ('${STATES.join("', '")}')),
+            city TEXT NOT NULL CHECK(LENGTH(TRIM(city)) > 0),
+            country TEXT NOT NULL DEFAULT 'USA' CHECK(LENGTH(TRIM(country)) > 0),
+            zipCode TEXT NOT NULL,
+            street TEXT CHECK(LENGTH(TRIM(street)) > 0,
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
-            createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL) 
-            STRICT`);
+            createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL),
+            CHECK (
+                   LENGTH(TRIM(zipCode)) = 5 AND
+                   zipCode GLOB '*[0-9]*'
+                  )
+            ) STRICT`);
     }
     /**
      * The record id as stored in the address database. Its value will be undefined if the address has not been stored

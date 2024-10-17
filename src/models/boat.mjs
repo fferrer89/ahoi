@@ -1,11 +1,11 @@
 import Database from './database.mjs';
 import DB from '../../config/db.mjs';
+import { BOAT_TYPES } from "../utils/constants.mjs";
 
 export default class Boat { // Class that provides methods for creating and retrieving Boat
     static #db = DB.physicalDBConnection; // Database is open (similar to db.open()) // In-Memory database
     static #dbTableName = 'boats';
     // sqlite Data Types: NULL, INTEGER, REAL, TEXT, BLOB
-    // e.g.: ownerId INTEGER REFERENCES users(id) NOT NULL,
     // createdAt → 1727270175
     // createdAtStr → 2024-09-25 13:16:15
     // TODO: Add available time db column and field
@@ -15,11 +15,13 @@ export default class Boat { // Class that provides methods for creating and retr
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,        
             ownerId INTEGER NOT NULL,        
             addressId INTEGER NOT NULL,
-            type TEXT,
-            pricePerHour INTEGER,
-            description TEXT,
+            type TEXT NOT NULL CHECK(type IN ('${Object.values(BOAT_TYPES).join("', '")}')),
+            pricePerHour INTEGER CHECK(pricePerHour >= 0),
+            description TEXT CHECK(LENGTH(TRIM(description)) > 0),
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
-            createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL
+            createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
+            FOREIGN KEY(ownerId) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY(addressId) REFERENCES addresses(id) ON DELETE CASCADE
             ) STRICT`);
     }
 
