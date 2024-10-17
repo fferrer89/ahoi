@@ -1,4 +1,4 @@
-import {ACCOUNT_TYPES, STATES} from './constants.mjs';
+import { ACCOUNT_TYPES, STATES } from './constants.mjs';
 
 
 const validation = {
@@ -118,11 +118,6 @@ const validation = {
         }
         return userType;
     },
-    /**
-     *
-     * @param varName
-     * @return {*}
-     */
     isRequired: (varName) => {
         throw new TypeError(`${varName} is required`)
     },

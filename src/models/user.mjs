@@ -1,7 +1,6 @@
 import Database from './database.mjs';
 import DB from '../../config/db.mjs';
 import { ACCOUNT_TYPES } from '../utils/constants.mjs';
-
 export default class User { // Class that provides methods for creating and retrieving User
     static #db = DB.physicalDBConnection; // Database is open (similar to db.open()) // In-Memory database
     static #dbTableName = 'users';
@@ -30,7 +29,7 @@ export default class User { // Class that provides methods for creating and retr
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             email TEXT NOT NULL COLLATE NOCASE UNIQUE,
             password TEXT NOT NULL,
-            userType TEXT NOT NULL CHECK(userType IN ('${ACCOUNT_TYPES.BOAT_RENTER}', '${ACCOUNT_TYPES.BOAT_OWNER}', '${ACCOUNT_TYPES.ADMIN}')),
+            userType TEXT NOT NULL CHECK(userType IN ('${Object.values(ACCOUNT_TYPES).join("', '")}')),
             username TEXT CHECK(LENGTH(TRIM(username)) > 0),         
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
@@ -120,3 +119,8 @@ export default class User { // Class that provides methods for creating and retr
         return this.#username;
     }
 }
+// console.log(Object.values(ACCOUNT_TYPES).join("', '"))
+// const user = new User('ffcala@gooale.com', '1234abcd?', 'Boat Renter', 'abc');
+// console.log(user);
+// Database.insert(user);
+ // node --experimental-sqlite user.mjs

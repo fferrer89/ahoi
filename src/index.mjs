@@ -36,9 +36,9 @@ server.on('request', async (req, res) => {
     req.on('error', err => {
         errorHandling(err, res, req);
     });
-    let body = [];
+    const body = [];
     req.on('data', chunk => {
-        body.push(chunk);
+        body.push(chunk.toString('binary'));
     })
     req.on('end', () => {
         // At this point, we have the headers, method, url, and body (if present).
