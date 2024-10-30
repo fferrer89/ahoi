@@ -60,4 +60,4 @@ private-key.pem
 
 # Files and folders not needed to be build
 build/*
-uploads/photos/*
+photos/*
