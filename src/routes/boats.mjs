@@ -2,6 +2,8 @@ import fsSync from "node:fs";
 import path from "node:path";
 import Boat from "../models/boat.mjs";
 import Database from "../models/database.mjs";
+import Address from "../models/address.mjs";
+import Image from "../models/image.mjs";
 
 /**
  * TODO: Implement this
@@ -25,7 +27,7 @@ export default async function boatsRoute(req, res) {
             */
             res.writeHead(204,
                 {
-                    'Allow': 'OPTIONS, HEAD, GET',
+                    'Allow': 'OPTIONS, HEAD, GET, POST',
                     'Access-Control-Allow-Methods': 'OPTIONS, HEAD, GET, POST',
                     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
                     'Access-Control-Expose-Headers': 'Cache-Control ,Content-Type',
@@ -60,27 +62,78 @@ export default async function boatsRoute(req, res) {
         case 'GET':
             // TODO: Implement this route
             // /boats?location=Chicago%2C+IL&date=2024-09-27&boatType=motorboat
+            if (req.query?.location) {
+                req.query.location = req.query.location?.split(', ');
+                req.query.location.city = req.query.location[0]?.trim() === '' ? undefined : req.query.location[0]?.trim();
+                req.query.location.state = req.query.location[1]?.trim() === '' ? undefined : req.query.location[1]?.trim()
+            }
+            if (req?.query?.boatType && req.query.boatType?.trim() === 'All') {
+                req.query.boatType = undefined;
+            }
+            const fullBoats = Boat.getBoatsWithImageAndAddressFromDb(req.query?.location?.state, req.query?.location?.city, req?.query?.boatType);
 
-            res.writeHead(200, { 'Content-Type': 'text/plain' }); // 406 Not Acceptable
-            res.end('Only \'text/html\' content type supported.');
+            const acceptContentType = req?.headers['accept'];
+            if (acceptContentType?.includes("*/*") ||
+                acceptContentType?.includes("text/html")) {
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                // TODO: Compose page to return all the boats in the server side
+                const boatHTML = `
+                    <dl>
+                        <dt>firstBoat Id</dt>
+                        <dd>${fullBoats[0]?.id}</dd>
+                    </dl>`;
+                res.end(boatHTML);
+            } else if (acceptContentType?.includes("application/*") ||
+                acceptContentType?.includes("application/json")) {
+                res.writeHead(200, { 'Content-Type': 'application/json; charset=UTF-8' });
+                res.end(JSON.stringify(fullBoats));
+            } else {
+                // Default response body type if the request doesn't contain an 'accept' header or an accept content type is not implemented
+                /*
+                 MIME Type:
+                 - Format: type/subtype;optionalParameter=value
+                 - An optional parameter (optionalParameter) can be added to provide additional details.
 
+                 e.g.:
+                 application/json; charset=UTF-8
+                 text/plain; charset=UTF-8
+                 application/x-www-form-urlencoded // used in forms without files/img attached
+                 multipart/form-data // used in forms with files/img attached
+                 */
+                res.writeHead(406, {'Content-Type': 'text/plain; charset=utf-8'}); // (406 Not Acceptable)
+                res.end(`Not Acceptable`);
+            }
             break;
         case 'POST':
+            // FIXME: PROTECTED RESOURCE. Only logged in users (req.session.user.id !== null) with a Boat Owner (req.session.user.id === ACCOUNT_TYPES.BOAT_OWNER) account can create boats.
             const contentType = req.headers['content-type'];
             const acceptContentTypePost = req?.headers['accept'];
             // Handle Request
             let boatId;
+            let addressId;
             if (contentType?.includes("application/json") || contentType?.includes("application/x-www-form-urlencoded")) {
                 // Validate input (ownerId and type)
-                // const boat = new Boat(req.body?.ownerId, req.body?.type);
-                // boatId = Database.insert(boat);
-                boatId = 1;
-            } else if (contentType?.includes("multipart/form-data") ) {
-                // const boat = new Boat(req.body?.ownerId, req.body?.type);
-                // boatId = Database.insert(boat);
-                boatId = 1;
+                // Create Address
+                const address = new Address(req.body?.state, req.body?.city, req.body?.country, req.body?.zipCode, req.body?.street);
+                addressId = Database.insert(address);
+                // Create Boat
+                // req.body.pricePerHour = parseInt(req.body?.pricePerHour);
+                const boat = new Boat(req.body?.ownerId, addressId, req.body?.type, req.body?.pricePerHour, req.body?.description); // FIXME: Remove
+                // const boat = new Boat(req.session.user.id, addressId, req.body?.type, req.body?.pricePerHour, req.body?.description);
+                boatId = Database.insert(boat);
+            } else if (contentType?.includes("multipart/form-data")) { // Form with Images
+                // Validate input (ownerId and type)
+                // Create Address
+                const address = new Address(req.body?.state, req.body?.city, req.body?.country, req.body?.zipCode, req.body?.street);
+                addressId = Database.insert(address);
+                // Create Boat
+                const boat = new Boat(req.body?.ownerId, addressId, req.body?.type, req.body?.pricePerHour, req.body?.description);
+                boatId = Database.insert(boat);
+                // Create Image/s (linked to the boat)
+                const image = new Image(boatId, req.body?.boatPhoto?.pathName, req.body?.boatPhoto?.name, req.body?.boatPhoto?.type, req.body?.boatPhoto?.size)
+                const imageId = Database.insert(image);
             } else {
-                res.writeHead(415, {'Accept-Post': ['application/json; charset=utf-8', 'application/x-www-form-urlencoded']});
+                res.writeHead(415, {'Accept-Post': ['application/json; charset=utf-8', 'application/x-www-form-urlencoded', 'multipart/form-data']});
                 res.end(); // 415 Unsupported Media Type
                 return;
             }
@@ -102,6 +155,7 @@ export default async function boatsRoute(req, res) {
                         <dd>${boatId}</dd>
                     </dl>`;
                 res.end(boatHTML);
+                // TODO: Redirect to boat page: /boats/:boatId
             } else {
                 // Default response body type if the request doesn't contain an 'accept' header or an accept content type is not implemented
                 /*
@@ -115,12 +169,12 @@ export default async function boatsRoute(req, res) {
                  application/x-www-form-urlencoded // used in forms without files/img attached
                  multipart/form-data // used in forms with files/img attached
                  */
-                res.writeHead(201, {'Content-Type': 'text/plain; charset=utf-8'});
-                res.end(`boatId: ${boatId}`);
+                res.writeHead(406, {'Content-Type': 'text/plain; charset=utf-8'}); // (406 Not Acceptable)
+                res.end(`Not Acceptable`);
             }
             break;
         default:
-            res.writeHead(405, {'Allow': 'OPTIONS, HEAD, GET'}); // 405 – Method Not Allowed
+            res.writeHead(405, {'Allow': 'OPTIONS, HEAD, GET, POST'}); // 405 – Method Not Allowed
             res.end();
     }
 }

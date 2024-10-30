@@ -1,7 +1,6 @@
 import Database from './database.mjs';
 import DB from '../../config/db.mjs';
-import { STATES } from "../utils/constants.mjs";
-
+import { STATES, COUNTRIES } from "../utils/constants.mjs";
 /**
  * Example:
  * INSERT INTO addresses (street, city, state, country, zipCode)
@@ -17,13 +16,13 @@ export default class Address {
         Address.db.exec(`
         CREATE TABLE IF NOT EXISTS ${Address.#dbTableName} (
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            state TEXT NOT NULL CHECK(userType IN ('${STATES.join("', '")}')),
+            state TEXT NOT NULL CHECK(state IN ('${STATES.join("', '")}')),
             city TEXT NOT NULL CHECK(LENGTH(TRIM(city)) > 0),
-            country TEXT NOT NULL DEFAULT 'USA' CHECK(LENGTH(TRIM(country)) > 0),
+            country TEXT NOT NULL DEFAULT 'USA' CHECK(country IN ('${COUNTRIES.join("', '")}')),
             zipCode TEXT NOT NULL,
-            street TEXT CHECK(LENGTH(TRIM(street)) > 0,
+            street TEXT CHECK(LENGTH(TRIM(street)) > 0 ),
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
-            createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL),
+            createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
             CHECK (
                    LENGTH(TRIM(zipCode)) = 5 AND
                    zipCode GLOB '*[0-9]*'
@@ -48,7 +47,7 @@ export default class Address {
      * @param zipCode
      * @param street
      */
-    constructor(city, state, country='USA', zipCode, street) {
+    constructor(state, city, country='USA', zipCode, street) {
         this.#state = state;
         this.#city = city;
         this.#country = country;
@@ -78,10 +77,10 @@ export default class Address {
     get dbTableName() {
         return Address.#dbTableName;
     }
-    get dbMutableFieldNames() {
+    get dbImmutableFieldNames() {
         return ['state', 'city', 'country', 'zipCode', 'street'];
     }
-    get dbMutableFieldValues() {
+    get dbImmutableFieldValues() {
         return [this.state, this.city, this.country, this.zipCode, this.street];
     }
     get id() {

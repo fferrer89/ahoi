@@ -45,7 +45,7 @@ function fileExtensionToMIMEType(fileExtension) {
  */
 function createDirectoryIfNotExists(directoryPath) {
     try {
-        fs.mkdirSync(directoryPath);
+        fs.mkdirSync(directoryPath, { recursive: true } );
         console.info(`Directory ${directoryPath} created successfully.`);
     } catch (err) {
         if (err.code !== 'EEXIST') {

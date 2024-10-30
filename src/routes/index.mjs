@@ -70,6 +70,9 @@ export default async function routes(req, res) {
         case `/users/bookings/:bookingId`:
             // bookingRoute(req, res);
             break;
+        case `/photos/:photoId`:
+            // photoRoute(req, res);
+            break;
         case '/login':
             loginRoute(req, res);
             break;

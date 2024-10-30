@@ -12,7 +12,7 @@
     "debug": "node --env-file=.env --experimental-sqlite --experimental-default-type=module --watch --inspect-brk src/index.mjs"
   },
   "homepage": "https://ahoi.app#readme",
-  "keywords": ["node.js", "sqlite", "web components", "aws lightsail"],
+  "keywords": ["node.js", "sqlite", "web components", "aws ec2"],
   "author": {
     "name": "Kiko Ferrer",
     "email": "ffcatala@gmail.com",

@@ -57,3 +57,7 @@ certificate*
 csr.pem
 private-key.pem
 *.pem
+
+# Files and folders not needed to be build
+build/*
+uploads/photos/*

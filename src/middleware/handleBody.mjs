@@ -53,8 +53,9 @@ export default function handleBody(req, res) {
                     const file = new Blob([fileContent], { type: contentType });
                     formData.set(fieldName, file, fileName);
                     const fileCreatedTime = formData.get(fieldName)?.lastModified ?? 'unknown';
-                    const userId = req?.session?.user?.id ?? 'unknown';
-                    formData.get(fieldName).pathName = `${userId}-${fileCreatedTime}-${fileNameCleaned}`;
+                    // const userId = req?.session?.user?.id ?? 'unknown';
+                    // formData.get(fieldName).pathName = `${userId}-${fileCreatedTime}-${fileNameCleaned}`;
+                    formData.get(fieldName).pathName = `${fileCreatedTime}-${fileNameCleaned}`;
 
                     // Write field content to disk
                     const filePath = path.join('./uploads/photos', formData.get(fieldName)?.pathName);

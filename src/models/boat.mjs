@@ -1,7 +1,8 @@
 import Database from './database.mjs';
 import DB from '../../config/db.mjs';
 import { BOAT_TYPES } from "../utils/constants.mjs";
-
+import Image from "./image.mjs";
+import Address from "./address.mjs";
 export default class Boat { // Class that provides methods for creating and retrieving Boat
     static #db = DB.physicalDBConnection; // Database is open (similar to db.open()) // In-Memory database
     static #dbTableName = 'boats';
@@ -41,7 +42,7 @@ export default class Boat { // Class that provides methods for creating and retr
      * @param ownerId
      * @param addressId
      * @param type
-     * @param pricePerHour
+     * @param {number} pricePerHour
      * @param description
      */
     constructor(ownerId, addressId, type, pricePerHour, description) {
@@ -66,6 +67,61 @@ export default class Boat { // Class that provides methods for creating and retr
     static getBoatFromDb(id) {
         const boat = Database.query(this.db, this.dbTableName, id);
         return boat;
+    }
+    static getBoatImagesFromDb(boatId) {
+        const query = this.db.prepare(`SELECT * FROM ${Image.dbTableName} WHERE boatId = ?`);
+        const images = query.get(boatId);
+        return images;
+    }
+    static getBoatWithImageAndAddressFromDb(boatId) {
+        const query = this.db.prepare(
+            `SELECT * 
+                 FROM ${this.dbTableName} 
+                    INNER JOIN ${Address.dbTableName} on ${Address.dbTableName}.id = ${this.dbTableName}.addressId
+                    INNER JOIN ${Image.dbTableName} on ${Image.dbTableName}.boatId = ${this.dbTableName}.id
+                 WHERE ${this.dbTableName}.id = ? LIMIT 1`);
+        const boat = query.get(boatId);
+        return boat;
+    }
+    static getBoatsWithImageAndAddressFromDb(state=null, city=null, boatType=null) {
+        let queryStr = `SELECT *
+                               FROM ${this.dbTableName}
+                                  INNER JOIN ${Address.dbTableName} on ${Address.dbTableName}.id = ${this.dbTableName}.addressId
+                                  INNER JOIN ${Image.dbTableName} on ${Image.dbTableName}.boatId = ${this.dbTableName}.id `;
+        let boats, query;
+        if (state && city && boatType) {
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type`;
+            query = this.db.prepare(queryStr);
+            boats = query.all({ state, city, type:boatType });
+        } else if (state && !city && !boatType) {
+            queryStr += `WHERE ${Address.dbTableName}.state = :state`;
+            query = this.db.prepare(queryStr);
+            boats = query.all({ state });
+        } else if (state && city && !boatType) {
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city`;
+            query = this.db.prepare(queryStr);
+            boats = query.all({ state, city });
+        } else if (state && !city && boatType) {
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.type = :type`;
+            query = this.db.prepare(queryStr);
+            boats = query.all({ state, type:boatType });
+        } else if (!state && city && !boatType) {
+            queryStr += `WHERE ${Address.dbTableName}.city = :city`;
+            query = this.db.prepare(queryStr);
+            boats = query.all({ city });
+        } else if (!state && city && boatType) {
+            queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type`;
+            query = this.db.prepare(queryStr);
+            boats = query.all({ city, type:boatType });
+        } else if (!state && !city && boatType) {
+            queryStr += `WHERE ${this.dbTableName}.type = :type`;
+            query = this.db.prepare(queryStr);
+            boats = query.all({ type:boatType });
+        } else {
+            query = this.db.prepare(queryStr);
+            boats = query.all();
+        }
+        return boats;
     }
 
     get db() {
