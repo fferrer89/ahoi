@@ -58,6 +58,10 @@ csr.pem
 private-key.pem
 *.pem
 
-# Files and folders not needed to be build
-build/*
+# Empty folders and directories
 uploads/photos/*
+# Exception to the rule above
+!uploads/photos/.gitkeep
+
+build/*
+build/.gitkeep
