@@ -64,4 +64,4 @@ uploads/photos/*
 !uploads/photos/.gitkeep
 
 build/*
-build/.gitkeep
+!build/.gitkeep
