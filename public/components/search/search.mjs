@@ -3,7 +3,7 @@ class Search extends HTMLElement {
         window.customElements.define('search-ahoi', this);
     }
     static get observedAttributes() {
-        return ['max-years-ahead-reservation'];
+        return ['max-years-ahead-reservation', 'location', 'date', 'boat-type'];
     }
     static #getCurrentDate(yearIncrementer=0) {
         const today = new Date();
@@ -13,8 +13,9 @@ class Search extends HTMLElement {
         return `${year}-${month}-${day}`;
     }
 
-    #dateInput;
-    #boatTypeInput;
+    #locationAttr
+    #dateAttr;
+    #boatTypeAttr;
     #maxYearsAheadReservation;
     #defaultMaxYearsAheadReservation = 3;
 
@@ -53,7 +54,6 @@ class Search extends HTMLElement {
             return maxYearsAheadReservation;
         }
     }
-
     /**
      * @param {number} value
      */
@@ -65,8 +65,67 @@ class Search extends HTMLElement {
             this.removeAttribute('max-years-ahead-reservation');
         } else {
             this.setAttribute('max-years-ahead-reservation', value.toString());
-            this.#dateInput.max = Search.#getCurrentDate(this.maxYearsAheadReservation);
+            this.#dateAttr.max = Search.#getCurrentDate(this.maxYearsAheadReservation);
             this.#maxYearsAheadReservation = value;
+        }
+    }
+    get location() {
+        return this.getAttribute('location');
+    }
+    set location(value) {
+        if (value === null || value === undefined || value?.trim() === '')  {
+            this.removeAttribute('location');
+            this.#locationAttr.value = '';
+        } else {
+            /* Reflecting property to attribute: When document.querySelector('search-ahoi').location property is
+                changed using JS, its related HTML attribute (location='Chicago, IL') will also be changed.
+                Info: https://web.dev/articles/custom-elements-v1#reflectattr
+                */
+            this.setAttribute('location', value);
+            this.#locationAttr.value =  this.location; // Specific to this logic
+        }
+    }
+    get boatType() {
+        return this.getAttribute('boat-type');
+    }
+    set boatType(value) {
+        if (value === null || value === undefined || value?.trim() === '')  {
+            this.removeAttribute('boat-type');
+            this.#boatTypeAttr.options.selectedIndex = 0;
+            this.#boatTypeAttr.setAttribute('aria-visited', 'false');
+        } else {
+            /* Reflecting property to attribute: When document.querySelector('search-ahoi').location property is
+                changed using JS, its related HTML attribute (boat-type='All') will also be changed.
+                Info: https://web.dev/articles/custom-elements-v1#reflectattr
+                */
+            this.setAttribute('boat-type', value);
+            for (let option of this.#boatTypeAttr.options) {
+                if (option.value === value && option.value !== 'boatType') {
+                    this.#boatTypeAttr.options.selectedIndex = option.index;
+                    this.#firstChangeValueOnBoatTypeEventHandler();
+                    break;
+                }
+            }
+        }
+    }
+    get date() {
+        return this.getAttribute('date');
+    }
+    set date(value) {
+        if (value === null || value === undefined || value?.trim() === '')  {
+            this.removeAttribute('date');
+            this.#dateAttr.type = 'text';
+            this.#dateAttr.value = 'Date';
+            this.#dateAttr.style.color = '#999';
+        } else {
+            /* Reflecting property to attribute: When document.querySelector('search-ahoi').location property is
+                changed using JS, its related HTML attribute (date='2024-11-10') will also be changed.
+                Info: https://web.dev/articles/custom-elements-v1#reflectattr
+                */
+            this.setAttribute('date', value);
+            this.#firstClickOnDateEventHandler()
+            this.#dateAttr.value =  this.date;
+            this.#changeValueOfDateEventHandler();
         }
     }
 
@@ -82,32 +141,32 @@ class Search extends HTMLElement {
      * until this time.
      */
     connectedCallback() {
-        this.#dateInput = this.shadowRoot.querySelector('input[name="date"]');
-        this.#boatTypeInput = this.shadowRoot.querySelector('select[name="boatType"]');
-
         // -------------------------------------- DOM Manipulations--------------------------------------
-        this.#dateInput.min = Search.#getCurrentDate();
-        this.#dateInput.max = Search.#getCurrentDate(this.maxYearsAheadReservation);
+        this.#locationAttr = this.shadowRoot.querySelector('input[name="location"]');
+        this.#dateAttr = this.shadowRoot.querySelector('input[name="date"]');
+        this.#boatTypeAttr = this.shadowRoot.querySelector('select[name="boatType"]');
+        this.#dateAttr.min = Search.#getCurrentDate();
+        this.#dateAttr.max = Search.#getCurrentDate(this.maxYearsAheadReservation);
         // -------------------------------------- Event Listeners ---------------------------------------
-        this.#dateInput.addEventListener('click', this.#firstClickOnDateEventHandler.bind(this), {once: true});
-        this.#dateInput.addEventListener('change', this.#changeValueOfDateEventHandler.bind(this));
-        this.#boatTypeInput.addEventListener('change', this.#firstChangeValueOnBoatTypeEventHandler.bind(this), {once: true});
+        this.#dateAttr.addEventListener('click', this.#firstClickOnDateEventHandler.bind(this), {once: true});
+        this.#dateAttr.addEventListener('change', this.#changeValueOfDateEventHandler.bind(this));
+        this.#boatTypeAttr.addEventListener('change', this.#firstChangeValueOnBoatTypeEventHandler.bind(this), {once: true});
     }
     #firstClickOnDateEventHandler(event) {
-        this.#dateInput.type = 'date';
+        this.#dateAttr.type = 'date';
     }
     #changeValueOfDateEventHandler(event) {
-        if (this.#dateInput.value === '') {
-            this.#dateInput.style.color = '#999';
+        if (this.#dateAttr.value === '') {
+            this.#dateAttr.style.color = '#999';
         } else {
-            this.#dateInput.style.color = 'initial';
+            this.#dateAttr.style.color = 'initial';
         }
     }
     #firstChangeValueOnBoatTypeEventHandler(event) {
-        const selectedOption = this.#boatTypeInput.options[this.#boatTypeInput.selectedIndex];
+        const selectedOption = this.#boatTypeAttr.options[this.#boatTypeAttr.selectedIndex];
         const selectedValue = selectedOption.value;
         if (selectedValue !== 'boatType') {
-            this.#boatTypeInput.setAttribute('aria-visited', 'true');
+            this.#boatTypeAttr.setAttribute('aria-visited', 'true');
         }
     }
 
@@ -134,9 +193,9 @@ class Search extends HTMLElement {
      * called if the user closes the tab.
      */
     disconnectedCallback() {
-        this.#dateInput.removeEventListener('click', this.#firstClickOnDateEventHandler);
-        this.#dateInput.removeEventListener('change', this.#changeValueOfDateEventHandler);
-        this.#boatTypeInput.removeEventListener('change', this.#firstChangeValueOnBoatTypeEventHandler);
+        this.#dateAttr.removeEventListener('click', this.#firstClickOnDateEventHandler);
+        this.#dateAttr.removeEventListener('change', this.#changeValueOfDateEventHandler);
+        this.#boatTypeAttr.removeEventListener('change', this.#firstChangeValueOnBoatTypeEventHandler);
     }
 
     /**
@@ -169,6 +228,18 @@ class Search extends HTMLElement {
             case 'max-years-ahead-reservation':
                 const maxYearsAheadReservationInt = parseInt(newValue, 10);
                 this.maxYearsAheadReservation = maxYearsAheadReservationInt;
+                break;
+            case 'location':
+                this.location = newValue;
+                break;
+            case 'date':
+                this.date = newValue;
+                // console.log(this?.#dateAttr?.value); // 2024-11-15
+                // console.log(this?.#dateAttr?.valueAsDate); // Thu Nov 14 2024 18:00:00 GMT-0600 (Central Standard Time)
+                // console.log(this?.#dateAttr?.valueAsNumber); // 1731628800000
+                break;
+            case 'boat-type':
+                this.boatType = newValue;
                 break;
             default:
                 break;

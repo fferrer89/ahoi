@@ -59,9 +59,9 @@ private-key.pem
 *.pem
 
 # Empty folders and directories
-uploads/photos/*
+uploads/images/*
 # Exception to the rule above
-!uploads/photos/.gitkeep
+!uploads/images/.gitkeep
 
 build/*
 !build/.gitkeep

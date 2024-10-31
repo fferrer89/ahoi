@@ -4,9 +4,11 @@ import Boat from "../models/boat.mjs";
 import Database from "../models/database.mjs";
 import Address from "../models/address.mjs";
 import Image from "../models/image.mjs";
+import Boats from "../views/pages/boats.mjs";
+import Layout from "../views/layout.mjs";
+import fs from "node:fs/promises";
 
 /**
- * TODO: Implement this
  * Route handler for the home page
  *
  * @param req
@@ -60,33 +62,64 @@ export default async function boatsRoute(req, res) {
             }
             break;
         case 'GET':
-            // TODO: Implement this route
+            // TODO: Add Error Checking (400) to query input parameters
             // /boats?location=Chicago%2C+IL&date=2024-09-27&boatType=motorboat
+            let locationCity, locationState, boatType = req?.query?.boatType;
             if (req.query?.location) {
-                req.query.location = req.query.location?.split(', ');
-                req.query.location.city = req.query.location[0]?.trim() === '' ? undefined : req.query.location[0]?.trim();
-                req.query.location.state = req.query.location[1]?.trim() === '' ? undefined : req.query.location[1]?.trim()
+                const locationArray = req.query.location?.split(', ');
+                locationCity = locationArray?.[0]?.trim() === '' ? undefined : locationArray?.[0]?.trim();
+                locationState = locationArray?.[1]?.trim() === '' ? undefined : locationArray?.[1]?.trim();
             }
-            if (req?.query?.boatType && req.query.boatType?.trim() === 'All') {
-                req.query.boatType = undefined;
+            if (boatType?.trim() === 'boatType') {
+                boatType = 'All';
+                req.query.boatType = 'All';
             }
-            const fullBoats = Boat.getBoatsWithImageAndAddressFromDb(req.query?.location?.state, req.query?.location?.city, req?.query?.boatType);
-
+            if (boatType && boatType?.trim() === 'All') {
+                boatType = undefined;
+            }
+            let boatsData;
+            try {
+                boatsData = Boat.getBoatsWithImageAndAddressFromDb(locationState, locationCity, boatType);
+            } catch (e) {
+                console.error(e);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Server Error'); // 500 Internal Server Error
+            }
             const acceptContentType = req?.headers['accept'];
             if (acceptContentType?.includes("*/*") ||
                 acceptContentType?.includes("text/html")) {
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                // TODO: Compose page to return all the boats in the server side
-                const boatHTML = `
-                    <dl>
-                        <dt>firstBoat Id</dt>
-                        <dd>${fullBoats[0]?.id}</dd>
-                    </dl>`;
-                res.end(boatHTML);
+                try {
+                    // req.query.location = 'Boston, MA';
+                    const boats = Boats({
+                        searchValues: req.query,
+                        boatsData
+                    });
+                    const layout = Layout({
+                            page: { title: 'Boats'},
+                            user: req?.session?.user
+                        }, [boats]
+                    );
+                    await fs.writeFile('build/boats.html', layout, {encoding: 'utf8'});
+                    let boatsPage;
+                    const boatsPagePath = path.resolve('build/boats.html');
+                    const boatsPageFileStats = await fs.stat(boatsPagePath);
+                    boatsPage = await fs.readFile(boatsPagePath, { encoding: 'utf8' });
+                    res.writeHead(200,
+                        {
+                            'Content-Type': 'text/html; charset=UTF-8','Content-Length': boatsPageFileStats.size,
+                            'Last-Modified': boatsPageFileStats.mtime
+                        }
+                    );
+                    res.end(boatsPage);
+                } catch (e) {
+                    console.error(e);
+                    res.writeHead(500, { 'Content-Type': 'text/plain' });
+                    res.end('Server Error'); // 500 Internal Server Error
+                }
             } else if (acceptContentType?.includes("application/*") ||
                 acceptContentType?.includes("application/json")) {
                 res.writeHead(200, { 'Content-Type': 'application/json; charset=UTF-8' });
-                res.end(JSON.stringify(fullBoats));
+                res.end(JSON.stringify(boatsData));
             } else {
                 // Default response body type if the request doesn't contain an 'accept' header or an accept content type is not implemented
                 /*
