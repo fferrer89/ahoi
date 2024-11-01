@@ -21,11 +21,14 @@ class BoatCard extends HTMLElement {
      */
     constructor() {
         super();
-        this.attachShadow({mode: 'open'}); // Attaches a Shadow DOM tree to this element
-        const template = document.querySelector('template#boat-card-template');
-        const clonedTemplate = document.importNode(template.content, true);
+        // this.attachShadow({mode: 'open'}); // Attaches a Shadow DOM tree to this element
+        // const template = document.querySelector('template#boat-card-template');
+        // const clonedTemplate = document.importNode(template.content, true);
         // template.remove(); // Removes the <template> element from the final HTML document
-        this.shadowRoot.appendChild(clonedTemplate);
+        // this.shadowRoot.appendChild(clonedTemplate);
+        const templateContent = document.querySelector('template#boat-card-template')?.content;
+        this.attachShadow( {mode: 'open'} ); // Attaches a Shadow DOM tree to this element
+        this.shadowRoot.appendChild(templateContent.cloneNode(true));
     }
 
     get available() {

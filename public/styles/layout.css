@@ -374,11 +374,19 @@ main#boats {
         }
         > section#boat-cards {
             margin-inline: 1.4rem;
+            margin-block-end: 2rem;
             display: flex;
+            gap: clamp(0.5rem, 1.3vw, 0.8rem);
             flex-direction: row;
-            /*justify-content: center;*/
+            justify-content: center;
             align-items: center;
             flex-wrap: wrap;
+            && img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                object-position: center center;
+            }
         }
     }
 }
