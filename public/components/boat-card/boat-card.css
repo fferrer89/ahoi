@@ -1,0 +1,65 @@
+:host-context(section) {
+    /*Style only applies to this custom component (HOST element) boat-card that is inside of a section html element*/
+    /*border: 1px solid red;*/
+}
+:host(*) {
+    /*border: 1px solid red;*/
+}
+
+article {
+    display: inline-block;
+    margin: 0.3rem;
+    border-radius: 15px;
+    box-shadow: 1px 1px 7px 1px rgba(0,0,0,0.2);
+    /*height: 360px;*/
+    height: clamp(340px, 30vw, 370px);;
+    width: clamp(340px, 30vw, 400px);
+    > figure {
+        margin: 0;
+        position: relative;
+        && ::slotted(img) {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            object-fit: contain;
+        }
+        > figcaption {
+            /* The term 'slotted' implies element lightDOM is moved to shadowDOM. Slotted content isn't in shadowDOM... only reflected from lightDOM.*/
+            && ::slotted(p) {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                border-radius: 3px;
+                margin-inline: 0.8em;
+                padding: 0.3em;
+                font-size: smaller;
+                background-color: var(--tertiary-color);
+            }
+        }
+    }
+    > section {
+        /*border: 1px solid red;*/
+        /*border-top: none;*/
+        padding: 0.1rem 0.8rem 0.3rem;
+        && ::slotted(p[slot='boat-location']) {
+            font-size: smaller;
+            color: gray;
+            margin-block: 0.5em;
+        }
+        && ::slotted(p[slot='boat-description']) {
+            max-width: 300px; /*FIXME: */
+            margin-block: 0.8em;
+            color: var(--secondary-color);
+        }
+    }
+}
+
+::slotted(p[slot='price-per-hour']) {
+    /*color: red;*/
+}
+::part(a) {
+    color: red;
+    display: block;
+}
+slot[name="price-per-hour"]::slotted(p) {
+    /*color: yellow;*/
+}

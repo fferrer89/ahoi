@@ -70,11 +70,7 @@ export default async function boatsRoute(req, res) {
                 locationCity = locationArray?.[0]?.trim() === '' ? undefined : locationArray?.[0]?.trim();
                 locationState = locationArray?.[1]?.trim() === '' ? undefined : locationArray?.[1]?.trim();
             }
-            if (boatType?.trim() === 'boatType') {
-                boatType = 'All';
-                req.query.boatType = 'All';
-            }
-            if (boatType && boatType?.trim() === 'All') {
+            if (boatType && (boatType?.trim() === 'All') || boatType?.trim() === '') {
                 boatType = undefined;
             }
             let boatsData;

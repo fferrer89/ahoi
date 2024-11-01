@@ -19,7 +19,7 @@ export default class Image { // Class that provides methods for creating and ret
             boatId INTEGER NOT NULL,
             pathName TEXT NOT NULL COLLATE NOCASE UNIQUE CHECK(LENGTH(TRIM(pathName)) > 0),
             name TEXT NOT NULL,
-            fileType TEXT NOT NULL,
+            type TEXT NOT NULL,
             size INTEGER NOT NULL,
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
@@ -35,21 +35,21 @@ export default class Image { // Class that provides methods for creating and ret
     #boatId;
     #pathName;
     #name;
-    #fileType;
+    #type;
     #size;
 
     /**
      * @param boatId
      * @param pathName
      * @param name
-     * @param fileType
+     * @param type
      * @param size
      */
-    constructor(boatId, pathName, name, fileType, size) {
+    constructor(boatId, pathName, name, type, size) {
         this.#boatId = boatId;
         this.#pathName = pathName;
         this.#name = name;
-        this.#fileType = fileType;
+        this.#type = type;
         this.#size = size;
     }
     static get db() {
@@ -80,10 +80,10 @@ export default class Image { // Class that provides methods for creating and ret
         return Image.#dbTableName;
     }
     get dbImmutableFieldNames() {
-        return ['boatId', 'pathName', 'name', 'fileType', 'size'];
+        return ['boatId', 'pathName', 'name', 'type', 'size'];
     }
     get dbImmutableFieldValues() {
-        return [this.boatId, this.pathName, this.name, this.fileType, this.size];
+        return [this.boatId, this.pathName, this.name, this.type, this.size];
     }
     get id() {
         return this.#id;
@@ -97,8 +97,8 @@ export default class Image { // Class that provides methods for creating and ret
     get name() {
         return this.#name;
     }
-    get fileType() {
-        return this.#fileType;
+    get type() {
+        return this.#type;
     }
     get size() {
         return this.#size;

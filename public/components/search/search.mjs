@@ -3,7 +3,7 @@ class Search extends HTMLElement {
         window.customElements.define('search-ahoi', this);
     }
     static get observedAttributes() {
-        return ['max-years-ahead-reservation', 'location', 'date', 'boat-type'];
+        return ['max-years-ahead-reservation', 'location', 'date', 'boat-type', 'required-search-inputs'];
     }
     static #getCurrentDate(yearIncrementer=0) {
         const today = new Date();
@@ -89,7 +89,7 @@ class Search extends HTMLElement {
         return this.getAttribute('boat-type');
     }
     set boatType(value) {
-        if (value === null || value === undefined || value?.trim() === '')  {
+        if (value === null || value === undefined || value?.trim() === 'boatType' || value?.trim() === '')  {
             this.removeAttribute('boat-type');
             this.#boatTypeAttr.options.selectedIndex = 0;
             this.#boatTypeAttr.setAttribute('aria-visited', 'false');
@@ -100,7 +100,7 @@ class Search extends HTMLElement {
                 */
             this.setAttribute('boat-type', value);
             for (let option of this.#boatTypeAttr.options) {
-                if (option.value === value && option.value !== 'boatType') {
+                if (option.value === value && option.value !== '') {
                     this.#boatTypeAttr.options.selectedIndex = option.index;
                     this.#firstChangeValueOnBoatTypeEventHandler();
                     break;
@@ -115,7 +115,7 @@ class Search extends HTMLElement {
         if (value === null || value === undefined || value?.trim() === '')  {
             this.removeAttribute('date');
             this.#dateAttr.type = 'text';
-            this.#dateAttr.value = 'Date';
+            // this.#dateAttr.value = 'Date';
             this.#dateAttr.style.color = '#999';
         } else {
             /* Reflecting property to attribute: When document.querySelector('search-ahoi').location property is
@@ -126,6 +126,22 @@ class Search extends HTMLElement {
             this.#firstClickOnDateEventHandler()
             this.#dateAttr.value =  this.date;
             this.#changeValueOfDateEventHandler();
+        }
+    }
+    get requiredSearchInputs() {
+        return this.hasAttribute('required-search-inputs');
+    }
+    set requiredSearchInputs(value) {
+        if (value === 'true' || value?.trim() === '') {
+            this.setAttribute('required-search-inputs', '');
+            this.#locationAttr.required = true;
+            this.#dateAttr.required = true;
+            this.#boatTypeAttr.required = true;
+        } else {
+            this.removeAttribute('required-search-inputs');
+            this.#locationAttr.required = false;
+            this.#dateAttr.required = false;
+            this.#boatTypeAttr.required = false;
         }
     }
 
@@ -165,7 +181,7 @@ class Search extends HTMLElement {
     #firstChangeValueOnBoatTypeEventHandler(event) {
         const selectedOption = this.#boatTypeAttr.options[this.#boatTypeAttr.selectedIndex];
         const selectedValue = selectedOption.value;
-        if (selectedValue !== 'boatType') {
+        if (selectedValue !== '') {
             this.#boatTypeAttr.setAttribute('aria-visited', 'true');
         }
     }
@@ -240,6 +256,9 @@ class Search extends HTMLElement {
                 break;
             case 'boat-type':
                 this.boatType = newValue;
+                break;
+            case 'required-search-inputs':
+                this.requiredSearchInputs = newValue;
                 break;
             default:
                 break;

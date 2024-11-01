@@ -1,6 +1,15 @@
 <template id="boat-card-template">
-    <link rel="stylesheet" href="/public/components/search/search.css">
-    <figure>
-        <img src="/uploads/images/1" alt="Test Photo">
-    </figure>
+    <link rel="stylesheet" href="/public/components/boat-card/boat-card.css">
+    <article>
+        <figure>
+            <slot name="boat-image"></slot>
+            <figcaption >
+                <slot name="price-per-hour">PRICE_PER_HOUR</slot><!--$267/hour-->
+            </figcaption>
+        </figure>
+        <section>
+            <slot name="boat-location">LOCATION</slot><!--BOSTON, MA-->
+            <slot name="boat-description">DESCRIPTION</slot><!--2 mastil sailboat of up t 5 sailers-->
+        </section>
+    </article>
 </template>

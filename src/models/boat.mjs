@@ -86,7 +86,7 @@ export default class Boat { // Class that provides methods for creating and retr
     static getBoatsWithImageAndAddressFromDb(state=null, city=null, boatType=null) {
         let queryStr = `SELECT ${this.dbTableName}.id as boatId, ${this.dbTableName}.ownerId, 
                                       ${this.dbTableName}.type as boatType, ${this.dbTableName}.pricePerHour,
-                                      ${this.dbTableName}.description, ${Address.dbTableName}.state,
+                                      ${this.dbTableName}.description,
                                       ${Address.dbTableName}.city, ${Address.dbTableName}.state,
                                       ${Image.dbTableName}.id as imageId, ${Image.dbTableName}.pathName,
                                       ${Image.dbTableName}.name as imageName

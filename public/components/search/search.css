@@ -95,7 +95,7 @@ select {
     &[aria-visited=false] {
         color: #999;
     }
-    > option[value="boatType"] {
+    > option#hidden-option {
         display: none;
     }
 }
@@ -126,7 +126,7 @@ styles to elements in the shadow tree from outside of it.*/
 [part="form-search"] {
 }
 ::slotted(*) {
-    /* To style ANY slotted content */
+    /* To style ANY slotted content. The term slotted implies element lightDOM is moved to shadowDOM */
 }
 :where(input, button, textarea, select, input::file-selector-button) {
     /*To make sure form controls inherit the font styling of their containers*/

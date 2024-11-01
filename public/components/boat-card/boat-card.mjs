@@ -3,9 +3,8 @@ class BoatCard extends HTMLElement {
         window.customElements.define('boat-card', this);
     }
     static get observedAttributes() {
-        // return [];
+        return ['available'];
     }
-
 
     /**
      * In the class constructor, you can set up initial state and default values, register event listeners, ...
@@ -27,6 +26,17 @@ class BoatCard extends HTMLElement {
         const clonedTemplate = document.importNode(template.content, true);
         // template.remove(); // Removes the <template> element from the final HTML document
         this.shadowRoot.appendChild(clonedTemplate);
+    }
+
+    get available() {
+        return this.hasAttribute('available');
+    }
+    set available(value) {
+        if (value === 'true' || value?.trim() === '') {
+            this.setAttribute('available', '');
+        } else {
+            this.removeAttribute('available');
+        }
     }
 
     /**
@@ -94,5 +104,16 @@ class BoatCard extends HTMLElement {
      * @param newValue the attribute's new value
      */
     attributeChangedCallback(name, oldValue, newValue) {
+        if (oldValue === newValue) {
+            return;
+        }
+        // Observing changes to attributes
+        switch (name) {
+            case 'available':
+                this.available = newValue;
+                break;
+            default:
+                break;
+        }
     }
 }

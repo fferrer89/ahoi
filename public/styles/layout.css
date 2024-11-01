@@ -176,7 +176,6 @@ section:has( > form[action*=signup], > form[action*=login]) {
     }
 }
 
-
 /*Page header structure*/
 body > header {
     container-name: page-header;
@@ -189,7 +188,7 @@ body > header {
     width: 100%;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 1px 5px dimgray;
-    &:has(+ main > section[data-layout-variant="hero"]) {
+    &:has(+ main > section) {
         /*Applies to page headers that contain a hero section. It targets the header section*/
         position: fixed;
         top: 0;
@@ -299,7 +298,6 @@ section[data-layout-variant*=hero] {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     height: 100vh;
     width: 100vw;
 }
@@ -352,7 +350,35 @@ main#home {
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    }
+}
+main#boats {
+    > section:has( search-ahoi)  {
+        margin-block-start: 90px;
+        padding-block: 1.8rem;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        > search-ahoi {
+            width: fit-content;
+            margin: 0 auto;
+            display: block;
+            box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.5);
+        }
+    }
+    > section:has( > section#boat-cards) {
+        min-height: 400px;
+        > h3 {
+            margin: 0.6em 1.8em;
+            color: var(--secondary-color);
+        }
+        > section#boat-cards {
+            margin-inline: 1.4rem;
+            display: flex;
+            flex-direction: row;
+            /*justify-content: center;*/
+            align-items: center;
+            flex-wrap: wrap;
         }
     }
 }
