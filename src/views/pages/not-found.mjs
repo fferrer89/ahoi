@@ -8,7 +8,6 @@ import html from "../../utils/html.mjs";
  * @constructor
  */
 export default function NotFound(props, children) {
-    // ${searchTemplate && `<script type="module" src="/public/components/search/search.mjs"></script>`}
     return (
         html`
             <main>

@@ -4,6 +4,7 @@ import Boat from "../models/boat.mjs";
 import Boats from "../views/pages/boats.mjs";
 import Layout from "../views/layout.mjs";
 import fs from "node:fs/promises";
+import {BOAT_TYPES} from "../utils/constants.mjs";
 
 /**
  * Route handler for the home page
@@ -59,13 +60,16 @@ export default async function boatsRoute(req, res) {
             }
             break;
         case 'GET':
-            // TODO: Add Error Checking (400) to query input parameters
             // /boats?location=Chicago%2C+IL&date=2024-09-27&boatType=motorboat
             let locationCity, locationState, boatType = req?.query?.boatType, ownerId = req?.query?.ownerId;
             if (req.query?.location) {
                 const locationArray = req.query.location?.split(', ');
                 locationCity = locationArray?.[0]?.trim() === '' ? undefined : locationArray?.[0]?.trim();
                 locationState = locationArray?.[1]?.trim() === '' ? undefined : locationArray?.[1]?.trim();
+            }
+            if (!Object.values(BOAT_TYPES).find(type => type === boatType) && boatType?.trim() !== 'All') {
+                boatType = undefined;
+                req.query.boatType = undefined;
             }
             if (boatType && (boatType?.trim() === 'All') || boatType?.trim() === '') {
                 boatType = undefined;
@@ -82,7 +86,6 @@ export default async function boatsRoute(req, res) {
             if (acceptContentType?.includes("*/*") ||
                 acceptContentType?.includes("text/html")) {
                 try {
-                    // req.query.location = 'Boston, MA';
                     const boats = Boats({
                         searchValues: req.query,
                         boatsData,

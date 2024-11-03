@@ -7,6 +7,7 @@ import Image from "../models/image.mjs";
 import MyBoats from "../views/pages/my-boats.mjs";
 import Layout from "../views/layout.mjs";
 import fs from "node:fs/promises";
+import {ACCOUNT_TYPES} from "../utils/constants.mjs";
 
 /**
  * Route handler for the home page
@@ -62,8 +63,17 @@ export default async function myBoatsRoute(req, res) {
             }
             break;
         case 'GET':
-            // TODO: Protected resource. Only authenticated boat owners can access this route and can only see their own boats
+            // Protected resource. Only authenticated boat owners can access this route and can only see their own boats
             let ownerId = req?.session?.user?.id;
+            if (!ownerId) { // stale=true
+                // res.writeHead(401, {'WWW-Authenticate': 'Basic realm="Protected Resource", domain="/my-boats"'});
+                res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/login'});
+                return res.end(); // 401 (Unauthorized) - 303 (See Other)
+            }
+            if (req?.session?.user?.userType !== ACCOUNT_TYPES.BOAT_OWNER) {
+                res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/signup'});
+                return res.end(); //  403 (Forbidden) - 303 (See Other)
+            }
             let myBoatsData;
             try {
                 myBoatsData = Boat.getBoatsWithImageAndAddressFromDb(null, null, null, ownerId);
@@ -123,7 +133,15 @@ export default async function myBoatsRoute(req, res) {
             }
             break;
         case 'POST':
-            // FIXME: PROTECTED RESOURCE. Only logged in users (req.session.user.id !== null) with a Boat Owner (req.session.user.id === ACCOUNT_TYPES.BOAT_OWNER) account can create boats.
+            //  Protected Resource only logged-in users that are boat owners can create boats.
+            if (!ownerId) {
+                res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/login'});
+                return res.end(); // See Other
+            }
+            if (req?.session?.user?.userType !== ACCOUNT_TYPES.BOAT_OWNER) {
+                res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/signup'});
+                return res.end();
+            }
             const contentType = req.headers['content-type'];
             const acceptContentTypePost = req?.headers['accept'];
             // Handle Request

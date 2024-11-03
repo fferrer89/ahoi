@@ -67,6 +67,7 @@ styles to elements in the shadow tree from outside of it.*/
 /*Signup and Login Layout*/
 section:has( > form[action*=signup], > form[action*=login]) {
     background-color: #F2F2F2;
+    color: white;
     > form {
         width: clamp(330px, 25vw, 450px);
         min-height: 350px;
@@ -293,7 +294,6 @@ section[data-layout-variant*=hero] {
     > search-ahoi {
         margin: 4rem 0.5rem;
     }
-    color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -339,6 +339,7 @@ main#home {
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center center;
+        color: white;
         /*Image overlay*/
         position: relative;
         z-index: 1;
@@ -355,7 +356,7 @@ main#home {
     }
 }
 main#boats {
-    > section {
+    > section:first-of-type {
         margin-block-start: 90px;
         padding-block: 1.8rem;
         border-bottom: 2px solid rgba(0, 0, 0, 0.1);

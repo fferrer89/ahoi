@@ -55,4 +55,11 @@ function createDirectoryIfNotExists(directoryPath) {
     }
 }
 
-export { fileExtensionToMIMEType, createDirectoryIfNotExists};
+function decodeBasicAuth(authHeader) {
+    const base64Credentials = authHeader.split(' ')?.[1]; // 'Basic YWRkc2Zhc2Q6c2Zhc2Rm';
+    const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+    const [email, password] = credentials.split(':');
+    return { email, password };
+}
+
+export { fileExtensionToMIMEType, createDirectoryIfNotExists, decodeBasicAuth};
