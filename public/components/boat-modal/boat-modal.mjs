@@ -1,11 +1,12 @@
-export default class BoatCard extends HTMLElement {
+import BoatCard from "/public/components/boat-card/boat-card.mjs";
+class BoatModal extends HTMLDialogElement {
     static {
-        window.customElements.define('boat-card', this);
+        window.customElements.define('boat-modal', this, { extends: 'dialog' });
     }
     static get observedAttributes() {
-        return ['available'];
     }
 
+    #form;
     /**
      * In the class constructor, you can set up initial state and default values, register event listeners, ...
      * Do NOT try to access the DOM of this element (search-ahoi) in the constructor, so 'document.createElement("span")'
@@ -21,20 +22,8 @@ export default class BoatCard extends HTMLElement {
      */
     constructor() {
         super();
-        const templateContent = document.querySelector('template#boat-card-template')?.content;
-        this.attachShadow( {mode: 'open'} ); // Attaches a Shadow DOM tree to this element
-        this.shadowRoot.appendChild(templateContent.cloneNode(true));
-    }
-
-    get available() {
-        return this.hasAttribute('available');
-    }
-    set available(value) {
-        if (value === 'true' || value?.trim() === '') {
-            this.setAttribute('available', '');
-        } else {
-            this.removeAttribute('available');
-        }
+        const templateContent = document.querySelector('template#boat-modal-template')?.content;
+        this.appendChild(templateContent.cloneNode(true));
     }
 
     /**
@@ -49,10 +38,10 @@ export default class BoatCard extends HTMLElement {
      * until this time.
      */
     connectedCallback() {
-        // -------------------------------------- DOM Manipulations--------------------------------------
-
-        // -------------------------------------- Event Listeners ---------------------------------------
-
+        this.#form = this.querySelector('form');
+        const closeModalBtn = this.querySelector('button[command=close]');
+        closeModalBtn.addEventListener('click', this.#closeModalEventHandler.bind(this))
+        this.addEventListener("submit", this);
     }
 
     /**
@@ -60,10 +49,65 @@ export default class BoatCard extends HTMLElement {
      * @see https://thathtml.blog/2023/07/handleevent-is-mindblowing/
      * @param event
      */
-    handleEvent(event) {
-        if (event.type === "click") {
-            window.alert(`You clicked this custom HTML web component: ${this.constructor.name}`);
+    async handleEvent(event) {
+        if (event.type === "submit") {
+            await this.#submitFormEventHandler(event);
         }
+    }
+    async #submitFormEventHandler(event) {
+        console.info(`You submitted this custom HTML web component: ${this.constructor.name}`);
+        event.preventDefault(); // Prevent default behavior when submitting a from inside a dialog element
+        // Create a FormData object to handle file uploads
+        const formData = new FormData(this.#form);
+        // Send form data to server
+        const response = await window.fetch('/my-boats', {
+            method: 'POST',
+            body: formData
+        })
+        const responseBody = await response.json()
+        // Create a boat-card and append it to the end of the boar-cards section
+        // TODO: Include the 'edit-enabled' attribute
+        const boatImage = document.createElement('img');
+        boatImage.src = `/uploads/images/${responseBody?.imageId}`;
+        boatImage.alt = `${responseBody?.type} image`;
+        boatImage.slot = 'boat-image';
+
+        const pricePerHour = document.createElement('p');
+        const price = document.createElement('strong');
+        price.textContent = `$${responseBody?.pricePerHour}`;
+        pricePerHour.appendChild(price);
+        const subTime = document.createElement('sub');
+        subTime.textContent = '/hour';
+        pricePerHour.appendChild(subTime);
+        pricePerHour.slot = 'price-per-hour';
+
+        const location = document.createElement('p');
+        location.textContent = `${responseBody?.address?.city?.toUpperCase()}, ${responseBody?.address?.state?.toUpperCase()}`;
+        location.slot = 'boat-location';
+
+        const description = document.createElement('p');
+        description.textContent = `${responseBody?.description}`;
+        description.slot = 'boat-description';
+
+        const boatCards = document.querySelector('section#boat-cards');
+        const boatCard = document.createElement('boat-card');
+        boatCard.appendChild(boatImage);
+        boatCard.appendChild(pricePerHour);
+        boatCard.appendChild(location);
+        boatCard.appendChild(description);
+        boatCards.appendChild(boatCard);
+
+        // Update the h3 with correct number of boats (data-num-boats) and with appropriate text
+        const headingNumBoats = document.querySelector('h3[data-num-boats]');
+        const numOfBoatsCur = headingNumBoats?.dataset?.numBoats;
+        const numOfBoatsNew = parseInt(numOfBoatsCur) + 1;
+        headingNumBoats.dataset.numBoats = String(numOfBoatsNew);
+        headingNumBoats.textContent = (numOfBoatsNew > 1) ? `${numOfBoatsNew} boats` : `${numOfBoatsNew} boat`;
+        this.close();
+    }
+    #closeModalEventHandler(event) {
+        this.#form.reset();
+        this.close();
     }
 
     /**
@@ -78,6 +122,8 @@ export default class BoatCard extends HTMLElement {
      * called if the user closes the tab.
      */
     disconnectedCallback() {
+        this.removeEventListener('submit', this.#submitFormEventHandler);
+        this.removeEventListener('click', this.#closeModalEventHandler);
     }
 
     /**
@@ -102,16 +148,5 @@ export default class BoatCard extends HTMLElement {
      * @param newValue the attribute's new value
      */
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) {
-            return;
-        }
-        // Observing changes to attributes
-        switch (name) {
-            case 'available':
-                this.available = newValue;
-                break;
-            default:
-                break;
-        }
     }
 }

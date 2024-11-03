@@ -23,6 +23,9 @@ if (typeof window === "undefined") {
         const boatCardComponent = document.querySelector('boat-card');
         boatCardComponent && await import('/public/components/boat-card/boat-card.mjs');
 
+        const boatModalComponent = document.querySelector('dialog[is="boat-modal"]');
+        boatModalComponent && await import('/public/components/boat-modal/boat-modal.mjs');
+
         /*
         Call script that implements the logic for the login and signup pages if the rendered HTML contains those forms
          */

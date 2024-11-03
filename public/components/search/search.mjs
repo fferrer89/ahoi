@@ -34,11 +34,12 @@ class Search extends HTMLElement {
      */
     constructor() {
         super();
-        this.attachShadow({mode: 'open'}); // Attaches a Shadow DOM tree to this element
-        const template = document.querySelector('template#search-template');
-        const clonedTemplate = document.importNode(template.content, true);
-        template.remove(); // Removes the <template> element from the final HTML document
-        this.shadowRoot.appendChild(clonedTemplate);
+        // <template id="search-template" shadowrootmode="open">, so comment code below
+        // this.attachShadow({mode: 'open'}); // Attaches a Shadow DOM tree to this element
+        // const template = document.querySelector('template#search-template');
+        // const clonedTemplate = document.importNode(template.content, true);
+        // template.remove(); // Removes the <template> element from the final HTML document
+        // this.shadowRoot.appendChild(clonedTemplate);
     }
 
     /**

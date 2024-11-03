@@ -31,13 +31,13 @@ export default function Boats(props, children) {
                 </section>
                 <section>
                     <h3>${props?.boatsData?.length > 0 ?
-                            `${props?.boatsData?.length} boats ${props?.searchValues?.location ? `in ${props?.searchValues?.location}` : ''}`
+                            `${props?.boatsData?.length} boat${props?.boatsData?.length > 1 ? `s` : ''} ${props?.searchValues?.location ? `in ${props?.searchValues?.location}` : ''}`
                             : 'We did not find a match'}
                     </h3>
                     <section id="boat-cards">
-                        ${props?.boatsData.map(boat => `
+                        ${props?.boatsData?.map(boat => `
                         <boat-card available liked>
-                            <img slot="boat-image" src="/uploads/images/${boat?.boatId}" alt="${boat?.boatType} image">
+                            <img slot="boat-image" src="/uploads/images/${boat?.imageId}" alt="${boat?.boatType} image">
                             <p slot="price-per-hour"><strong>$${boat?.pricePerHour}</strong><sub part="abc">/hour</sub></p>
                             <p slot="boat-location">${boat?.city.toUpperCase()}, ${boat?.state.toUpperCase()}</p>
                             <p slot="boat-description">${boat?.description}</p>

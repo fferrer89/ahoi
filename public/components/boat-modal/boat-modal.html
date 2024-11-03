@@ -1,0 +1,46 @@
+<template id="boat-modal-template" >
+    <button type="button" command="close" commandfor="#boat-modal" >Close Modal</button>
+    <form method="dialog">
+        <ul>
+            <li>
+                <fieldset>
+                    <legend>Boat Location</legend>
+                    <label for="state">State</label>
+                    <select id="state" name="state" >
+                        <option value="IL">IL</option>
+                        <option value="MA">MA</option>
+                    </select>
+                    <label for="city">City</label>
+                    <select id="city" name="city" >
+                        <option value="Boston">Boston</option>
+                        <option value="Chicago">Chicago</option>
+                    </select>
+                    <label for="zip-code">Zip Code</label>
+                    <input id="zip-code" type="text" name="zipCode">
+                    <label for="street">Street</label>
+                    <input id="street" type="text" name="street">
+                </fieldset>
+            </li>
+            <li>
+                <label for="type">Boat Type</label>
+                <select id="type" name="type" >
+                    <option value="Sailboat">Sailboat</option>
+                    <option value="Motorboat">Motorboat</option>
+                </select>
+            </li>
+            <li>
+                <label for="price-per-hour">Price Per Hour</label>
+                <input id="price-per-hour" name="pricePerHour" type="number">
+            </li>
+            <li>
+                <label for="description">Boat Description</label>
+                <input id="description" name="description" type="text">
+            </li>
+            <li>
+                <label for="boat-image">Boat Image</label>
+                <input id="boat-image" name="boatImage" type="file" accept="image/png, image/jpeg">
+            </li>
+        </ul>
+        <button>Create Boat</button>
+    </form>
+</template>

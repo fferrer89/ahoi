@@ -7,20 +7,6 @@ import html from "../../utils/html.mjs";
  * @constructor
  */
 export default function Signup(props, children) {
-    // props = {
-    //     errorMessages: {
-    //         generalErrorMsg: 'Please select a Boat Renter or Boat Owner account type',
-    //         username: 'Username cannot be empty',
-    //         email: 'Email cannot be empty',
-    //         password: 'Password cannot be empty',
-    //     },
-    //     values: {
-    //         userType: 'Boat Renter',
-    //         email: 'jown@me.com',
-    //         username: 'ass'
-    //     }
-    // }
-
     return (
         html`
             <main id="signup">

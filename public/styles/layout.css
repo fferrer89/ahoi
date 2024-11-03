@@ -303,7 +303,7 @@ section[data-layout-variant*=hero] {
 }
 
 /*Fieldset Toggle structure*/
-fieldset:has(input:nth-of-type(1)):has(input:nth-of-type(2)):not(:has(input:nth-of-type(3))) {
+fieldset:has( input[name=userType]) {
     border-color: var(--filter-input-color);
     border-radius: 40px;
     display: inline-block;
@@ -355,7 +355,7 @@ main#home {
     }
 }
 main#boats {
-    > section:has( search-ahoi)  {
+    > section {
         margin-block-start: 90px;
         padding-block: 1.8rem;
         border-bottom: 2px solid rgba(0, 0, 0, 0.1);
@@ -365,12 +365,35 @@ main#boats {
             display: block;
             box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.5);
         }
+        > header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-block-end: 20px;
+            > button {
+                margin: 0.6em clamp(0.1em, 3vw, 4em) 0.6em clamp(0.1em, 2vw, 1.8em);
+                color: white;
+                background-color: var(--primary-color);
+                border-radius: 5px;
+                padding: clamp(5px, 2vw, 10px);
+                border: none;
+                white-space: nowrap;
+                &&:hover {
+                    color: var(--secondary-color);
+                }
+                &&:active {
+                    transform: scale(0.95);
+                }
+            }
+        }
     }
     > section:has( > section#boat-cards) {
         min-height: 400px;
-        > h3 {
-            margin: 0.6em 1.8em;
+        && h3 {
+            margin: 0.6em clamp(0.1em, 2vw, 1.8em);
             color: var(--secondary-color);
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
         }
         > section#boat-cards {
             margin-inline: 1.4rem;
