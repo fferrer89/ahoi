@@ -3,7 +3,7 @@ import path from "node:path";
 import homeRoute from "./home.mjs";
 import aboutRoute from "./about.mjs";
 import boatsRoute from "./boats.mjs";
-import myBoatsRoute from "./myBoats.mjs";
+import myBoatsRoute from "./my-boats.mjs";
 import loginRoute from "./login.mjs";
 import signupRoute from "./signup.mjs";
 import imageRoute from "./image.mjs";

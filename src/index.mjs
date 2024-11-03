@@ -3,7 +3,7 @@ import http from 'node:http'; // TODO: delete
 import path from "node:path";
 import routes from "./routes/index.mjs";
 import middlewares from "./middleware/index.mjs";
-import errorHandling from "./middleware/errorHandling.mjs";
+import errorHandling from "./middleware/error-handling.mjs";
 // import sslCredentials from "../config/ssl-certificate.mjs";
 
 

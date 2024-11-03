@@ -68,23 +68,16 @@ export default function Layout(props, children) {
                                 <li>
                                     <a href="/my-boats"${(title === 'Your Fleet') && 'aria-current="page"'}>Your Fleet</a>                 
                                 </li>
-                                <li>
-                                    <a href="/boats/bookings" ${(title === 'Your Boat Bookings') && 'aria-current="page"'}>Your Boat Bookings</a>
-                                </li>  
+<!--                                <li><a href="/boats/bookings" ${(title === 'Your Boat Bookings') && 'aria-current="page"'}>Your Boat Bookings</a></li>  -->
                         `}
                         <!-- Links displayed only to logged boat renter users -->
                         ${user?.userType === ACCOUNT_TYPES.BOAT_RENTER && `
-                                <li>
-                                    <a href="/users/bookings" ${(title === 'Your Bookings') && 'aria-current="page"'}>Your Bookings</a>
-                                </li>
+<!--                                <li><a href="/users/bookings" ${(title === 'Your Bookings') && 'aria-current="page"'}>Your Bookings</a></li>-->
                         `}
                         <!-- Links displayed to all logged users (boat renter or boat owners) -->
                         ${user?.id ? 
                                 `                               
-                                <li>
-                                    <a href="/users/"${user.id} ${(title === user.username) && 'aria-current="page"'}>${user.username}</a>
-                                    <!-- Change text to "Your Profile", instead of "username - userType"-->
-                                </li>
+<!--                                <li><a href="/users/"${user.id} ${(title === user.username) && 'aria-current="page"'}>${user.username}</a></li>-->
                                 <li>
                                     <a href="/logout" ${(title === 'Log Out') && 'aria-current="page"'}>Log Out</a>
                                 </li>                               

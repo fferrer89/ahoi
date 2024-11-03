@@ -40,7 +40,9 @@ class BoatModal extends HTMLDialogElement {
     connectedCallback() {
         this.#form = this.querySelector('form');
         const closeModalBtn = this.querySelector('button[command=close]');
-        closeModalBtn.addEventListener('click', this.#closeModalEventHandler.bind(this))
+        const state = this.querySelector('select#state');
+        const city = this.querySelector('select#city');
+        closeModalBtn.addEventListener('click', this.#closeModalEventHandler.bind(this));
         this.addEventListener("submit", this);
     }
 
@@ -103,6 +105,7 @@ class BoatModal extends HTMLDialogElement {
         const numOfBoatsNew = parseInt(numOfBoatsCur) + 1;
         headingNumBoats.dataset.numBoats = String(numOfBoatsNew);
         headingNumBoats.textContent = (numOfBoatsNew > 1) ? `${numOfBoatsNew} boats` : `${numOfBoatsNew} boat`;
+        this.#form.reset();
         this.close();
     }
     #closeModalEventHandler(event) {

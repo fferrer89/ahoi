@@ -63,10 +63,7 @@ export default async function myBoatsRoute(req, res) {
             break;
         case 'GET':
             // TODO: Protected resource. Only authenticated boat owners can access this route and can only see their own boats
-            // console.log(req?.session?.user?.id);
-            // console.log(req?.session?.user?.userType);
-            // let ownerId = req?.session?.user?.id; // FIXME: Uncomment
-            let ownerId = 1; // FIXME: Delete
+            let ownerId = req?.session?.user?.id;
             let myBoatsData;
             try {
                 myBoatsData = Boat.getBoatsWithImageAndAddressFromDb(null, null, null, ownerId);
@@ -83,7 +80,8 @@ export default async function myBoatsRoute(req, res) {
                         myBoatsData
                     });
                     const layout = Layout({
-                            page: { title: 'Boats'},
+                            page: { title: 'Your Fleet'},
+                            user: req?.session?.user
                         }, [myBoats]
                     );
                     await fs.writeFile('build/my-boats.html', layout, {encoding: 'utf8'});
@@ -129,26 +127,22 @@ export default async function myBoatsRoute(req, res) {
             const contentType = req.headers['content-type'];
             const acceptContentTypePost = req?.headers['accept'];
             // Handle Request
-            let boatId;
-            let addressId;
-            let imageId;
+            let boatId, addressId, imageId;
+            // TODO: Input validation checks
             if (contentType?.includes("application/json") || contentType?.includes("application/x-www-form-urlencoded")) {
                 // Validate input (ownerId and type)
                 // Create Address
                 const address = new Address(req.body?.state, req.body?.city, req.body?.country ?? 'USA', req.body?.zipCode, req.body?.street);
                 addressId = Database.insert(address);
                 // Create Boat
-                // req.body.pricePerHour = parseInt(req.body?.pricePerHour);
-                const boat = new Boat(1, addressId, req.body?.type, req.body?.pricePerHour, req.body?.description); // FIXME: Remove
-                // const boat = new Boat(req.session.user.id, addressId, req.body?.type, req.body?.pricePerHour, req.body?.description);
+                const boat = new Boat(req.session.user.id, addressId, req.body?.type, req.body?.pricePerHour, req.body?.description);
                 boatId = Database.insert(boat);
             } else if (contentType?.includes("multipart/form-data")) { // Form with Images
-                // Validate input (ownerId and type)
                 // Create Address
                 const address = new Address(req.body?.state, req.body?.city, req.body?.country ?? 'USA', req.body?.zipCode, req.body?.street);
                 addressId = Database.insert(address);
                 // Create Boat
-                const boat = new Boat(req.body?.ownerId ?? 2, addressId, req.body?.type, req.body?.pricePerHour, req.body?.description);
+                const boat = new Boat(req.session.user.id, addressId, req.body?.type, req.body?.pricePerHour, req.body?.description);
                 boatId = Database.insert(boat);
                 // Create Image/s (linked to the boat)
                 const image = new Image(boatId, req.body?.boatImage?.pathName, req.body?.boatImage?.name, req.body?.boatImage?.type, req.body?.boatImage?.size)

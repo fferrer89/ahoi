@@ -1,8 +1,8 @@
 import logger from "./logger.mjs";
-import responseHeaders from "./responseHeaders.mjs";
-import publicResource from "./publicResource.mjs";
-import handleBody from "./handleBody.mjs";
-import requestHeaders from "./requestHeaders.mjs";
+import responseHeaders from "./response-headers.mjs";
+import publicResource from "./public-resource.mjs";
+import handleBody from "./handle-body.mjs";
+import requestHeaders from "./request-headers.mjs";
 import visitor from "./visitor.mjs"; // Web Visitor
 import session from "./session.mjs"; // Auth Session
 
@@ -43,4 +43,11 @@ export default function middlewares(req, res) {
     !res.writableEnded && visitor(req, res); // Web Visitor
     !res.writableEnded && session(req, res); // Auth Session
     // !res.writableEnded && protectedResources(req, res); // Authentication middleware
+    // TODO: Delete below
+    // Mock an authenticated user
+    // req.session = {
+    //     user: {
+    //         id: 2, username: 'owner', userType: 'Boat Owner'
+    //     }
+    // };
 }

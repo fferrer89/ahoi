@@ -1,65 +1,52 @@
-:host-context(section) {
-    /*Style only applies to this custom component (HOST element) boat-card that is inside of a section html element*/
-    /*border: 1px solid red;*/
-}
-:host(*) {
-    /*border: 1px solid red;*/
-}
-
-article {
-    display: inline-block;
-    margin: 0.3rem;
-    border-radius: 15px;
-    box-shadow: 1px 1px 7px 1px rgba(0,0,0,0.2);
-    height: clamp(340px, 30vw, 370px);
-    width: clamp(340px, 30vw, 400px);
-    > figure {
-        margin: 0;
-        position: relative;
-        height: 255px;
-        && ::slotted(img) {
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            /*object-fit: fill;*/
+dialog[is=boat-modal] {
+    border: 3px solid #7F7F7F;
+    /*position: relative;*/
+    ::backdrop {
+        background-color: rgba(0, 0, 0, 1);
+    }
+    > button[command=close] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: transparent;
+        border: none;
+        :active {
+            transform: scale(0.98);
         }
-        > figcaption {
-            /* The term 'slotted' implies element lightDOM is moved to shadowDOM. Slotted content isn't in shadowDOM... only reflected from lightDOM.*/
-            && ::slotted(p) {
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                border-radius: 3px;
-                margin-inline: 0.8em;
-                padding: 0.3em;
-                font-size: smaller;
-                background-color: var(--tertiary-color);
+    }
+    > form {
+        margin: 0.5rem;
+        & button.submit {
+            color: white;
+            display: block;
+            margin: auto;
+            padding-inline: 4rem;
+            padding-block: 0.4rem;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 5px;
+            &:hover {
+                color: var(--secondary-color);
+            }
+            &:active {
+                transform: scale(0.98);
+            }
+        }
+        > ul {
+            && input, && select {
+                width: 100%;
+            }
+            && label {
+                color: rgba(0, 0, 0, 0.7);
+                display: inline-block;
+                margin-block: 0.2rem;
+            }
+            > li {
+                margin-block: 0.4rem;
+                > fieldset {
+
+                }
             }
         }
     }
-    > section {
-        /*border: 1px solid red;*/
-        /*border-top: none;*/
-        padding: 0.1rem 0.8rem 0.3rem;
-        && ::slotted(p[slot='boat-location']) {
-            font-size: smaller;
-            color: gray;
-            margin-block: 0.5em;
-        }
-        && ::slotted(p[slot='boat-description']) {
-            max-width: 300px; /*FIXME: */
-            margin-block: 0.8em;
-            color: var(--secondary-color);
-        }
-    }
-}
-
-::slotted(p[slot='price-per-hour']) {
-    /*color: red;*/
-}
-::part(a) {
-    color: red;
-    display: block;
-}
-slot[name="price-per-hour"]::slotted(p) {
-    /*color: yellow;*/
 }
