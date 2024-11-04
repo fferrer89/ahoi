@@ -18,8 +18,7 @@ export default function Login(props, children) {
     //     }
     // }
     return (
-        html`
-            <main id="login">
+        html`<main id="login">
                 <section data-layout-variant="hero">
                     <form action="/login" method="post">
                         <header>
@@ -64,7 +63,6 @@ export default function Login(props, children) {
                         </ul>
                     </form>
                 </section>
-            </main>
-        `
+            </main>`
     )
 }

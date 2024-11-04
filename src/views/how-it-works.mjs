@@ -2,8 +2,7 @@ import html from "../utils/html.mjs";
 
 export default function HowItWorks(props, children) {
     return (
-        html`
-            <section id="how-it-works">
+        html`<section id="how-it-works">
                 <h2>How It Works</h2>
                 <section>
                     <h3>Boat Renter</h3>
@@ -93,7 +92,6 @@ export default function HowItWorks(props, children) {
                         </hgroup>
                     </section>
                 </section>
-            </section>
-        `
+            </section>`
     )
 }

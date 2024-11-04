@@ -21,8 +21,7 @@ export default function Layout(props, children) {
         user
     } = props;
     return (
-        html`
-            <!DOCTYPE html>
+        html`<!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
@@ -164,7 +163,5 @@ export default function Layout(props, children) {
             </footer>`
             }
             </body>
-            </html>
-        `
-    )
+            </html>`)
 }

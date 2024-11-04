@@ -7,9 +7,9 @@ export default async function notFoundController(req, res) {
     try {
         const notFound = NotFound();
         const layout = Layout({page: {title: 'Not Found'}}, [notFound]);
-        await fs.writeFile('build/notfound.html', layout, {encoding: 'utf8'});
+        await fs.writeFile('build/not-found.html', layout, {encoding: 'utf8'});
         let notFoundPage;
-        const notFoundPagePath = path.resolve('build/notfound.html');
+        const notFoundPagePath = path.resolve('build/not-found.html');
         const notFoundPageFileStats = await fs.stat(notFoundPagePath);
         notFoundPage = await fs.readFile(notFoundPagePath, {encoding: 'utf8'});
         res.writeHead(404,

@@ -2,8 +2,7 @@ import html from "../utils/html.mjs";
 
 export default function FindYourCrew(props, children) {
     return (
-        html`
-            <section id="find-your-crew">
+        html`<section id="find-your-crew">
                 <figure>
                     <img src="/public/assets/images/ocean-with-small-boats.png" alt="Ocean with small boats">
                     <figcaption>
@@ -20,7 +19,6 @@ export default function FindYourCrew(props, children) {
                         <p>Want to go sailing and gain experience as crew? Update your profile and coordinate with skippers to crew a sailboat for renters with little or no sailing experience</p>
                     </hgroup>
                 </section>
-            </section>
-        `
+            </section>`
     )
 }

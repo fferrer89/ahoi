@@ -1,61 +1,63 @@
-<template id="boat-modal-template" >
+<template id="boat-modal-template" shadowrootmode="open">
     <link rel="stylesheet" href="/public/components/boat-modal/boat-modal.css">
-    <button type="button" command="close" commandfor="#boat-modal" formmethod="dialog">
-        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50">
-            <path d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z"></path>
-        </svg>
-    </button>
-    <form method="dialog">
-        <ul>
-            <li>
-                <fieldset>
-                    <legend>Boat Location</legend>
-                    <ul>
-                        <li>
-                            <label for="state">State</label>
-                            <select id="state" name="state" required >
-                                <option value="IL">IL</option>
-                            </select>
-                        </li>
-                        <li>
-                            <label for="city">City</label>
-                            <select id="city" name="city" required>
-                                <option value="Chicago">Chicago</option>
-                                <option value="Aurora">Aurora</option>
-                                <option value="Naperville">Naperville</option>
-                            </select>
-                        </li>
-                        <li>
-                            <label for="zip-code">Zip Code</label>
-                            <input id="zip-code" type="text" name="zipCode" minlength="5" maxlength="5" required>
-                        </li>
-                        <li>
-                            <label for="street">Street</label>
-                            <input id="street" type="text" name="street" maxlength="35" required>
-                        </li>
-                    </ul>
-                </fieldset>
-            </li>
-            <li>
-                <label for="type">Boat Type</label>
-                <select id="type" name="type" required>
-                    <option value="Sailboat">Sailboat</option>
-                    <option value="Motorboat">Motorboat</option>
-                </select>
-            </li>
-            <li>
-                <label for="price-per-hour">Price Per Hour</label>
-                <input id="price-per-hour" name="pricePerHour" type="number" min="0" max="10000" required >
-            </li>
-            <li>
-                <label for="description">Boat Description</label>
-                <input id="description" name="description" type="text" maxlength="85" required >
-            </li>
-            <li>
-                <label for="boat-image">Boat Image</label>
-                <input id="boat-image" name="boatImage" type="file" accept="image/png, image/jpeg" required>
-            </li>
-        </ul>
-        <button class="submit">Create Boat</button>
-    </form>
+    <dialog id="boat-modal">
+        <button type="button" command="close" commandfor="#boat-modal" formmethod="dialog">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50">
+                <path d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z"></path>
+            </svg>
+        </button>
+        <form method="dialog">
+            <ul>
+                <li>
+                    <fieldset>
+                        <legend>Boat Location</legend>
+                        <ul>
+                            <li>
+                                <label for="state">State</label>
+                                <select id="state" name="state" required >
+                                    <option value="IL">IL</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label for="city">City</label>
+                                <select id="city" name="city" required>
+                                    <option value="Chicago">Chicago</option>
+                                    <option value="Aurora">Aurora</option>
+                                    <option value="Naperville">Naperville</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label for="zip-code">Zip Code</label>
+                                <input id="zip-code" type="text" name="zipCode" minlength="5" maxlength="5" required>
+                            </li>
+                            <li>
+                                <label for="street">Street</label>
+                                <input id="street" type="text" name="street" maxlength="35" required>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </li>
+                <li>
+                    <label for="type">Boat Type</label>
+                    <select id="type" name="type" required>
+                        <option value="Sailboat">Sailboat</option>
+                        <option value="Motorboat">Motorboat</option>
+                    </select>
+                </li>
+                <li>
+                    <label for="price-per-hour">Price Per Hour</label>
+                    <input id="price-per-hour" name="pricePerHour" type="number" min="0" max="10000" required >
+                </li>
+                <li>
+                    <label for="description">Boat Description</label>
+                    <input id="description" name="description" type="text" maxlength="85" required >
+                </li>
+                <li>
+                    <label for="boat-image">Boat Image</label>
+                    <input id="boat-image" name="boatImage" type="file" accept="image/png, image/jpeg" required>
+                </li>
+            </ul>
+            <button class="submit">Create Boat</button>
+        </form>
+    </dialog>
 </template>

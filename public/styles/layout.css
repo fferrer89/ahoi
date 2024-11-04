@@ -373,6 +373,7 @@ main#boats {
             align-items: center;
             margin-block-end: 20px;
             > button {
+                cursor: pointer;
                 margin: 0.6em clamp(0.1em, 3vw, 4em) 0.6em clamp(0.1em, 2vw, 1.8em);
                 color: white;
                 background-color: var(--primary-color);

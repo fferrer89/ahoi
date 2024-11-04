@@ -23,16 +23,15 @@ export default function Home(props, children) {
     }
     // ${searchTemplate && `<script type="module" src="/public/components/search/search.mjs"></script>`}
     return (
-        html`
-            <main id="home">
+        html`<main id="home">
                 <section data-layout-variant="hero">
                     <h1>Rent a boat in your favorite city</h1>
                     <search-ahoi max-years-ahead-reservation="4">
-                    ${searchTemplate}
+                        ${searchTemplate}
+                    </search-ahoi>   
                 </section>
                 ${howItWorks}
                 ${findYourCrew}
-            </main>
-        `
+            </main>`
     )
 }

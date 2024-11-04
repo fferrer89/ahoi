@@ -8,6 +8,7 @@ import MyBoats from "../views/pages/my-boats.mjs";
 import Layout from "../views/layout.mjs";
 import fs from "node:fs/promises";
 import {ACCOUNT_TYPES} from "../utils/constants.mjs";
+import BoatCard from "../views/boat-card.mjs";
 
 /**
  * Route handler for the home page
@@ -32,6 +33,7 @@ export default async function myBoatsRoute(req, res) {
                 {
                     'Allow': 'OPTIONS, HEAD, GET, POST',
                     'Access-Control-Allow-Methods': 'OPTIONS, HEAD, GET, POST',
+                    'Accept-Post': 'application/json',
                     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
                     'Access-Control-Expose-Headers': 'Cache-Control ,Content-Type',
                     'Access-Control-Allow-Credentials': 'true',
@@ -86,9 +88,10 @@ export default async function myBoatsRoute(req, res) {
             if (acceptContentType?.includes("*/*") ||
                 acceptContentType?.includes("text/html")) {
                 try {
+                    const boatCardComponents = myBoatsData?.map(boatObj => BoatCard({boatObj}))
                     const myBoats = MyBoats({
-                        myBoatsData
-                    });
+                        numOfBoats: myBoatsData?.length
+                    }, [boatCardComponents]);
                     const layout = Layout({
                             page: { title: 'Your Fleet'},
                             user: req?.session?.user
@@ -134,7 +137,7 @@ export default async function myBoatsRoute(req, res) {
             break;
         case 'POST':
             //  Protected Resource only logged-in users that are boat owners can create boats.
-            if (!ownerId) {
+            if (!req?.session?.user?.id) {
                 res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/login'});
                 return res.end(); // See Other
             }
@@ -171,37 +174,32 @@ export default async function myBoatsRoute(req, res) {
                 return;
             }
             // Handle Response
+            const boatObj = {
+                boatId: boatId,
+                type: req.body?.type,
+                pricePerHour: req.body?.pricePerHour,
+                description: req.body?.description,
+                imageId,
+                state: req.body?.state,
+                city: req.body?.city,
+                country: req.body?.country ?? 'USA',
+                zipCode: req.body?.zipCode,
+                street: req.body?.street,
+            };
             // Content Negotiation (what body response type does the client want back?)
             if (acceptContentTypePost?.includes("*/*") ||
                 acceptContentTypePost?.includes("application/*") ||
                 acceptContentTypePost?.includes("application/json")) {
                 // Default response body type globally and for 'application/' types
                 res.writeHead(201, {'Content-Type': 'application/json; charset=UTF-8'});
-                const boatObj = JSON.stringify({
-                    boatId: boatId,
-                    type: req.body?.type,
-                    pricePerHour: req.body?.pricePerHour,
-                    description: req.body?.description,
-                    imageId,
-                    address: {
-                        state: req.body?.state,
-                        city: req.body?.city,
-                        country: req.body?.country ?? 'USA',
-                        zipCode: req.body?.zipCode,
-                        street: req.body?.street,
+                res.end(JSON.stringify(boatObj));
+            } else if (acceptContentTypePost?.includes("text/plain")) {
+                const boatCard = BoatCard({
+                        boatObj
                     },
-                });
-                res.end(boatObj);
-            } else if (acceptContentTypePost?.includes("text/html")) {
-                const bodyString  = JSON.stringify(req.body)
-                res.writeHead(201, {'Content-Type': 'text/html'});
-                const boatHTML = `
-                    <dl>
-                        <dt>boatId</dt>
-                        <dd>${boatId}</dd>
-                    </dl>`;
-                res.end(boatHTML);
-                // TODO: Redirect to boat page: /boats/:boatId
+                );
+                res.writeHead(201, { 'Content-Type': 'text/plain; charset=UTF-8' });
+                res.end(boatCard);
             } else {
                 // Default response body type if the request doesn't contain an 'accept' header or an accept content type is not implemented
                 /*

@@ -1,11 +1,13 @@
-import BoatCard from "/public/components/boat-card/boat-card.mjs";
-class BoatModal extends HTMLDialogElement {
+// import BoatCard from "/public/components/boat-card/boat-card.mjs";
+// import styleSheet from '/public/components/boat-modal/boat-modal.css' with { type: 'css' };
+class BoatModal extends HTMLElement {
     static {
-        window.customElements.define('boat-modal', this, { extends: 'dialog' });
+        window.customElements.define('boat-modal', this);
     }
     static get observedAttributes() {
     }
 
+    #dialog;
     #form;
     /**
      * In the class constructor, you can set up initial state and default values, register event listeners, ...
@@ -22,8 +24,6 @@ class BoatModal extends HTMLDialogElement {
      */
     constructor() {
         super();
-        const templateContent = document.querySelector('template#boat-modal-template')?.content;
-        this.appendChild(templateContent.cloneNode(true));
     }
 
     /**
@@ -38,11 +38,12 @@ class BoatModal extends HTMLDialogElement {
      * until this time.
      */
     connectedCallback() {
-        this.#form = this.querySelector('form');
+        this.#form = this.shadowRoot.querySelector('form');
+        this.#dialog = this.shadowRoot.querySelector('dialog');
         const openModalBtn = document.querySelector('main#boats button[command=show-modal]');
-        const closeModalBtn = this.querySelector('button[command=close]');
+        const closeModalBtn = this.shadowRoot.querySelector('button[command=close]');
         openModalBtn.addEventListener('click', this.#openModalEventHandler.bind(this));
-        this.addEventListener("submit", this);
+        this.shadowRoot.addEventListener("submit", this);
         closeModalBtn.addEventListener('click', this.#closeModalEventHandler.bind(this));
     }
 
@@ -53,7 +54,7 @@ class BoatModal extends HTMLDialogElement {
      */
     async handleEvent(event) {
         if (event.type === "submit") {
-            await this.#submitFormEventHandler(event);
+            await this.#submitFormEventHandler(event); // Events bubbles up from submit <dialog> to <boat-modal>
         }
     }
     async #submitFormEventHandler(event) {
@@ -65,40 +66,47 @@ class BoatModal extends HTMLDialogElement {
         // FIXME: Error handling when the there is an error in the fetch() or json()
         const response = await window.fetch('/my-boats', {
             method: 'POST',
+            headers: {
+                'Accept': 'text/plain'
+            },
             body: formData
         })
-        const responseBody = await response.json()
-        // Create a boat-card and append it to the end of the boar-cards section
-        // TODO: Include the 'edit-enabled' attribute
-        const boatImage = document.createElement('img');
-        boatImage.src = `/uploads/images/${responseBody?.imageId}`;
-        boatImage.alt = `${responseBody?.type} image`;
-        boatImage.slot = 'boat-image';
-
-        const pricePerHour = document.createElement('p');
-        const price = document.createElement('strong');
-        price.textContent = `$${responseBody?.pricePerHour}`;
-        pricePerHour.appendChild(price);
-        const subTime = document.createElement('sub');
-        subTime.textContent = '/hour';
-        pricePerHour.appendChild(subTime);
-        pricePerHour.slot = 'price-per-hour';
-
-        const location = document.createElement('p');
-        location.textContent = `${responseBody?.address?.city?.toUpperCase()}, ${responseBody?.address?.state?.toUpperCase()}`;
-        location.slot = 'boat-location';
-
-        const description = document.createElement('p');
-        description.textContent = `${responseBody?.description}`;
-        description.slot = 'boat-description';
-
-        const boatCards = document.querySelector('section#boat-cards');
-        const boatCard = document.createElement('boat-card');
-        boatCard.appendChild(boatImage);
-        boatCard.appendChild(pricePerHour);
-        boatCard.appendChild(location);
-        boatCard.appendChild(description);
+        const responseBody = await response.text()
+        const boatCardHtmlDoc = Document.parseHTMLUnsafe(responseBody);
+        const boatCard = boatCardHtmlDoc?.body?.firstChild;
+        const boatCards = window.document.querySelector('section#boat-cards');
         boatCards.appendChild(boatCard);
+        // const responseBody = await response.json()
+        // // Create a boat-card and append it to the end of the boar-cards section
+        // const boatImage = document.createElement('img');
+        // boatImage.src = `/uploads/images/${responseBody?.imageId}`;
+        // boatImage.alt = `${responseBody?.type} image`;
+        // boatImage.slot = 'boat-image';
+        //
+        // const pricePerHour = document.createElement('p');
+        // const price = document.createElement('strong');
+        // price.textContent = `$${responseBody?.pricePerHour}`;
+        // pricePerHour.appendChild(price);
+        // const subTime = document.createElement('sub');
+        // subTime.textContent = '/hour';
+        // pricePerHour.appendChild(subTime);
+        // pricePerHour.slot = 'price-per-hour';
+        //
+        // const location = document.createElement('p');
+        // location.textContent = `${responseBody?.address?.city?.toUpperCase()}, ${responseBody?.address?.state?.toUpperCase()}`;
+        // location.slot = 'boat-location';
+        //
+        // const description = document.createElement('p');
+        // description.textContent = `${responseBody?.description}`;
+        // description.slot = 'boat-description';
+        //
+        // const boatCards = document.querySelector('section#boat-cards');
+        // const boatCard = document.createElement('boat-card');
+        // boatCard.appendChild(boatImage);
+        // boatCard.appendChild(pricePerHour);
+        // boatCard.appendChild(location);
+        // boatCard.appendChild(description);
+        // boatCards.appendChild(boatCard);
 
         // Update the h3 with correct number of boats (data-num-boats) and with appropriate text
         const headingNumBoats = document.querySelector('h3[data-num-boats]');
@@ -107,16 +115,16 @@ class BoatModal extends HTMLDialogElement {
         headingNumBoats.dataset.numBoats = String(numOfBoatsNew);
         headingNumBoats.textContent = (numOfBoatsNew > 1) ? `${numOfBoatsNew} boats` : `${numOfBoatsNew} boat`;
         this.#form.reset();
-        this.close();
+        this.#dialog.close();
     }
     #closeModalEventHandler(event) {
         this.#form.reset();
-        this.close();
+        this.#dialog.close();
     }
     #openModalEventHandler(event) {
         this.#form.reset();
         // Use the .showModal() method to display a modal dialog and the .show() method to display a non-modal dialog.
-        this.showModal();
+        this.#dialog.showModal();
     }
 
     /**

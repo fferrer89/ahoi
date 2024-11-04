@@ -6,7 +6,7 @@ import requestHeaders from "./request-headers.mjs";
 import visitor from "./visitor.mjs"; // Web Visitor
 import session from "./session.mjs"; // Auth Session
 import routeParams from "./route-params.mjs";
-import authChallenge from "./auth-challenge.mjs";
+// import authChallenge from "./auth-challenge.mjs";
 
 /**
  * Middleware function that intercepts the requests and responses between a client and a server. It acts as a bridge,
@@ -48,9 +48,9 @@ export default function middlewares(req, res) {
     // !res.writableEnded && authChallenge(req, res); // authorization:  Basic YWRkc2Zhc2Q6c2Zhc2Rm
     // TODO: Delete below
     // Mock an authenticated user
-    // req.session = {
-    //     user: {
-    //         id: 2, username: 'owner', userType: 'Boat Owner'
-    //     }
-    // };
+    req.session = {
+        user: {
+            id: 1, username: 'owner', userType: 'Boat Owner'
+        }
+    };
 }

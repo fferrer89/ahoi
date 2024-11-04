@@ -9,13 +9,11 @@ import html from "../../utils/html.mjs";
  */
 export default function NotFound(props, children) {
     return (
-        html`
-            <main>
+        html`<main>
                 <section data-layout-variant="hero">
                     <h1>Page Not Found</h1>
                     <p>The page you're trying to access doesn't exist</p>
                 </section>
-            </main>
-        `
+            </main>`
     )
 }

@@ -8,8 +8,7 @@ import html from "../../utils/html.mjs";
  */
 export default function Signup(props, children) {
     return (
-        html`
-            <main id="signup">
+        html`<main id="signup">
                 <section data-layout-variant="hero">
                     <form action="/signup" method="post">
                         <header>
@@ -59,7 +58,6 @@ export default function Signup(props, children) {
                         </ul>
                     </form>
                 </section>
-            </main>
-        `
+            </main>`
     )
 }

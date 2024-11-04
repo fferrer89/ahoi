@@ -1,10 +1,11 @@
-dialog[is=boat-modal] {
+dialog {
     border: 3px solid #7F7F7F;
     /*position: relative;*/
     ::backdrop {
         background-color: rgba(0, 0, 0, 1);
     }
     > button[command=close] {
+        cursor: pointer;
         position: absolute;
         top: 0;
         right: 0;
@@ -17,6 +18,7 @@ dialog[is=boat-modal] {
     > form {
         margin: 0.5rem;
         & button.submit {
+            cursor: pointer;
             color: white;
             display: block;
             margin: auto;
@@ -35,6 +37,7 @@ dialog[is=boat-modal] {
         > ul {
             && input, && select {
                 width: 100%;
+                box-sizing: border-box;
             }
             && label {
                 color: rgba(0, 0, 0, 0.8);
@@ -49,4 +52,11 @@ dialog[is=boat-modal] {
             }
         }
     }
+}
+ul {
+    list-style: none;
+    padding-inline-start: 0;
+}
+li {
+    list-style: none;
 }

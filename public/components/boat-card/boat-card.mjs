@@ -21,9 +21,9 @@ export default class BoatCard extends HTMLElement {
      */
     constructor() {
         super();
-        const templateContent = document.querySelector('template#boat-card-template')?.content;
-        this.attachShadow( {mode: 'open'} ); // Attaches a Shadow DOM tree to this element
-        this.shadowRoot.appendChild(templateContent.cloneNode(true));
+        // const templateContent = document.querySelector('template#boat-card-template')?.content;
+        // this.attachShadow( {mode: 'open'} ); // Attaches a Shadow DOM tree to this element
+        // this.shadowRoot.appendChild(templateContent.cloneNode(true));
     }
 
     get available() {
@@ -50,7 +50,6 @@ export default class BoatCard extends HTMLElement {
      */
     connectedCallback() {
         // -------------------------------------- DOM Manipulations--------------------------------------
-
         // -------------------------------------- Event Listeners ---------------------------------------
 
     }

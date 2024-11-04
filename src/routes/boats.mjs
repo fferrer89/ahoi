@@ -5,6 +5,7 @@ import Boats from "../views/pages/boats.mjs";
 import Layout from "../views/layout.mjs";
 import fs from "node:fs/promises";
 import {BOAT_TYPES} from "../utils/constants.mjs";
+import BoatCard from "../views/boat-card.mjs";
 
 /**
  * Route handler for the home page
@@ -86,11 +87,12 @@ export default async function boatsRoute(req, res) {
             if (acceptContentType?.includes("*/*") ||
                 acceptContentType?.includes("text/html")) {
                 try {
+                    const boatCardComponents = boatsData?.map(boatObj => BoatCard({boatObj}))
                     const boats = Boats({
                         searchValues: req.query,
-                        boatsData,
+                        numOfBoats: boatsData?.length,
                         user: req?.session?.user
-                    });
+                    }, [boatCardComponents]);
                     const layout = Layout({
                             page: { title: 'Boats'},
                             user: req?.session?.user
