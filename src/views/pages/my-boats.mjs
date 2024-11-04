@@ -19,6 +19,7 @@ export default function MyBoats(props, children) {
     } catch (err) {
         console.error(err);
     }
+    // FIXME: The is HTML attribute (is="boat-modal") is not compatible with IOS devices so the dialog does not render when clicked in iphone, iphad, ..
     return (
         html`
             <main id="boats">
@@ -28,7 +29,7 @@ export default function MyBoats(props, children) {
                                 `${props?.myBoatsData?.length} boat${props?.myBoatsData?.length > 1 ? `s` : ''}`
                                 : 'You have not posted any boat yet'}
                         </h3>
-                        <button type="button" command="show-modal" commandfor="#boat-modal" onclick="document.querySelector('dialog').showModal()">Post New Boat</button>
+                        <button type="button" command="show-modal" commandfor="#boat-modal">Post New Boat</button>
                     </header>
                     <dialog is="boat-modal" id="boat-modal"></dialog>
                     ${boatModalTemplate}

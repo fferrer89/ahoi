@@ -21,7 +21,7 @@ ul {
     > li {
         display: inline-block;
         height: 100%;
-        margin-inline-start: clamp(0.2rem, 1.5vw, 1.3rem);
+        margin-inline-start: clamp(0.1rem, 0.8vw, 1.3rem);
     }
 }
 button {

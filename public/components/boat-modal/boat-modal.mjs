@@ -39,9 +39,11 @@ class BoatModal extends HTMLDialogElement {
      */
     connectedCallback() {
         this.#form = this.querySelector('form');
+        const openModalBtn = document.querySelector('main#boats button[command=show-modal]');
         const closeModalBtn = this.querySelector('button[command=close]');
-        closeModalBtn.addEventListener('click', this.#closeModalEventHandler.bind(this));
+        openModalBtn.addEventListener('click', this.#openModalEventHandler.bind(this));
         this.addEventListener("submit", this);
+        closeModalBtn.addEventListener('click', this.#closeModalEventHandler.bind(this));
     }
 
     /**
@@ -111,6 +113,11 @@ class BoatModal extends HTMLDialogElement {
         this.#form.reset();
         this.close();
     }
+    #openModalEventHandler(event) {
+        this.#form.reset();
+        // Use the .showModal() method to display a modal dialog and the .show() method to display a non-modal dialog.
+        this.showModal();
+    }
 
     /**
      * disconnectedCallback() gets automatically executed by the browser after it has detached/unmounted this custom
@@ -124,6 +131,7 @@ class BoatModal extends HTMLDialogElement {
      * called if the user closes the tab.
      */
     disconnectedCallback() {
+        this.removeEventListener('click', this.#openModalEventHandler);
         this.removeEventListener('submit', this.#submitFormEventHandler);
         this.removeEventListener('click', this.#closeModalEventHandler);
     }
