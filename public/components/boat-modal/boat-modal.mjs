@@ -40,8 +40,6 @@ class BoatModal extends HTMLDialogElement {
     connectedCallback() {
         this.#form = this.querySelector('form');
         const closeModalBtn = this.querySelector('button[command=close]');
-        const state = this.querySelector('select#state');
-        const city = this.querySelector('select#city');
         closeModalBtn.addEventListener('click', this.#closeModalEventHandler.bind(this));
         this.addEventListener("submit", this);
     }
@@ -62,6 +60,7 @@ class BoatModal extends HTMLDialogElement {
         // Create a FormData object to handle file uploads
         const formData = new FormData(this.#form);
         // Send form data to server
+        // FIXME: Error handling when the there is an error in the fetch() or json()
         const response = await window.fetch('/my-boats', {
             method: 'POST',
             body: formData

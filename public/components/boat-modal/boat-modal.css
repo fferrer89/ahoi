@@ -37,7 +37,7 @@ dialog[is=boat-modal] {
                 width: 100%;
             }
             && label {
-                color: rgba(0, 0, 0, 0.7);
+                color: rgba(0, 0, 0, 0.8);
                 display: inline-block;
                 margin-block: 0.2rem;
             }
