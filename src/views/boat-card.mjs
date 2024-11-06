@@ -21,11 +21,11 @@ export default function BoatCard(props, children) {
                 ${props?.boatObj?.imageIds?.map((imageId, index) => {
                     switch (index) {
                         case 0:
-                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image">`
+                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" fetchpriority="high">`
                         case 1:
-                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" hidden>`
+                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" fetchpriority="low" hidden>`
                         default:
-                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" hidden loading="lazy">`
+                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" fetchpriority="low" loading="lazy" hidden>`
                     }
                 })}
                 <p slot="price-per-hour"><strong>$${props?.boatObj?.pricePerHour}</strong><sub>/hour</sub></p>
