@@ -1,5 +1,5 @@
-import Database from './database.mjs';
 import DB from '../../config/db.mjs';
+import Database from './database.mjs';
 
 export default class Booking {
     static #db = DB.physicalDBConnection;

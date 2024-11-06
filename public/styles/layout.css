@@ -391,7 +391,7 @@ main#boats {
         }
     }
     > section:has( > section#boat-cards) {
-        min-height: 400px;
+        min-height: 35vh;
         && h3 {
             margin: 0.6em clamp(0.1em, 2vw, 1.8em);
             color: var(--secondary-color);
@@ -406,12 +406,6 @@ main#boats {
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
-            && img {
-                height: 100%;
-                width: 100%;
-                object-fit: cover;
-                object-position: center center;
-            }
         }
     }
 }

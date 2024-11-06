@@ -1,5 +1,5 @@
-import Database from './database.mjs';
 import DB from '../../config/db.mjs';
+import Database from './database.mjs';
 import { ACCOUNT_TYPES } from '../utils/constants.mjs';
 export default class User { // Class that provides methods for creating and retrieving User
     static #db = DB.physicalDBConnection; // Database is open (similar to db.open()) // In-Memory database

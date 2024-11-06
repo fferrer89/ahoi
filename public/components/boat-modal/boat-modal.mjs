@@ -96,16 +96,16 @@ class BoatModal extends HTMLElement {
         // location.textContent = `${responseBody?.address?.city?.toUpperCase()}, ${responseBody?.address?.state?.toUpperCase()}`;
         // location.slot = 'boat-location';
         //
-        // const description = document.createElement('p');
-        // description.textContent = `${responseBody?.description}`;
-        // description.slot = 'boat-description';
+        // const title = document.createElement('p');
+        // title.textContent = `${responseBody?.title}`;
+        // title.slot = 'boat-title';
         //
         // const boatCards = document.querySelector('section#boat-cards');
         // const boatCard = document.createElement('boat-card');
         // boatCard.appendChild(boatImage);
         // boatCard.appendChild(pricePerHour);
         // boatCard.appendChild(location);
-        // boatCard.appendChild(description);
+        // boatCard.appendChild(title);
         // boatCards.appendChild(boatCard);
 
         // Update the h3 with correct number of boats (data-num-boats) and with appropriate text

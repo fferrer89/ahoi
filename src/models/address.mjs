@@ -1,5 +1,5 @@
-import Database from './database.mjs';
 import DB from '../../config/db.mjs';
+import Database from './database.mjs';
 import { STATES, COUNTRIES } from "../utils/constants.mjs";
 /**
  * Example:

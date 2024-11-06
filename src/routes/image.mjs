@@ -55,8 +55,7 @@ export default async function imageRoute(req, res) {
                     'Access-Control-Max-Age': '86400'
                 }
             ); // 204 – No Content
-            res.end();
-            break;
+            return res.end();
         case 'HEAD':
             try {
                 res.writeHead(204,
@@ -65,13 +64,12 @@ export default async function imageRoute(req, res) {
                         'Last-Modified': imagePathFileStats.mtime
                     }
                 );
-                res.end();
+                return res.end();
             } catch (e) {
                 console.error(e);
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Server Error');
+                return res.end('Server Error');
             }
-            break;
         case 'GET':
             try {
                 const fileExtension = path.extname(imageFullPath);
@@ -81,21 +79,20 @@ export default async function imageRoute(req, res) {
                 res.setHeader('Last-Modified', imagePathFileStats.mtime);
                 res.setHeader('Content-Type', mimeType);
                 res.statusCode = 200;
-                res.end(image);
+                return res.end(image);
             } catch (err) {
                 // https://nodejs.org/api/errors.html
                 if (err?.code === 'ENOENT') {
                     // ENOENT (No such file or directory): Commonly raised by fs operations to indicate that a component of the specified pathname does not exist. No entity (file or directory) could be found by the given path.
                     res.statusCode = 404;
-                    res.end('Image Not Found');
+                    return res.end('Image Not Found');
                 } else {
                     res.statusCode = 500;
-                    res.end('Internal Server Error');
+                    return res.end('Internal Server Error');
                 }
             }
-            break;
         default:
             res.writeHead(405, {'Allow': 'OPTIONS, HEAD, GET, POST'}); // 405 – Method Not Allowed
-            res.end();
+            return res.end();
     }
 }

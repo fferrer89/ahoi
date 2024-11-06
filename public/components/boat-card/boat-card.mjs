@@ -26,6 +26,14 @@ export default class BoatCard extends HTMLElement {
         // this.shadowRoot.appendChild(templateContent.cloneNode(true));
     }
 
+    #currentImageIndex = 0;
+    #numOfImages;
+    #imgCarousel;
+    #movePhotoEnabled = true;
+    #images;
+    #prevPhotoBtn;
+    #nextPhotoBtn;
+
     get available() {
         return this.hasAttribute('available');
     }
@@ -49,9 +57,15 @@ export default class BoatCard extends HTMLElement {
      * until this time.
      */
     connectedCallback() {
-        // -------------------------------------- DOM Manipulations--------------------------------------
-        // -------------------------------------- Event Listeners ---------------------------------------
-
+        this.#images = this.querySelectorAll('img');
+        this.#imgCarousel = this.shadowRoot.querySelector('section#image-carousel');
+        this.#prevPhotoBtn = this.shadowRoot.querySelector('button#prev-photo');
+        this.#nextPhotoBtn = this.shadowRoot.querySelector('button#next-photo');
+        this.#numOfImages = this.#images.length;
+        this.#removeChangeImgButtons(this.#numOfImages);
+        this.shadowRoot.addEventListener("click", this);
+        this.#prevPhotoBtn.addEventListener('click', this.#prevPhotoEventHandler.bind(this));
+        this.#nextPhotoBtn.addEventListener('click', this.#nextPhotoEventHandler.bind(this));
     }
 
     /**
@@ -61,7 +75,38 @@ export default class BoatCard extends HTMLElement {
      */
     handleEvent(event) {
         if (event.type === "click") {
-            window.alert(`You clicked this custom HTML web component: ${this.constructor.name}`);
+        }
+    }
+    #prevPhotoEventHandler(event) {
+        if (this.#movePhotoEnabled)  {
+            this.#movePhotoEnabled = false; // Disable prev/next click
+            this.#currentImageIndex = (--this.#currentImageIndex + this.#numOfImages) % this.#numOfImages;
+            this.#imgCarousel.style.transform = `translateX(-${this.#currentImageIndex * 340}px)`;
+            this.#toggleButtonDisable();
+            window.setTimeout(() => this.#movePhotoEnabled = true, 400); // Enable next click after 0.4 seconds
+        }
+    }
+    #nextPhotoEventHandler(event) {
+        if (this.#movePhotoEnabled)  {
+            this.#movePhotoEnabled = false; // Disable prev/next click
+            this.#currentImageIndex = (++this.#currentImageIndex + this.#numOfImages) % this.#numOfImages;
+            const nextImageIndex = ( this.#currentImageIndex + this.#numOfImages + 1) % this.#numOfImages;
+            if (this.#images[this.#currentImageIndex].hidden) {
+                this.#images[this.#currentImageIndex].hidden = false;
+                this.#images[nextImageIndex].loading = 'eager';
+            }
+            this.#imgCarousel.style.transform = `translateX(-${this.#currentImageIndex * 340}px)`;
+            this.#toggleButtonDisable();
+            window.setTimeout(() => this.#movePhotoEnabled = true, 400);
+        }
+    }
+    #toggleButtonDisable() {
+        this.#prevPhotoBtn.disabled = this.#currentImageIndex === 0;
+    }
+    #removeChangeImgButtons(numOfImages) {
+        if (numOfImages === 1) {
+            this.#prevPhotoBtn.remove();
+            this.#nextPhotoBtn.remove();
         }
     }
 
@@ -77,6 +122,8 @@ export default class BoatCard extends HTMLElement {
      * called if the user closes the tab.
      */
     disconnectedCallback() {
+        this.removeEventListener('click', this.#prevPhotoEventHandler);
+        this.removeEventListener('click', this.#nextPhotoEventHandler);
     }
 
     /**

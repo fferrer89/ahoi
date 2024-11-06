@@ -34,8 +34,7 @@ export default async function homeRoute(req, res) {
                     'Access-Control-Max-Age': '86400'
                 }
             ); // 204 – No Content
-            res.end();
-            break;
+            return res.end();
         case 'HEAD':
             try {
                 const homePagePath = path.resolve('build/index.html');
@@ -51,13 +50,12 @@ export default async function homeRoute(req, res) {
                         'Last-Modified': homePageFileStats.mtime
                     }
                 );
-                res.end();
+                return res.end();
             } catch (e) {
                 console.error(e);
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Server Error');
+                return res.end('Server Error');
             }
-            break;
         case 'GET':
             const acceptContentType = req?.headers['accept'];
             if (acceptContentType?.includes( "*/*") || acceptContentType?.includes("text/*") ||
@@ -80,19 +78,18 @@ export default async function homeRoute(req, res) {
                             'Last-Modified': homePageFileStats.mtime
                         }
                     );
-                    res.end(homePage);
+                    return res.end(homePage);
                 } catch (e) {
                     console.error(e);
                     res.writeHead(500, { 'Content-Type': 'text/plain' });
-                    res.end('Server Error'); // 500 Internal Server Error
+                    return res.end('Server Error'); // 500 Internal Server Error
                 }
             } else {
                 res.writeHead(406, { 'Content-Type': 'text/plain' }); // 406 Not Acceptable
-                res.end('Only \'text/html\' content type supported.');
+                return res.end('Only \'text/html\' content type supported.');
             }
-            break;
         default:
             res.writeHead(405, {'Allow': 'OPTIONS, HEAD, GET'}); // 405 – Method Not Allowed
-            res.end();
+            return res.end();
     }
 }

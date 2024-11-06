@@ -36,8 +36,7 @@ export default async function boatsRoute(req, res) {
                     'Access-Control-Max-Age': '86400'
                 }
             ); // 204 – No Content
-            res.end();
-            break;
+            return res.end();
         case 'HEAD':
             try {
                 const boatsPagePath = path.resolve('build/boats.html');
@@ -53,13 +52,12 @@ export default async function boatsRoute(req, res) {
                         'Last-Modified': boatsPageFileStats.mtime
                     }
                 );
-                res.end();
+                return res.end();
             } catch (e) {
                 console.error(e);
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Server Error');
+                return res.end('Server Error');
             }
-            break;
         case 'GET':
             // /boats?location=Chicago%2C+IL&date=2024-09-27&boatType=motorboat
             let locationCity, locationState, boatType = req?.query?.boatType, ownerId = req?.query?.ownerId;
@@ -78,10 +76,13 @@ export default async function boatsRoute(req, res) {
             let boatsData;
             try {
                 boatsData = Boat.getBoatsWithImageAndAddressFromDb(locationState, locationCity, boatType, ownerId);
+                boatsData.forEach(boat => {
+                    boat.imageIds = boat?.imageIds?.split(',')?.map(id => parseInt(id));
+                });
             } catch (e) {
                 console.error(e);
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Server Error'); // 500 Internal Server Error
+                return res.end('Server Error'); // 500 Internal Server Error
             }
             const acceptContentType = req?.headers['accept'];
             if (acceptContentType?.includes("*/*") ||
@@ -109,16 +110,16 @@ export default async function boatsRoute(req, res) {
                             'Last-Modified': boatsPageFileStats.mtime
                         }
                     );
-                    res.end(boatsPage);
+                    return res.end(boatsPage);
                 } catch (e) {
                     console.error(e);
                     res.writeHead(500, { 'Content-Type': 'text/plain' });
-                    res.end('Server Error'); // 500 Internal Server Error
+                    return res.end('Server Error'); // 500 Internal Server Error
                 }
             } else if (acceptContentType?.includes("application/*") ||
                 acceptContentType?.includes("application/json")) {
                 res.writeHead(200, { 'Content-Type': 'application/json; charset=UTF-8' });
-                res.end(JSON.stringify(boatsData));
+                return res.end(JSON.stringify(boatsData));
             } else {
                 // Default response body type if the request doesn't contain an 'accept' header or an accept content type is not implemented
                 /*
@@ -133,11 +134,10 @@ export default async function boatsRoute(req, res) {
                  multipart/form-data // used in forms with files/img attached
                  */
                 res.writeHead(406, {'Content-Type': 'text/plain; charset=utf-8'}); // (406 Not Acceptable)
-                res.end(`Not Acceptable`);
+                return res.end(`Not Acceptable`);
             }
-            break;
         default:
             res.writeHead(405, {'Allow': 'OPTIONS, HEAD, GET'}); // 405 – Method Not Allowed
-            res.end();
+            return res.end();
     }
 }

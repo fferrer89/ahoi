@@ -17,12 +17,10 @@ export default async function signupRoute(req, res) {
     switch (req.method) {
         case 'OPTIONS':
             res.writeHead(204, {'Allow': 'OPTIONS, HEAD, GET, POST'}); // 204 – No Content
-            res.end();
-            break;
+            return res.end();
         case 'HEAD':
             res.writeHead(204, {'Content-Type': 'text/plain', 'Content-Language': 'en-us'});
-            res.end();
-            break;
+            return res.end();
         case 'GET':
             const acceptContentType = req?.headers['accept'];
             if (acceptContentType?.includes("*/*") || acceptContentType?.includes("text/*") ||
@@ -45,17 +43,16 @@ export default async function signupRoute(req, res) {
                             'Last-Modified': signupPageFileStats.mtime
                         }
                     );
-                    res.end(signupPage);
+                    return res.end(signupPage);
                 } catch (e) {
                     console.error(e);
                     res.writeHead(500, {'Content-Type': 'text/plain'});
-                    res.end('Server Error'); // 500 Internal Server Error
+                    return res.end('Server Error'); // 500 Internal Server Error
                 }
             } else {
                 res.writeHead(406, {'Content-Type': 'text/plain'}); // 406 Not Acceptable
-                res.end('Only \'text/html\' content type supported.');
+                return res.end('Only \'text/html\' content type supported.');
             }
-            break;
         case 'POST':
             const contentType = req.headers['content-type'];
             const acceptContentTypePost = req?.headers['accept'];
@@ -171,14 +168,12 @@ export default async function signupRoute(req, res) {
                             break;
                         default:
                             res.writeHead(500);
-                            res.end();
-                            return;
+                            return res.end();
                     }
                     if (Object.keys(props.errorMessages).length === 0) {
                         // TODO: implement this
                         res.writeHead(500);
-                        res.end();
-                        return;
+                        return res.end();
                     }
                 }
                 if (Object.keys(props.errorMessages).length > 0) {
@@ -205,8 +200,7 @@ export default async function signupRoute(req, res) {
                 }
             } else {
                 res.writeHead(415, {'Accept-Post': ['application/json; charset=utf-8', 'application/x-www-form-urlencoded']});
-                res.end(); // 415 Unsupported Media Type
-                return;
+                return res.end(); // 415 Unsupported Media Type
             }
             const sessionCookieName= 'sessionId';
             const expireSessionCookieSec = 3600; // Time stored as UTC timestamp, so Max-Age=3600 is UTC time now + 1 hour
@@ -225,8 +219,7 @@ export default async function signupRoute(req, res) {
             // Content Negotiation (what body response type does the client want back?)
             if (acceptContentTypePost?.includes("text/html")) {
                 res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/'});
-                res.end(); // See Other (login page or user dashboard page)
-                return;
+                return res.end(); // See Other (login page or user dashboard page)
             } else {
                 /*
                  MIME Type:
@@ -240,11 +233,10 @@ export default async function signupRoute(req, res) {
                  multipart/form-data // used in forms with files/img attached
                  */
                 res.writeHead(406, {'Accept': 'text/html; charset=utf-8'});
-                res.end(`Responses to this route are only supplied in text/html format`); // Not Acceptable
+                return res.end(`Responses to this route are only supplied in text/html format`); // Not Acceptable
             }
-            break;
         default:
             res.writeHead(405, {'Allow': 'OPTIONS, HEAD, GET, POST'}); // 405 – Method Not Allowed
-            res.end('Method Not Allowed');
+            return res.end('Method Not Allowed');
     }
 }

@@ -1,0 +1,334 @@
+[
+  {
+    "email": "john@gmail.com",
+    "password": "1234abcd?",
+    "userType": "Boat Owner",
+    "username": "John Inc & Boats",
+    "boats": [
+      {
+        "address": {
+          "state": "IL",
+          "city": "Chicago",
+          "country": "USA",
+          "zipCode": "60657",
+          "street": "Melrose Harbour",
+          "id": 1
+        },
+        "type": "Sailboat",
+        "pricePerHour": 155,
+        "title": "Peaceful 2-person sailboat at Chicago Harbour!",
+        "images": [
+          {
+            "pathName": "seed_john_boat1_photo1.jpg",
+            "name": "seed_john_boat1_photo1",
+            "type": "image/jpeg",
+            "size": 618114,
+            "id": 1
+          },
+          {
+            "pathName": "seed_john_boat1_photo2.jpg",
+            "name": "seed_john_boat1_photo2",
+            "type": "image/jpeg",
+            "size": 2905097,
+            "id": 2
+          },
+          {
+            "pathName": "seed_john_boat1_photo3.jpg",
+            "name": "seed_john_boat1_photo3",
+            "type": "image/jpeg",
+            "size": 1023988,
+            "id": 3
+          }
+        ],
+        "id": 1
+      },
+      {
+        "address": {
+          "state": "IL",
+          "city": "Chicago",
+          "country": "USA",
+          "zipCode": "60657",
+          "street": "Melrose Harbour",
+          "id": 2
+        },
+        "type": "Motorboat",
+        "pricePerHour": 255,
+        "title": "18ft speed motorboat for a crew of up to 5",
+        "images": [
+          {
+            "pathName": "seed_john_boat2_photo1.jpg",
+            "name": "seed_john_boat2_photo1",
+            "type": "image/jpeg",
+            "size": 2205219,
+            "id": 4
+          },
+          {
+            "pathName": "seed_john_boat2_photo2.jpg",
+            "name": "seed_john_boat2_photo2",
+            "type": "image/jpeg",
+            "size": 4273187,
+            "id": 5
+          },
+          {
+            "pathName": "seed_john_boat2_photo3.jpg",
+            "name": "seed_john_boat2_photo3",
+            "type": "image/jpeg",
+            "size": 2687777,
+            "id": 6
+          },
+          {
+            "pathName": "seed_john_boat2_photo4.jpg",
+            "name": "seed_john_boat1_photo3",
+            "type": "image/jpeg",
+            "size": 1503534,
+            "id": 7
+          }
+        ],
+        "id": 2
+      },
+      {
+        "address": {
+          "state": "IL",
+          "city": "Chicago",
+          "country": "USA",
+          "zipCode": "60657",
+          "street": "Melrose Harbour",
+          "id": 3
+        },
+        "type": "Motorboat",
+        "pricePerHour": 500,
+        "title": "Elegant 30ft boat (1000hp): With crew included!",
+        "images": [
+          {
+            "pathName": "seed_john_boat3_photo1.jpg",
+            "name": "seed_john_boat3_photo1",
+            "type": "image/jpeg",
+            "size": 1333506,
+            "id": 8
+          },
+          {
+            "pathName": "seed_john_boat3_photo2.jpg",
+            "name": "seed_john_boat3_photo2",
+            "type": "image/jpeg",
+            "size": 6389710,
+            "id": 9
+          },
+          {
+            "pathName": "seed_john_boat3_photo3.jpg",
+            "name": "seed_john_boat3_photo3",
+            "type": "image/jpeg",
+            "size": 1007073,
+            "id": 10
+          }
+        ],
+        "id": 3
+      },
+      {
+        "address": {
+          "state": "IL",
+          "city": "Chicago",
+          "country": "USA",
+          "zipCode": "60658",
+          "street": "Grand Av",
+          "id": 4
+        },
+        "type": "Motorboat",
+        "pricePerHour": 433,
+        "title": "25ft speedboat for one in Aurora!",
+        "images": [
+          {
+            "pathName": "seed_john_boat4_photo1.jpg",
+            "name": "seed_john_boat4_photo1",
+            "type": "image/jpeg",
+            "size": 1497795,
+            "id": 11
+          }
+        ],
+        "id": 4
+      },
+      {
+        "address": {
+          "state": "IL",
+          "city": "Chicago",
+          "country": "USA",
+          "zipCode": "60658",
+          "street": "Grand Av",
+          "id": 5
+        },
+        "type": "Sailboat",
+        "pricePerHour": 101,
+        "title": "Three sailing boat in IL Central: Skipper needed",
+        "images": [
+          {
+            "pathName": "seed_john_boat5_photo1.jpg",
+            "name": "seed_john_boat5_photo1",
+            "type": "image/jpeg",
+            "size": 1800348,
+            "id": 12
+          }
+        ],
+        "id": 5
+      },
+      {
+        "address": {
+          "state": "IL",
+          "city": "Chicago",
+          "country": "USA",
+          "zipCode": "60658",
+          "street": "Grand Av",
+          "id": 6
+        },
+        "type": "Motorboat",
+        "pricePerHour": 9000,
+        "title": "Yacht with a crew of 10 in Chicago",
+        "images": [
+          {
+            "pathName": "seed_john_boat6_photo1.jpg",
+            "name": "seed_john_boat6_photo1",
+            "type": "image/jpeg",
+            "size": 1952484,
+            "id": 13
+          }
+        ],
+        "id": 6
+      },
+      {
+        "address": {
+          "state": "IL",
+          "city": "Chicago",
+          "country": "USA",
+          "zipCode": "60658",
+          "street": "Grand Av",
+          "id": 7
+        },
+        "type": "Motorboat",
+        "pricePerHour": 340,
+        "title": "Motor Yatch Atlas in perfect condition",
+        "images": [
+          {
+            "pathName": "seed_john_boat7_photo1.jpg",
+            "name": "seed_john_boat7_photo1",
+            "type": "image/jpeg",
+            "size": 995696,
+            "id": 14
+          }
+        ],
+        "id": 7
+      }
+    ],
+    "id": 1
+  },
+  {
+    "email": "belmont@marina.com",
+    "password": "1234abcd?",
+    "userType": "Boat Owner",
+    "username": "Belmont Marina",
+    "boats": [
+      {
+        "address": {
+          "state": "IL",
+          "city": "Aurora",
+          "country": "USA",
+          "zipCode": "60502",
+          "street": "Aurora Sport Harbour",
+          "id": 8
+        },
+        "type": "Sailboat",
+        "pricePerHour": 178,
+        "title": "Two-sails fun boat at Aurara harbour",
+        "images": [
+          {
+            "pathName": "seed_mary_boat1_photo1.jpg",
+            "name": "seed_mary_boat1_photo1",
+            "type": "image/jpeg",
+            "size": 1241451,
+            "id": 15
+          },
+          {
+            "pathName": "seed_mary_boat1_photo2.jpg",
+            "name": "seed_mary_boat1_photo2",
+            "type": "image/jpeg",
+            "size": 6015159,
+            "id": 16
+          }
+        ],
+        "id": 8
+      },
+      {
+        "address": {
+          "state": "IL",
+          "city": "Aurora",
+          "country": "USA",
+          "zipCode": "60502",
+          "street": "Aurora Sport Harbour",
+          "id": 9
+        },
+        "type": "Sailboat",
+        "pricePerHour": 198,
+        "title": "Elegant 20ft Catamaran: Experience in IL!",
+        "images": [
+          {
+            "pathName": "seed_mary_boat2_photo1.jpg",
+            "name": "seed_mary_boat2_photo1",
+            "type": "image/jpeg",
+            "size": 1839405,
+            "id": 17
+          },
+          {
+            "pathName": "seed_mary_boat2_photo2.jpg",
+            "name": "seed_mary_boat2_photo2",
+            "type": "image/jpeg",
+            "size": 2202179,
+            "id": 18
+          }
+        ],
+        "id": 9
+      },
+      {
+        "address": {
+          "state": "IL",
+          "city": "Naperville",
+          "country": "USA",
+          "zipCode": "60563",
+          "street": "North Central Lake",
+          "id": 10
+        },
+        "type": "Sailboat",
+        "pricePerHour": 133,
+        "title": "Boat for 3 in Naperville: Great Lake!",
+        "images": [
+          {
+            "pathName": "seed_mary_boat3_photo1.jpg",
+            "name": "seed_mary_boat3_photo1",
+            "type": "image/jpeg",
+            "size": 4799476,
+            "id": 19
+          }
+        ],
+        "id": 10
+      }
+    ],
+    "id": 2
+  },
+  {
+    "email": "mary@gmail.com",
+    "password": "1234abcd?",
+    "userType": "Boat Owner",
+    "username": "Mary",
+    "id": 3
+  },
+  {
+    "email": "john@hotmail.com",
+    "password": "1234abcd?",
+    "userType": "Boat Renter",
+    "username": "John",
+    "id": 4
+  },
+  {
+    "email": "philip@me.com",
+    "password": "1234abcd?",
+    "userType": "Boat Renter",
+    "username": "Phil",
+    "id": 5
+  }
+]

@@ -80,7 +80,7 @@ export default class Database {
             return record;
         } else {
             const query = db.prepare(`SELECT * FROM ${dbTable}`);
-            const records = query.get();
+            const records = query.all();
             return records;
         }
     }

@@ -51,11 +51,12 @@ export default function handleBody(req, res) {
 
                     // Store file in FormData() object
                     const file = new Blob([fileContent], { type: contentType });
-                    formData.set(fieldName, file, fileName);
-                    const fileCreatedTime = formData.get(fieldName)?.lastModified ?? 'unknown';
-                    formData.get(fieldName).pathName = `${fileCreatedTime}-${fileNameCleaned}`;
+                    formData.append(fieldName, file, fileName);
+                    const lastFile = formData.getAll(fieldName)?.[formData.getAll(fieldName).length - 1];
+                    const fileCreatedTime = lastFile.lastModified ?? 'unknown';
+                    lastFile.pathName = `${fileCreatedTime}-${fileNameCleaned}`;
                     // Write field content to disk
-                    const filePath = path.join('./uploads/images', formData.get(fieldName)?.pathName);
+                    const filePath = path.join('./uploads/images', lastFile?.pathName);
                     fs.writeFileSync(filePath, fileContent, { encoding: 'binary' });
                 } else {
                     // Handle other form fields
@@ -66,13 +67,24 @@ export default function handleBody(req, res) {
             })
             // Convert formData to a JS object
             formData.forEach((value, key) => {
+                // key: boatImage; value: File
                 if (value instanceof Blob) {
-                    parsedBody[key] = {
+                    const curElement = parsedBody[key];
+                    const newElement = {
                         size: value.size,
                         type: value.type,
                         name: value.name?.substring(0, value.name?.indexOf('.')),
                         pathName: value.pathName,
                         lastModified: value.lastModified,
+                    };
+                    if (curElement) {
+                        if (parsedBody[key] instanceof Array) {
+                            parsedBody[key] = [...curElement, newElement];
+                        } else {
+                            parsedBody[key] = [curElement, newElement];
+                        }
+                    } else {
+                        parsedBody[key] = newElement;
                     }
                 } else {
                     parsedBody[key] = value

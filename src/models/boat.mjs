@@ -1,8 +1,8 @@
-import Database from './database.mjs';
 import DB from '../../config/db.mjs';
-import { BOAT_TYPES } from "../utils/constants.mjs";
+import Database from './database.mjs';
 import Image from "./image.mjs";
 import Address from "./address.mjs";
+import { BOAT_TYPES } from "../utils/constants.mjs";
 export default class Boat { // Class that provides methods for creating and retrieving Boat
     static #db = DB.physicalDBConnection; // Database is open (similar to db.open()) // In-Memory database
     static #dbTableName = 'boats';
@@ -18,7 +18,7 @@ export default class Boat { // Class that provides methods for creating and retr
             addressId INTEGER NOT NULL,
             type TEXT NOT NULL CHECK(type IN ('${Object.values(BOAT_TYPES).join("', '")}')),
             pricePerHour INTEGER CHECK(pricePerHour >= 0),
-            description TEXT CHECK(LENGTH(TRIM(description)) > 0),
+            title TEXT CHECK(LENGTH(TRIM(title)) > 0),
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
             FOREIGN KEY(ownerId) REFERENCES users(id) ON DELETE CASCADE,
@@ -35,7 +35,7 @@ export default class Boat { // Class that provides methods for creating and retr
     #addressId;
     #type;
     #pricePerHour;
-    #description;
+    #title;
 
     /**
      *
@@ -43,14 +43,14 @@ export default class Boat { // Class that provides methods for creating and retr
      * @param addressId
      * @param type
      * @param {number} pricePerHour
-     * @param description
+     * @param title
      */
-    constructor(ownerId, addressId, type, pricePerHour, description) {
+    constructor(ownerId, addressId, type, pricePerHour, title) {
         this.#ownerId = ownerId;
         this.#addressId = addressId;
         this.#type = type; // Sailboat, Motorboat
         this.#pricePerHour = pricePerHour;
-        this.#description = description;
+        this.#title = title;
     }
     static get db() {
         return this.#db;
@@ -86,7 +86,7 @@ export default class Boat { // Class that provides methods for creating and retr
     // static getBoatsWithImageAndAddressFromDb(state=null, city=null, boatType=null, ownerId=null) {
     //     let queryStr = `SELECT ${this.dbTableName}.id as boatId, ${this.dbTableName}.ownerId,
     //                                   ${this.dbTableName}.type as boatType, ${this.dbTableName}.pricePerHour,
-    //                                   ${this.dbTableName}.description,
+    //                                   ${this.dbTableName}.title,
     //                                   ${Address.dbTableName}.city, ${Address.dbTableName}.state,
     //                                   ${Image.dbTableName}.id as imageId, ${Image.dbTableName}.pathName,
     //                                   ${Image.dbTableName}.name as imageName
@@ -131,75 +131,91 @@ export default class Boat { // Class that provides methods for creating and retr
     static getBoatsWithImageAndAddressFromDb(state=null, city=null, boatType=null, ownerId=null) {
         let queryStr = `SELECT ${this.dbTableName}.id as boatId, ${this.dbTableName}.ownerId, 
                                   ${this.dbTableName}.type as boatType, ${this.dbTableName}.pricePerHour,
-                                  ${this.dbTableName}.description,
+                                  ${this.dbTableName}.title,
                                   ${Address.dbTableName}.city, ${Address.dbTableName}.state,
-                                  ${Image.dbTableName}.id as imageId, ${Image.dbTableName}.pathName,
-                                  ${Image.dbTableName}.name as imageName
-                           FROM ${this.dbTableName}
-                              INNER JOIN ${Address.dbTableName} on ${Address.dbTableName}.id = ${this.dbTableName}.addressId
-                              INNER JOIN ${Image.dbTableName} on ${Image.dbTableName}.boatId = ${this.dbTableName}.id `;
+                                  GROUP_CONCAT(${Image.dbTableName}.id) AS imageIds
+                               FROM ${this.dbTableName}
+                                  INNER JOIN ${Address.dbTableName} on ${Address.dbTableName}.id = ${this.dbTableName}.addressId
+                                  INNER JOIN ${Image.dbTableName} on ${Image.dbTableName}.boatId = ${this.dbTableName}.id
+                                  `;
         let boats, query;
         if (state && city && boatType && ownerId) {
             queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, city, type:boatType, ownerId });
         } else if (state && city && boatType) {
             queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, city, type:boatType });
         } else if (state && city && !boatType && ownerId) {
             queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, city, ownerId });
         } else if (state && city && !boatType) {
             queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, city });
         } else if (state && !city && boatType && ownerId) {
             queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, type:boatType, ownerId });
         } else if (state && !city && boatType) {
             queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.type = :type`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, type:boatType });
         } else if (state && !city && !boatType && ownerId) {
             queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, ownerId });
         } else if (state && !city && !boatType) {
             queryStr += `WHERE ${Address.dbTableName}.state = :state`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state });
         } else if (!state && city && boatType && ownerId) {
             queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ city, type:boatType, ownerId });
         } else if (!state && city && boatType) {
             queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ city, type:boatType });
         } else if (!state && city && !boatType && ownerId) {
             queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ city, ownerId });
         } else if (!state && city && !boatType) {
             queryStr += `WHERE ${Address.dbTableName}.city = :city`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ city });
         } else if (!state && !city && boatType && ownerId) {
             queryStr += `WHERE ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ type:boatType, ownerId });
         } else if (!state && !city && boatType) {
             queryStr += `WHERE ${this.dbTableName}.type = :type`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ type:boatType });
         } else if (!state && !city && !boatType && ownerId) {
             queryStr += `WHERE ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ ownerId });
         } else {
+            queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all();
         }
@@ -212,10 +228,10 @@ export default class Boat { // Class that provides methods for creating and retr
         return Boat.#dbTableName;
     }
     get dbImmutableFieldNames() {
-        return ['ownerId', 'addressId', 'type', 'pricePerHour', 'description'];
+        return ['ownerId', 'addressId', 'type', 'pricePerHour', 'title'];
     }
     get dbImmutableFieldValues() {
-        return [this.ownerId, this.addressId, this.type, this.pricePerHour, this.description];
+        return [this.ownerId, this.addressId, this.type, this.pricePerHour, this.title];
     }
     get id() {
         return this.#id;
@@ -232,7 +248,7 @@ export default class Boat { // Class that provides methods for creating and retr
     get pricePerHour() {
         return this.#pricePerHour;
     }
-    get description() {
-        return this.#description;
+    get title() {
+        return this.#title;
     }
 }

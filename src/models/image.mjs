@@ -1,5 +1,5 @@
-import Database from './database.mjs';
 import DB from '../../config/db.mjs';
+import Database from './database.mjs';
 export default class Image { // Class that provides methods for creating and retrieving User
     static #db = DB.physicalDBConnection; // Database is open (similar to db.open()) // In-Memory database
     static #dbTableName = 'images';
@@ -21,6 +21,7 @@ export default class Image { // Class that provides methods for creating and ret
             name TEXT NOT NULL,
             type TEXT NOT NULL,
             size INTEGER NOT NULL,
+            position INTEGER NOT NULL CHECK(position >= 0), 
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
             FOREIGN KEY(boatId) REFERENCES boats(id) ON DELETE CASCADE
@@ -37,6 +38,7 @@ export default class Image { // Class that provides methods for creating and ret
     #name;
     #type;
     #size;
+    #position;
 
     /**
      * @param boatId
@@ -44,13 +46,15 @@ export default class Image { // Class that provides methods for creating and ret
      * @param name
      * @param type
      * @param size
+     * @param position
      */
-    constructor(boatId, pathName, name, type, size) {
+    constructor(boatId, pathName, name, type, size, position = 0) {
         this.#boatId = boatId;
         this.#pathName = pathName;
         this.#name = name;
         this.#type = type;
         this.#size = size;
+        this.#position = position;
     }
     static get db() {
         return this.#db;
@@ -80,10 +84,10 @@ export default class Image { // Class that provides methods for creating and ret
         return Image.#dbTableName;
     }
     get dbImmutableFieldNames() {
-        return ['boatId', 'pathName', 'name', 'type', 'size'];
+        return ['boatId', 'pathName', 'name', 'type', 'size', 'position'];
     }
     get dbImmutableFieldValues() {
-        return [this.boatId, this.pathName, this.name, this.type, this.size];
+        return [this.boatId, this.pathName, this.name, this.type, this.size, this.position];
     }
     get id() {
         return this.#id;
@@ -102,6 +106,9 @@ export default class Image { // Class that provides methods for creating and ret
     }
     get size() {
         return this.#size;
+    }
+    get position() {
+        return this.#position;
     }
 }
 // console.log(Object.values(ACCOUNT_TYPES).join("', '"))

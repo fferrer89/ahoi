@@ -18,10 +18,19 @@ export default function BoatCard(props, children) {
     }
     return (
         html`<boat-card edit-enabled>
-                <img slot="boat-image" src="/uploads/images/${props?.boatObj?.imageId}" alt="${props?.boatObj?.boatType} image">
+                ${props?.boatObj?.imageIds?.map((imageId, index) => {
+                    switch (index) {
+                        case 0:
+                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image">`
+                        case 1:
+                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" hidden>`
+                        default:
+                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" hidden loading="lazy">`
+                    }
+                })}
                 <p slot="price-per-hour"><strong>$${props?.boatObj?.pricePerHour}</strong><sub>/hour</sub></p>
                 <p slot="boat-location">${props?.boatObj?.city?.toUpperCase()}, ${props?.boatObj?.state?.toUpperCase()}</p>
-                <p slot="boat-description">${props?.boatObj?.description}</p>
+                <p slot="boat-title">${props?.boatObj?.title}</p>
                 ${boatCardTemplate}
             </boat-card>`
     )

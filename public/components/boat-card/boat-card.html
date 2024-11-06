@@ -2,14 +2,26 @@
     <link rel="stylesheet" href="/public/components/boat-card/boat-card.css">
     <article>
         <figure>
-            <slot name="boat-image"></slot>
+            <section id="image-carousel">
+                <slot name="boat-image"></slot>
+            </section>
             <figcaption >
                 <slot name="price-per-hour">PRICE_PER_HOUR</slot><!--$267/hour-->
             </figcaption>
+            <button type="button" id="prev-photo" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="12" height="12" viewBox="0,0,256,256">
+                    <g fill="#000000" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="translate(279.54166,256) rotate(180) scale(10.66667,10.66667)"><path d="M9.20703,2.79297l-1.41406,1.41406l7.79297,7.79297l-7.79297,7.79297l1.41406,1.41406l9.20703,-9.20703z"></path></g></g>
+                </svg>
+            </button>
+            <button type="button" id="next-photo">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="12" height="12" viewBox="0 0 24 24">
+                    <path d="M 9.2070312 2.7929688 L 7.7929688 4.2070312 L 15.585938 12 L 7.7929688 19.792969 L 9.2070312 21.207031 L 18.414062 12 L 9.2070312 2.7929688 z"></path>
+                </svg>
+            </button>
         </figure>
         <section>
             <slot name="boat-location">LOCATION</slot><!--BOSTON, MA-->
-            <slot name="boat-description">DESCRIPTION</slot><!--2 mastil sailboat of up t 5 sailers-->
+            <slot name="boat-title">TITLE</slot><!--2 mastil sailboat of up t 5 sailers-->
         </section>
     </article>
 </template>

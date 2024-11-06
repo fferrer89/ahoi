@@ -12,14 +12,26 @@ article {
     border-radius: 15px;
     box-shadow: 1px 1px 7px 1px rgba(0,0,0,0.2);
     height: clamp(360px, 60vw, 370px);
-    width: clamp(340px, 30vw, 400px);
+    /*width: clamp(340px, 30vw, 400px);*/
+    width: 340px;
     > figure {
+        overflow: hidden;
         margin: 0;
         position: relative;
-        height: 255px;
-        && ::slotted(img) {
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
+        > section#image-carousel {
+            height: 255px;
+            display: flex;
+            flex-direction: row;
+            transform: translateX(0);
+            transition: transform 0.5s ease-in-out;
+            && ::slotted(img) {
+                flex-shrink: 0;
+                width: 100%;
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+                object-fit: cover;
+                object-position: center center;
+            }
         }
         > figcaption {
             /* The term 'slotted' implies element lightDOM is moved to shadowDOM. Slotted content isn't in shadowDOM... only reflected from lightDOM.*/
@@ -34,6 +46,41 @@ article {
                 background-color: var(--tertiary-color);
             }
         }
+        &:hover > button {
+            display: inline-block;
+        }
+        > button {
+            display: none;
+            position: absolute;
+            top: 50%;
+            border-radius: 50%;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            border: none;
+            background-color: transparent;
+            &#prev-photo {
+                left: 7px;
+            }
+            &#next-photo {
+                right: 7px;
+            }
+
+            &[disabled] > svg {
+                display: none;
+                visibility: hidden;
+            }
+            > svg {
+                display: inline-block;
+                border-radius: 50%;
+                padding: 7px;
+                background-color: var(--tertiary-color);
+                &:hover {
+                    background-color: white;
+                    transform: scale(1.05);
+                }
+            }
+        }
     }
     > section {
         /*border: 1px solid red;*/
@@ -44,7 +91,7 @@ article {
             color: gray;
             margin-block: 0.5em;
         }
-        && ::slotted(p[slot='boat-description']) {
+        && ::slotted(p[slot='boat-title']) {
             max-width: 300px; /*FIXME: */
             margin-block: 0.8em;
             color: var(--secondary-color);
