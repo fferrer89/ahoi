@@ -29,7 +29,7 @@ export default class User { // Class that provides methods for creating and retr
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             email TEXT NOT NULL COLLATE NOCASE UNIQUE,
             password TEXT NOT NULL,
-            userType TEXT NOT NULL CHECK(userType IN ('${Object.values(ACCOUNT_TYPES).join("', '")}')),
+            userType TEXT NOT NULL COLLATE RTRIM CHECK(userType IN ('${Object.values(ACCOUNT_TYPES).join("', '")}')),
             username TEXT CHECK(LENGTH(TRIM(username)) > 0),         
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,

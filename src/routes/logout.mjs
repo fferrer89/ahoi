@@ -1,5 +1,6 @@
 import Session from "../models/session.mjs";
 import Database from "../models/database.mjs";
+import asyncLocalStorage from "../utils/async-local-storage.mjs";
 
 /**
  * Route handler for the login page
@@ -27,6 +28,7 @@ export default async function logoutRoute(req, res) {
                         const sameSitePolicySessionCookie = 'Strict';
                         res.setHeader('Set-Cookie', `${sessionCookieName}=${session.id}; Max-Age=0; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`);
                         Database.delete(Session.db, Session.dbTableName, session.id);
+                        asyncLocalStorage.disable()
                         res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/'});
                         return res.end(); // See Other (login page or user dashboard page)
                     } else {

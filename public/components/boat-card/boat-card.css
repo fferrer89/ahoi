@@ -49,8 +49,12 @@ article {
         &:hover > button {
             display: inline-block;
         }
+        @media (hover: hover) {
+            > button {
+                display: none;
+            }
+        }
         > button {
-            display: none;
             position: absolute;
             top: 50%;
             border-radius: 50%;

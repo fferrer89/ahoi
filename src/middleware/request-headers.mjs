@@ -5,7 +5,6 @@ import url from "node:url"; // The node:url module provides utilities for URL re
  * req.method, req,url, req.headers, req.pathname, req.query, req.cookies, req.body, ...
  */
 export default function requestHeaders(req, res) {
-    console.log('-requestHeadersMiddleware');
     // POST https://localhost:3000/boats?location=Chicago%2C+IL&date=2024-09-27&boatType=motorboat
     // console.log(`req.method: ${req.method}`); // POST
     // console.log(`req.url: ${req.url}`); // /boats?location=Chicago%2C+IL&date=2024-09-27&boatType=motorboat

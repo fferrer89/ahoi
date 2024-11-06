@@ -1,4 +1,3 @@
-
 import homeRoute from "./home.mjs";
 import aboutRoute from "./about.mjs";
 import boatsRoute from "./boats.mjs";
@@ -8,6 +7,7 @@ import signupRoute from "./signup.mjs";
 import imageRoute from "./image.mjs";
 import logoutRoute from "./logout.mjs";
 import notFoundController from "../controllers/not-found.mjs";
+import asyncLocalStorage from "../utils/async-local-storage.mjs";
 
 /**
  * Route handling based on the pathname
@@ -16,8 +16,9 @@ import notFoundController from "../controllers/not-found.mjs";
  * @param res
  */
 export default async function routes(req, res) {
-    console.info('-routes');
-    console.log(`pathname: ${req.pathname}`);
+    console.log('- Gets Store');
+    const store = asyncLocalStorage.getStore();
+    console.log(store?.get('session'));
     switch (req.pathname) {
         case '/':
             homeRoute(req, res);

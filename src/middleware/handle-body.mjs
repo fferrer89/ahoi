@@ -16,7 +16,6 @@ import fs from "node:fs";
  * @param res
  */
 export default function handleBody(req, res) {
-    console.info('-handleBodyMiddleware');
     const contentType = req.headers['content-type'];
     let parsedBody;
     if(req.body && req.body?.length > 0) {

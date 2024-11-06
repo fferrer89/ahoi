@@ -6,7 +6,6 @@ import { fileExtensionToMIMEType } from "../utils/helpers.mjs"; // The node:path
 export default function publicResource(req, res) {
     // https://localhost:3000/favicon.ico
     if (req.pathname.startsWith('/public') || req.pathname.startsWith('/favicon') && req.method === 'GET') {
-        console.info('-publicResourceMiddleware');
         // /public/styles/index.css -> /Users/kikoferrer/Documents/Apps/web-applications/ahoi/src/public/styles/index.css
         const publicResourceFullPath = path.join(process.env.NODE_APP_ROOT_DIR, req.url);
         // console.log(process.env.NODE_APP_ROOT_DIR) // /Users/kikoferrer/Documents/Apps/web-applications/ahoi

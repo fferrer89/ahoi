@@ -22,6 +22,8 @@ export default async function signupRoute(req, res) {
             res.writeHead(204, {'Content-Type': 'text/plain', 'Content-Language': 'en-us'});
             return res.end();
         case 'GET':
+            // Static page ?
+            // If user is logged in with a session, log out (res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/logout'});)
             const acceptContentType = req?.headers['accept'];
             if (acceptContentType?.includes("*/*") || acceptContentType?.includes("text/*") ||
                 acceptContentType?.includes("text/html")) {
@@ -29,7 +31,6 @@ export default async function signupRoute(req, res) {
                     const signup = Signup();
                     const layout = Layout({
                             page: { title: 'Signup'},
-                            user: req?.session?.user
                         }, [signup]
                     );
                     await fs.writeFile('build/signup.html', layout, {encoding: 'utf8'});

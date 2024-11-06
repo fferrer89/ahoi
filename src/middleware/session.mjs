@@ -1,8 +1,7 @@
 import Session from "../models/session.mjs";
 import Database from "../models/database.mjs";
 import User from "../models/user.mjs";
-// import {AsyncLocalStorage} from "async_hooks";
-// const asyncLocalStorage = new AsyncLocalStorage();
+import asyncLocalStorage from "../../src/utils/async-local-storage.mjs";
 /**
  * Retrieves the Session Information if the request has the session cookie.
  *
@@ -20,9 +19,8 @@ import User from "../models/user.mjs";
  *   - Providing a secure and personalized experience for logged-in users
  * web-visits (web-session) vs. auth-session (auth-session)
  */
-export default function session(req, res) {
-    console.info('-sessionMiddleware');
-    const sessionCookieName= 'sessionId';
+export default async function session(req, res) {
+    const sessionCookieName = 'sessionId';
     const sameSitePolicySessionCookie = 'Strict';
     let session;
     let sessionCookieVal = req.cookies[sessionCookieName];
@@ -32,6 +30,7 @@ export default function session(req, res) {
     sessionCookieVal = parseInt(sessionCookieVal);
     session = Session.getSessionFromDb(sessionCookieVal);
     if (!session) {
+        // Expire stale the browser session cookie
         res.setHeader('Set-Cookie', `${sessionCookieName}=delete; Max-Age=0; SameSite=${sameSitePolicySessionCookie}; HttpOnly; Secure`);
         return;
     }
@@ -61,6 +60,7 @@ export default function session(req, res) {
             id: user.id, username: user.username, userType: user.userType
         }
     };
-    console.log(`req.session:  ${JSON.stringify(req.session)}`);
-    // await asyncLocalStorage.enterWith(req.session); // TODO: See if i keep or remove this
+    const store = new Map();
+    store.set('session', req.session);
+    await asyncLocalStorage.enterWith(store); // run() vs enterWith() ???
 }

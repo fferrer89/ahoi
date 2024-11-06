@@ -21,7 +21,6 @@ import Visitor from "../models/visitor.mjs";
  *
  */
 export default function visitor(req, res) {
-    console.info('-visitorMiddleware');
     const visitorCookieName= 'visitorId';
     const expireVisitorCookieSec = (365 * 24 * 60 * 60 * 10); // Time stored as UTC timestamp, so Max-Age=(365 * 24 * 60 * 60 * 10) seconds is UTC time now + 10 years
     const sameSitePolicyVisitorCookie = 'Strict';
@@ -42,6 +41,6 @@ export default function visitor(req, res) {
     // Set two cookies:
     // res.setHeader('Set-Cookie', [`${visitorCookieName}=${visitorCookieName.id}; Max-Age=${expireVisitorCookieSec}; SameSite=${sameSitePolicyVisitorCookie}; HttpOnly; Secure`, `ahoiPrefColor=White; SameSite=${sameSitePolicyVisitorCookie}; HttpOnly; Secure`]);
     req.visitor = {id: visitor.id};
-    console.log(`req.visitor:  ${JSON.stringify(req.visitor)}`);
+    // console.log(`req.visitor:  ${JSON.stringify(req.visitor)}`);
     // await asyncLocalStorage.enterWith(req.session); // TODO: See if i keep or remove this
 }

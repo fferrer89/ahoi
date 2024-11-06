@@ -29,7 +29,7 @@ export default function Boats(props, children) {
                 <section>
                     <h3>${props?.numOfBoats > 0 ?
                             `${props?.numOfBoats} boat${props?.numOfBoats > 1 ? `s` : ''} ${props?.searchValues?.location ? `in ${props?.searchValues?.location}` : ''}`
-                            : 'We did not find a match'}
+                            : 'We did not find a match - We are only operating in the Chicago area'}
                     </h3>
                     <section id="boat-cards">
                         ${children.map(component => html`${component}`)}

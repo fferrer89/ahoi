@@ -17,7 +17,7 @@ export default class Image { // Class that provides methods for creating and ret
         CREATE TABLE IF NOT EXISTS ${Image.#dbTableName} (
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             boatId INTEGER NOT NULL,
-            pathName TEXT NOT NULL COLLATE NOCASE UNIQUE CHECK(LENGTH(TRIM(pathName)) > 0),
+            pathName TEXT NOT NULL UNIQUE CHECK(LENGTH(TRIM(pathName)) > 0),
             name TEXT NOT NULL,
             type TEXT NOT NULL,
             size INTEGER NOT NULL,

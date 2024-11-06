@@ -140,62 +140,62 @@ export default class Boat { // Class that provides methods for creating and retr
                                   `;
         let boats, query;
         if (state && city && boatType && ownerId) {
-            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, city, type:boatType, ownerId });
         } else if (state && city && boatType) {
-            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type`;
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, city, type:boatType });
         } else if (state && city && !boatType && ownerId) {
-            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city AND ${this.dbTableName}.ownerId = :ownerId COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, city, ownerId });
         } else if (state && city && !boatType) {
-            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city`;
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${Address.dbTableName}.city = :city COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, city });
         } else if (state && !city && boatType && ownerId) {
-            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, type:boatType, ownerId });
         } else if (state && !city && boatType) {
-            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.type = :type`;
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.type = :type COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, type:boatType });
         } else if (state && !city && !boatType && ownerId) {
-            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += `WHERE ${Address.dbTableName}.state = :state AND ${this.dbTableName}.ownerId = :ownerId COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state, ownerId });
         } else if (state && !city && !boatType) {
-            queryStr += `WHERE ${Address.dbTableName}.state = :state`;
+            queryStr += `WHERE ${Address.dbTableName}.state = :state COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ state });
         } else if (!state && city && boatType && ownerId) {
-            queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type AND ${this.dbTableName}.ownerId = :ownerId COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ city, type:boatType, ownerId });
         } else if (!state && city && boatType) {
-            queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type`;
+            queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.type = :type COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ city, type:boatType });
         } else if (!state && city && !boatType && ownerId) {
-            queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.ownerId = :ownerId`;
+            queryStr += `WHERE ${Address.dbTableName}.city = :city AND ${this.dbTableName}.ownerId = :ownerId COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ city, ownerId });
         } else if (!state && city && !boatType) {
-            queryStr += `WHERE ${Address.dbTableName}.city = :city`;
+            queryStr += `WHERE ${Address.dbTableName}.city = :city COLLATE NOCASE`;
             queryStr += ` GROUP BY ${this.dbTableName}.id`;
             query = this.db.prepare(queryStr);
             boats = query.all({ city });
