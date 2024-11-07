@@ -4,6 +4,7 @@ import path from "node:path";
 import routes from "./routes/index.mjs";
 import middlewares from "./middleware/index.mjs";
 import errorHandling from "./middleware/error-handling.mjs";
+import StaticPageBuilder from "./static/static-pages-builder.mjs";
 // import sslCredentials from "../config/ssl-certificate.mjs";
 
 
@@ -26,6 +27,7 @@ process.env.NODE_APP_ROOT_DIR = path.dirname(import.meta.dirname);
 // console.log(process.env.NODE_APP_ROOT_DIR) // /Users/kikoferrer/Documents/Apps/web-applications/ahoi
 // console.log('Print process.env: ');
 // console.log(process.env);
+
 /**
  * Create the HTTP server using the HTTP communication protocol with Secure Socket Layer (SSL) → HTTPS
  *

@@ -6,6 +6,8 @@ import Database from "../models/database.mjs";
 import User from "../models/user.mjs";
 import inputValidations from "../utils/input-validations.mjs";
 import Session from "../models/session.mjs";
+import logoutController from "../controllers/logout.mjs";
+import StaticPagesBuilder from "../static/static-pages-builder.mjs";
 
 /**
  * Route handler for the signup page
@@ -22,26 +24,20 @@ export default async function signupRoute(req, res) {
             res.writeHead(204, {'Content-Type': 'text/plain', 'Content-Language': 'en-us'});
             return res.end();
         case 'GET':
-            // Static page ?
-            // If user is logged in with a session, log out (res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/logout'});)
+            // If user is logged in with a session, log out
             const acceptContentType = req?.headers['accept'];
             if (acceptContentType?.includes("*/*") || acceptContentType?.includes("text/*") ||
                 acceptContentType?.includes("text/html")) {
                 try {
-                    const signup = Signup();
-                    const layout = Layout({
-                            page: { title: 'Signup'},
-                        }, [signup]
-                    );
-                    await fs.writeFile('build/signup.html', layout, {encoding: 'utf8'});
+                    // If user is logged in with a session, log out
+                    logoutController(req, res);
                     let signupPage;
-                    const signupPagePath = path.resolve('build/signup.html');
-                    const signupPageFileStats = await fs.stat(signupPagePath);
+                    const signupPagePath = path.resolve('src/static/signup.html');
                     signupPage = await fs.readFile(signupPagePath, {encoding: 'utf8'});
                     res.writeHead(200,
                         {
-                            'Content-Type': 'text/html; charset=UTF-8', 'Content-Length': signupPageFileStats.size,
-                            'Last-Modified': signupPageFileStats.mtime
+                            'Content-Type': 'text/html; charset=UTF-8',
+                            'Last-Modified': StaticPagesBuilder?.signupFileStats?.mtime
                         }
                     );
                     return res.end(signupPage);

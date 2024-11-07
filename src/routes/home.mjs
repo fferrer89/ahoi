@@ -3,6 +3,7 @@ import fs from "node:fs/promises"; // Async
 import path from "node:path";
 import Layout from "../views/layout.mjs";
 import Home from "../views/pages/home.mjs";
+import StaticPageBuilder from "../static/static-pages-builder.mjs";
 
 /**
  * Route handler for the home page
@@ -37,8 +38,6 @@ export default async function homeRoute(req, res) {
             return res.end();
         case 'HEAD':
             try {
-                const homePagePath = path.resolve('build/index.html');
-                const homePageFileStats = fsSync.statSync(homePagePath);
                 // homePageFileStats.mtime; // The timestamp (UTC) indicating the last time this file was modified.
                 // homePageFileStats.size; // The size of the file in bytes. 1024000 bits = 1MB
                 // homePageFileStats.birthtime; // The timestamp indicating the creation time of this file.
@@ -46,8 +45,8 @@ export default async function homeRoute(req, res) {
                 // this value with the current time to determine if the response is stale.
                 res.writeHead(204,
                     {
-                        'Content-Type': 'text/html; charset=UTF-8', 'Content-Length': homePageFileStats.size,
-                        'Last-Modified': homePageFileStats.mtime
+                        'Content-Type': 'text/html; charset=UTF-8', 'Content-Length': StaticPageBuilder?.homeFileStats?.size,
+                        'Last-Modified': StaticPageBuilder?.homeFileStats?.mtime
                     }
                 );
                 return res.end();
@@ -61,24 +60,32 @@ export default async function homeRoute(req, res) {
             if (acceptContentType?.includes( "*/*") || acceptContentType?.includes("text/*") ||
                 acceptContentType?.includes("text/html")) {
                 try {
-                    const home = Home();
-                    const layout = Layout({
-                            page: { title: 'Home'},
-                            user: req?.session?.user
-                        }, [home]
-                    );
-                    await fs.writeFile('build/index.html', layout, {encoding: 'utf8'});
                     let homePage;
-                    const homePagePath = path.resolve('build/index.html');
-                    const homePageFileStats = await fs.stat(homePagePath);
-                    homePage = await fs.readFile(homePagePath, { encoding: 'utf8' });
-                    res.writeHead(200,
-                        {
-                            'Content-Type': 'text/html; charset=UTF-8','Content-Length': homePageFileStats.size,
-                            'Last-Modified': homePageFileStats.mtime
-                        }
-                    );
-                    return res.end(homePage);
+                    if (req?.session?.id) {
+                        // If user is authenticated, return the dynamic home page
+                        const home = Home();
+                        const layout = Layout({
+                                page: { title: 'Home'},
+                                user: req?.session?.user
+                            }, [home]
+                        );
+                        await fs.writeFile('build/index.html', layout, {encoding: 'utf8'});
+                        // FIXME: Last-Modified (loginPageFileStats.mtime) should be the time in which the session was created (createdAt) ??
+                        const homePagePath = path.resolve('build/index.html');
+                        homePage = await fs.readFile(homePagePath, { encoding: 'utf8' });
+                        res.writeHead(200, { 'Content-Type': 'text/html; charset=UTF-8'});
+                        return res.end(homePage);
+                    } else {
+                        // If user is authenticated, return the static home page
+                        const homePagePath = path.resolve('src/static/index.html');
+                        homePage = await fs.readFile(homePagePath, { encoding: 'utf8' });
+                        res.writeHead(200,
+                            {
+                                'Content-Type': 'text/html; charset=UTF-8', 'Last-Modified': StaticPageBuilder?.homeFileStats?.mtime
+                            }
+                        );
+                        return res.end(homePage);
+                    }
                 } catch (e) {
                     console.error(e);
                     res.writeHead(500, { 'Content-Type': 'text/plain' });

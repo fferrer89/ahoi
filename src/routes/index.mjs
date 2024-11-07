@@ -16,9 +16,9 @@ import asyncLocalStorage from "../utils/async-local-storage.mjs";
  * @param res
  */
 export default async function routes(req, res) {
-    console.log('- Gets Store');
-    const store = asyncLocalStorage.getStore();
-    console.log(store?.get('session'));
+    // console.log('- Gets Store');
+    // const store = asyncLocalStorage.getStore();
+    // console.log(store?.get('session'));
     switch (req.pathname) {
         case '/':
             homeRoute(req, res);

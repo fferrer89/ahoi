@@ -5,6 +5,8 @@ import Login from "../views/pages/login.mjs";
 import inputValidations from "../utils/input-validations.mjs";
 import User from "../models/user.mjs";
 import Session from "../models/session.mjs";
+import logoutController from "../controllers/logout.mjs";
+import StaticPagesBuilder from "../static/static-pages-builder.mjs";
 
 /**
  * Route handler for the login page
@@ -25,21 +27,14 @@ export default async function loginRoute(req, res) {
             if (acceptContentType?.includes( "*/*") || acceptContentType?.includes("text/*") ||
                 acceptContentType?.includes("text/html")) {
                 try {
-                    const login = Login();
-                    const layout = Layout({
-                            page: { title: 'Login'},
-                            user: req?.session?.user
-                        }, [login]
-                    );
-                    await fs.writeFile('build/login.html', layout, {encoding: 'utf8'});
+                    // If user is logged in with a session, log out
+                    logoutController(req, res);
                     let loginPage;
-                    const loginPagePath = path.resolve('build/login.html');
-                    const loginPageFileStats = await fs.stat(loginPagePath);
+                    const loginPagePath = path.resolve('src/static/login.html');
                     loginPage = await fs.readFile(loginPagePath, { encoding: 'utf8' });
                     res.writeHead(200,
                         {
-                            'Content-Type': 'text/html; charset=UTF-8','Content-Length': loginPageFileStats.size,
-                            'Last-Modified': loginPageFileStats.mtime
+                            'Content-Type': 'text/html; charset=UTF-8', 'Last-Modified': StaticPagesBuilder?.loginFileStats?.mtime
                         }
                     );
                     return res.end(loginPage);
@@ -92,6 +87,7 @@ export default async function loginRoute(req, res) {
                     const loginPagePath = path.resolve('build/signup.html');
                     const loginPageFileStats = await fs.stat(loginPagePath);
                     loginPage = await fs.readFile(loginPagePath, {encoding: 'utf8'});
+                    // FIXME: loginPageFileStats.mtime should be the last time the user record was modified
                     res.writeHead(400,
                         {
                             'Content-Type': 'text/html; charset=UTF-8', 'Content-Length': loginPageFileStats.size,
