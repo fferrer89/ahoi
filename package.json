@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "homepage": "https://ahoi.app#readme",
-  "keywords": ["node.js", "sqlite", "web components", "aws ec2"],
+  "keywords": ["node.js", "sqlite", "web components", "aws ec2", "vanilla js", "vanilla css"],
   "author": {
     "name": "Kiko Ferrer",
     "email": "ffcatala@gmail.com",
@@ -24,14 +24,10 @@
       "name": "Kiko Ferrer",
       "email": "ffcatala@gmail.com",
       "url": "https://kikoferrer.com/"
-    },
-    {
-      "name": "Florian Cords",
-      "email": "fcords@gmail.com"
     }
   ],
   "license": "MIT",
-  "os": ["darwin", "linux"],
+  "os": ["Ubuntu", "linux"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fferrer89/ahoi.git"

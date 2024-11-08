@@ -17,6 +17,7 @@
         "type": "Sailboat",
         "pricePerHour": 155,
         "title": "Peaceful 2-person sailboat at Chicago Harbour!",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis deleniti expedita labore non repellat tempore voluptate? Adipisci cumque debitis eum expedita modi quis similique tempore. Atque error ipsam ipsum odit reiciendis. Consequatur culpa hic illum in ipsa ipsum, itaque maiores maxime minus natus neque non nulla, omnis reiciendis sit, temporibus voluptate! Ab alias culpa ipsam itaque labore, modi quis recusandae repudiandae similique sint vitae voluptas? Ab fugit natus reiciendis temporibus totam? Alias asperiores consequatur dolorem maiores nesciunt numquam tempore.",
         "images": [
           {
             "pathName": "seed_john_boat1_photo1.jpg",
@@ -38,6 +39,20 @@
             "type": "image/jpeg",
             "size": 1023988,
             "id": 3
+          },
+          {
+            "pathName": "seed_john_boat1_photo4.jpg",
+            "name": "seed_john_boat1_photo4",
+            "type": "image/jpeg",
+            "size": 1910769,
+            "id": 4
+          },
+          {
+            "pathName": "seed_john_boat1_photo5.jpg",
+            "name": "seed_john_boat1_photo5",
+            "type": "image/jpeg",
+            "size": 3741075,
+            "id": 5
           }
         ],
         "id": 1
@@ -54,34 +69,49 @@
         "type": "Motorboat",
         "pricePerHour": 255,
         "title": "18ft speed motorboat for a crew of up to 5",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis deleniti expedita labore non repellat tempore voluptate? Adipisci cumque debitis eum expedita modi quis similique tempore. Atque error ipsam ipsum odit reiciendis. Consequatur culpa hic illum in ipsa ipsum, itaque maiores maxime minus natus neque non nulla, omnis reiciendis sit, temporibus voluptate! Ab alias culpa ipsam itaque labore, modi quis recusandae repudiandae similique sint vitae voluptas? Ab fugit natus reiciendis tempor",
         "images": [
           {
             "pathName": "seed_john_boat2_photo1.jpg",
             "name": "seed_john_boat2_photo1",
             "type": "image/jpeg",
             "size": 2205219,
-            "id": 4
+            "id": 6
           },
           {
             "pathName": "seed_john_boat2_photo2.jpg",
             "name": "seed_john_boat2_photo2",
             "type": "image/jpeg",
             "size": 4273187,
-            "id": 5
+            "id": 7
           },
           {
             "pathName": "seed_john_boat2_photo3.jpg",
             "name": "seed_john_boat2_photo3",
             "type": "image/jpeg",
             "size": 2687777,
-            "id": 6
+            "id": 8
           },
           {
             "pathName": "seed_john_boat2_photo4.jpg",
-            "name": "seed_john_boat1_photo3",
+            "name": "seed_john_boat1_photo4",
             "type": "image/jpeg",
             "size": 1503534,
-            "id": 7
+            "id": 9
+          },
+          {
+            "pathName": "seed_john_boat2_photo5.jpg",
+            "name": "seed_john_boat1_photo5",
+            "type": "image/jpeg",
+            "size": 4273187,
+            "id": 10
+          },
+          {
+            "pathName": "seed_john_boat2_photo6.jpg",
+            "name": "seed_john_boat1_photo6",
+            "type": "image/jpeg",
+            "size": 1084489,
+            "id": 11
           }
         ],
         "id": 2
@@ -98,27 +128,35 @@
         "type": "Motorboat",
         "pricePerHour": 500,
         "title": "Elegant 30ft boat (1000hp): With crew included!",
+        "description": "Lorem is blanditit tempore voluptate? Adipisci cumque debitis eum expedita modi quis similique tempore. Atque error ipsam ipsum odit reiciendis. Consequatur culpa hic illum in ipsa ipsum, itaque maiores maxime minus natus neque non nulla, omnis reiciendis sit, temporibus voluptate! Ab alias culpa ipsam itaque labore, modi quis recusandae repudiandae simores consequatur dolorem maiores nesciunt numquam tempore.",
         "images": [
           {
             "pathName": "seed_john_boat3_photo1.jpg",
             "name": "seed_john_boat3_photo1",
             "type": "image/jpeg",
             "size": 1333506,
-            "id": 8
+            "id": 12
           },
           {
             "pathName": "seed_john_boat3_photo2.jpg",
             "name": "seed_john_boat3_photo2",
             "type": "image/jpeg",
             "size": 6389710,
-            "id": 9
+            "id": 13
           },
           {
             "pathName": "seed_john_boat3_photo3.jpg",
             "name": "seed_john_boat3_photo3",
             "type": "image/jpeg",
             "size": 1007073,
-            "id": 10
+            "id": 14
+          },
+          {
+            "pathName": "seed_john_boat3_photo4.jpg",
+            "name": "seed_john_boat3_photo4",
+            "type": "image/jpeg",
+            "size": 1799358,
+            "id": 15
           }
         ],
         "id": 3
@@ -135,13 +173,28 @@
         "type": "Motorboat",
         "pricePerHour": 433,
         "title": "25ft speedboat for one in Aurora!",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis deleniti expedita labore non repellat tempore voluptate? Adipisci cumque debitis eum expedita modi quis similique tempore. Atque error ipsam ipsum odit reiciendis. Consequatur culpa hic illum in ipsa ipsum, itaque maiores maxime minus natus neque non nulla, omnis reiciendis sit, temporibus voluptate! Ab alias culpa ipsam itaque labore, modi quis recusandae repudiandae similique sint vitae voluptas? Ab fugit natus reiciendis temporibus totam? Alias asperiores consequatur dolorem maiores nesciunt numquam tempore.",
         "images": [
           {
             "pathName": "seed_john_boat4_photo1.jpg",
             "name": "seed_john_boat4_photo1",
             "type": "image/jpeg",
             "size": 1497795,
-            "id": 11
+            "id": 16
+          },
+          {
+            "pathName": "seed_john_boat4_photo2.jpg",
+            "name": "seed_john_boat4_photo2",
+            "type": "image/jpeg",
+            "size": 9731036,
+            "id": 17
+          },
+          {
+            "pathName": "seed_john_boat4_photo3.jpg",
+            "name": "seed_john_boat4_photo3",
+            "type": "image/jpeg",
+            "size": 1926439,
+            "id": 18
           }
         ],
         "id": 4
@@ -158,13 +211,21 @@
         "type": "Sailboat",
         "pricePerHour": 101,
         "title": "Three sailing boat in IL Central: Skipper needed",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
         "images": [
           {
             "pathName": "seed_john_boat5_photo1.jpg",
             "name": "seed_john_boat5_photo1",
             "type": "image/jpeg",
             "size": 1800348,
-            "id": 12
+            "id": 19
+          },
+          {
+            "pathName": "seed_john_boat5_photo2.png",
+            "name": "seed_john_boat5_photo2",
+            "type": "image/png",
+            "size": 23353299,
+            "id": 20
           }
         ],
         "id": 5
@@ -181,13 +242,14 @@
         "type": "Motorboat",
         "pricePerHour": 9000,
         "title": "Yacht with a crew of 10 in Chicago",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis deleniti expedita labore non repellat tempore voluptate? Adipisci cumque debitis eum expedita modi quis similique tempore. Atque error ipsam ipsum odit reiciendis. Consequatur culpa hic illum in ipsa ipsum, itaque ores consequatur dolorem maiores nesciunt numquam tempore.",
         "images": [
           {
             "pathName": "seed_john_boat6_photo1.jpg",
             "name": "seed_john_boat6_photo1",
             "type": "image/jpeg",
             "size": 1952484,
-            "id": 13
+            "id": 21
           }
         ],
         "id": 6
@@ -204,13 +266,14 @@
         "type": "Motorboat",
         "pricePerHour": 340,
         "title": "Motor Yatch Atlas in perfect condition",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis deleniti expedita labore non repellat tempore voluptate? Adipisci cumque debitis eum expedita modi quis similique tempore. Atque error ipsam.",
         "images": [
           {
             "pathName": "seed_john_boat7_photo1.jpg",
             "name": "seed_john_boat7_photo1",
             "type": "image/jpeg",
             "size": 995696,
-            "id": 14
+            "id": 22
           }
         ],
         "id": 7
@@ -236,20 +299,21 @@
         "type": "Sailboat",
         "pricePerHour": 178,
         "title": "Two-sails fun boat at Aurara harbour",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis deleniti expedita labore non repellat tempore voluptate? Adipisci cumque debitis eum expedita modi quis similique.",
         "images": [
           {
             "pathName": "seed_mary_boat1_photo1.jpg",
             "name": "seed_mary_boat1_photo1",
             "type": "image/jpeg",
             "size": 1241451,
-            "id": 15
+            "id": 23
           },
           {
             "pathName": "seed_mary_boat1_photo2.jpg",
             "name": "seed_mary_boat1_photo2",
             "type": "image/jpeg",
             "size": 6015159,
-            "id": 16
+            "id": 24
           }
         ],
         "id": 8
@@ -266,20 +330,21 @@
         "type": "Sailboat",
         "pricePerHour": 198,
         "title": "Elegant 20ft Catamaran: Experience in IL!",
+        "description": "Lorem ipsum dolor sit amet totam veniam!",
         "images": [
           {
             "pathName": "seed_mary_boat2_photo1.jpg",
             "name": "seed_mary_boat2_photo1",
             "type": "image/jpeg",
             "size": 1839405,
-            "id": 17
+            "id": 25
           },
           {
             "pathName": "seed_mary_boat2_photo2.jpg",
             "name": "seed_mary_boat2_photo2",
             "type": "image/jpeg",
             "size": 2202179,
-            "id": 18
+            "id": 26
           }
         ],
         "id": 9
@@ -296,13 +361,14 @@
         "type": "Sailboat",
         "pricePerHour": 133,
         "title": "Boat for 3 in Naperville: Great Lake!",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis deleniti expedita labore non repellat tempore voluptate? Adipisci cumque debitis eum expedita modi quis similique tempore. Atque error ipsam ipsum odit reiciendis. Consequatur culpa hic illum in ipsa ipsum, itaque maiores maxime minus natus neque non nulla, omnis reiciendis sit, temporibus voluptate! Ab alias culpa ipsam itaque labore, modi quis recusandae repudiandae similique sint vitae voluptas?",
         "images": [
           {
             "pathName": "seed_mary_boat3_photo1.jpg",
             "name": "seed_mary_boat3_photo1",
             "type": "image/jpeg",
             "size": 4799476,
-            "id": 19
+            "id": 27
           }
         ],
         "id": 10

@@ -3,6 +3,7 @@ import Database from './database.mjs';
 import Image from "./image.mjs";
 import Address from "./address.mjs";
 import { BOAT_TYPES } from "../utils/constants.mjs";
+import User from "./user.mjs";
 export default class Boat { // Class that provides methods for creating and retrieving Boat
     static #db = DB.physicalDBConnection; // Database is open (similar to db.open()) // In-Memory database
     static #dbTableName = 'boats';
@@ -10,6 +11,7 @@ export default class Boat { // Class that provides methods for creating and retr
     // createdAt → 1727270175
     // createdAtStr → 2024-09-25 13:16:15
     // TODO: Add available time db column and field
+    // description should be < 100 characters, but I dont want to impose that check in db
     static {
         Boat.db.exec(`
         CREATE TABLE IF NOT EXISTS ${Boat.#dbTableName} (
@@ -19,6 +21,7 @@ export default class Boat { // Class that provides methods for creating and retr
             type TEXT NOT NULL CHECK(type IN ('${Object.values(BOAT_TYPES).join("', '")}')),
             pricePerHour INTEGER CHECK(pricePerHour >= 0),
             title TEXT CHECK(LENGTH(TRIM(title)) > 0),
+            description TEXT,
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
             FOREIGN KEY(ownerId) REFERENCES users(id) ON DELETE CASCADE,
@@ -36,7 +39,7 @@ export default class Boat { // Class that provides methods for creating and retr
     #type;
     #pricePerHour;
     #title;
-
+    #description;
     /**
      *
      * @param ownerId
@@ -44,13 +47,15 @@ export default class Boat { // Class that provides methods for creating and retr
      * @param type
      * @param {number} pricePerHour
      * @param title
+     * @param description
      */
-    constructor(ownerId, addressId, type, pricePerHour, title) {
+    constructor(ownerId, addressId, type, pricePerHour, title, description) {
         this.#ownerId = ownerId;
         this.#addressId = addressId;
         this.#type = type; // Sailboat, Motorboat
         this.#pricePerHour = pricePerHour;
         this.#title = title;
+        this.#description = description;
     }
     static get db() {
         return this.#db;
@@ -68,17 +73,18 @@ export default class Boat { // Class that provides methods for creating and retr
         const boat = Database.query(this.db, this.dbTableName, id);
         return boat;
     }
-    static getBoatImagesFromDb(boatId) {
-        const query = this.db.prepare(`SELECT * FROM ${Image.dbTableName} WHERE boatId = ?`);
-        const images = query.get(boatId);
-        return images;
-    }
+    // GROUP_CONCAT(${Image.dbTableName}.id) AS imageIds
     static getBoatWithImageAndAddressFromDb(boatId) {
         const query = this.db.prepare(
-            `SELECT * 
+            `SELECT ${this.dbTableName}.id as boatId, ${this.dbTableName}.ownerId, ${this.dbTableName}.description,
+                        ${this.dbTableName}.type as boatType, ${this.dbTableName}.pricePerHour, 
+                        ${this.dbTableName}.title, ${User.dbTableName}.username,
+                        ${Address.dbTableName}.city, ${Address.dbTableName}.state,
+                        json_group_array(json_object('id', ${Image.dbTableName}.id, 'directory', ${Image.dbTableName}.directory)) AS images
                  FROM ${this.dbTableName} 
                     INNER JOIN ${Address.dbTableName} on ${Address.dbTableName}.id = ${this.dbTableName}.addressId
                     INNER JOIN ${Image.dbTableName} on ${Image.dbTableName}.boatId = ${this.dbTableName}.id
+                    INNER JOIN ${User.dbTableName} on ${User.dbTableName}.id = ${this.dbTableName}.ownerId
                  WHERE ${this.dbTableName}.id = ? LIMIT 1`);
         const boat = query.get(boatId);
         return boat;
@@ -133,7 +139,7 @@ export default class Boat { // Class that provides methods for creating and retr
                                   ${this.dbTableName}.type as boatType, ${this.dbTableName}.pricePerHour,
                                   ${this.dbTableName}.title,
                                   ${Address.dbTableName}.city, ${Address.dbTableName}.state,
-                                  GROUP_CONCAT(${Image.dbTableName}.id) AS imageIds
+                                  json_group_array(json_object('id', ${Image.dbTableName}.id, 'directory', ${Image.dbTableName}.directory)) AS images
                                FROM ${this.dbTableName}
                                   INNER JOIN ${Address.dbTableName} on ${Address.dbTableName}.id = ${this.dbTableName}.addressId
                                   INNER JOIN ${Image.dbTableName} on ${Image.dbTableName}.boatId = ${this.dbTableName}.id
@@ -228,10 +234,10 @@ export default class Boat { // Class that provides methods for creating and retr
         return Boat.#dbTableName;
     }
     get dbImmutableFieldNames() {
-        return ['ownerId', 'addressId', 'type', 'pricePerHour', 'title'];
+        return ['ownerId', 'addressId', 'type', 'pricePerHour', 'title', 'description'];
     }
     get dbImmutableFieldValues() {
-        return [this.ownerId, this.addressId, this.type, this.pricePerHour, this.title];
+        return [this.ownerId, this.addressId, this.type, this.pricePerHour, this.title, this.description];
     }
     get id() {
         return this.#id;
@@ -250,5 +256,8 @@ export default class Boat { // Class that provides methods for creating and retr
     }
     get title() {
         return this.#title;
+    }
+    get description() {
+        return this.#description;
     }
 }

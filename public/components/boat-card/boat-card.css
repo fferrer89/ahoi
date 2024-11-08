@@ -7,13 +7,15 @@
 }
 
 article {
+    &:hover {
+        cursor: pointer;
+    }
     display: inline-block;
     margin: 0.3rem;
     border-radius: 15px;
     box-shadow: 1px 1px 7px 1px rgba(0,0,0,0.2);
     height: clamp(360px, 60vw, 370px);
-    /*width: clamp(340px, 30vw, 400px);*/
-    width: 340px;
+    width: 340px; /*width: clamp(340px, 30vw, 400px);*/
     > figure {
         overflow: hidden;
         margin: 0;
@@ -77,7 +79,7 @@ article {
             > svg {
                 display: inline-block;
                 border-radius: 50%;
-                padding: 7px;
+                padding: 4px;
                 background-color: var(--tertiary-color);
                 &:hover {
                     background-color: white;

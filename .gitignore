@@ -65,3 +65,6 @@ uploads/images/*
 
 build/*
 !build/.gitkeep
+
+build/boats/*
+!build/boats/.gitkeep

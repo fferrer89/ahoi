@@ -17,15 +17,15 @@ export default function BoatCard(props, children) {
         console.error(err);
     }
     return (
-        html`<boat-card edit-enabled>
-                ${props?.boatObj?.imageIds?.map((imageId, index) => {
+        html`<boat-card boat-id="${props?.boatObj?.boatId}" ${props?.editEnabled && 'edit-enabled'}>
+                ${props?.boatObj?.images?.map((image, index) => {
                     switch (index) {
                         case 0:
-                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" fetchpriority="high">`
+                            return html`<img slot="boat-image" src="${image.directory}/${image.id}" alt="${props?.boatObj?.boatType} image" fetchpriority="high">`
                         case 1:
-                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" fetchpriority="low" hidden>`
+                            return html`<img slot="boat-image" src="${image.directory}/${image.id}" alt="${props?.boatObj?.boatType} image" fetchpriority="low" hidden>`
                         default:
-                            return html`<img slot="boat-image" src="/uploads/images/${imageId}" alt="${props?.boatObj?.boatType} image" fetchpriority="low" loading="lazy" hidden>`
+                            return html`<img slot="boat-image" src="${image.directory}/${image.id}" alt="${props?.boatObj?.boatType} image" fetchpriority="low" loading="lazy" hidden>`
                     }
                 })}
                 <p slot="price-per-hour"><strong>$${props?.boatObj?.pricePerHour}</strong><sub>/hour</sub></p>

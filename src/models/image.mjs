@@ -11,6 +11,13 @@ export default class Image { // Class that provides methods for creating and ret
     /**
      * CHECK() If the result is zero, then a constraint violation occurred. If the result is a non-zero value or NULL,
      * it means no constraint violation occurred.
+     *
+     * ON DELETE CASCADE → Automatically deletes the matching rows in the child table (images) when a row in the parent
+     * table (boats) is deleted.
+     * ON UPDATE RESTRICT → Prevents the update of the id in the parent table (boats) if there are any matching rows
+     * in the child table (images)
+     * ON UPDATE CASCADE → Automatically updates the matching rows in the child table (images) when the id in the parent
+     * table is updated.
      */
     static {
         Image.db.exec(`
@@ -21,10 +28,11 @@ export default class Image { // Class that provides methods for creating and ret
             name TEXT NOT NULL,
             type TEXT NOT NULL,
             size INTEGER NOT NULL,
-            position INTEGER NOT NULL CHECK(position >= 0), 
+            position INTEGER NOT NULL CHECK(position >= 0),
+            directory TEXT NOT NULL DEFAULT '/uploads/images',
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
-            FOREIGN KEY(boatId) REFERENCES boats(id) ON DELETE CASCADE
+            FOREIGN KEY(boatId) REFERENCES boats(id) ON DELETE CASCADE ON UPDATE RESTRICT
             ) STRICT`);
     }
 
@@ -39,6 +47,7 @@ export default class Image { // Class that provides methods for creating and ret
     #type;
     #size;
     #position;
+    #directory;
 
     /**
      * @param boatId
@@ -47,14 +56,16 @@ export default class Image { // Class that provides methods for creating and ret
      * @param type
      * @param size
      * @param position
+     * @param directory
      */
-    constructor(boatId, pathName, name, type, size, position = 0) {
+    constructor(boatId, pathName, name, type, size, position = 0, directory='/uploads/images') {
         this.#boatId = boatId;
         this.#pathName = pathName;
         this.#name = name;
         this.#type = type;
         this.#size = size;
         this.#position = position;
+        this.#directory = directory;
     }
     static get db() {
         return this.#db;
@@ -84,10 +95,10 @@ export default class Image { // Class that provides methods for creating and ret
         return Image.#dbTableName;
     }
     get dbImmutableFieldNames() {
-        return ['boatId', 'pathName', 'name', 'type', 'size', 'position'];
+        return ['boatId', 'pathName', 'name', 'type', 'size', 'position', 'directory'];
     }
     get dbImmutableFieldValues() {
-        return [this.boatId, this.pathName, this.name, this.type, this.size, this.position];
+        return [this.boatId, this.pathName, this.name, this.type, this.size, this.position, this.directory];
     }
     get id() {
         return this.#id;
@@ -109,6 +120,9 @@ export default class Image { // Class that provides methods for creating and ret
     }
     get position() {
         return this.#position;
+    }
+    get directory() {
+        return this.#directory;
     }
 }
 // console.log(Object.values(ACCOUNT_TYPES).join("', '"))

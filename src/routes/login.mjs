@@ -26,6 +26,17 @@ export default async function loginRoute(req, res) {
             const acceptContentType = req?.headers['accept'];
             if (acceptContentType?.includes( "*/*") || acceptContentType?.includes("text/*") ||
                 acceptContentType?.includes("text/html")) {
+                /**
+                 * TODO: Implement server-cache logic.
+                 * Check the 'if-modified-since' request header that is sent by the browser automatically in each request.
+                 * ('if-modified-since': 'Thu Nov 07 2024 17:39:20 GMT-0600 (Central Standard Time)')
+                 * - Send a 304 (Not Modified) response without a body if following condition is true:
+                 * req?.headers['if-modified-since'] >= StaticPagesBuilder?.loginFileStats?.mtime
+                 * - Otherwise, send the full response if:
+                 * req?.headers['if-modified-since'] < StaticPagesBuilder?.loginFileStats?.mtime
+                 *
+                 * @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests
+                 */
                 try {
                     // If user is logged in with a session, log out
                     logoutController(req, res);

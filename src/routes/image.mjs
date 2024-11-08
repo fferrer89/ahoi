@@ -18,7 +18,7 @@ export default async function imageRoute(req, res) {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             return res.end('Image Not Found');
         }
-        imagePath = path.resolve(`/uploads/images/${imageObj?.pathName}`);
+        imagePath = path.resolve(`${req.basePathname}/${imageObj?.pathName}`);
         imageFullPath = path.join(process.env.NODE_APP_ROOT_DIR, imagePath); // /Users/kikoferrer/Documents/Apps/web-applications/ahoi/uploads/images/1730320042633-boat.png
         imagePathFileStats = fsSync.statSync(imageFullPath);
     } catch (err) {

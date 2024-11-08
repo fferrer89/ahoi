@@ -1,20 +1,20 @@
 import fsSync from "node:fs";
+import fs from "node:fs/promises";
 import path from "node:path";
 import Boat from "../models/boat.mjs";
 import Boats from "../views/pages/boats.mjs";
 import Layout from "../views/layout.mjs";
-import fs from "node:fs/promises";
 import {BOAT_TYPES} from "../utils/constants.mjs";
 import BoatCard from "../views/boat-card.mjs";
 
 /**
- * Route handler for the home page
+ * Route handler for the boats page
  *
  * @param req
  * @param res
  */
 export default async function boatsRoute(req, res) {
-    switch (req.method) {
+    switch (req.method) { // /boats?location=Chicago%2C+IL&date=2024-09-27&boatType=motorboat
         case 'OPTIONS':
             /*
             This method be used to test the allowed HTTP methods for a request or to determine whether a request would
@@ -59,7 +59,6 @@ export default async function boatsRoute(req, res) {
                 return res.end('Server Error');
             }
         case 'GET':
-            // /boats?location=Chicago%2C+IL&date=2024-09-27&boatType=motorboat
             let locationCity, locationState, boatType = req?.query?.boatType, ownerId = req?.query?.ownerId;
             if (req.query?.location) {
                 const locationArray = req.query.location?.split(', ');
@@ -77,7 +76,7 @@ export default async function boatsRoute(req, res) {
             try {
                 boatsData = Boat.getBoatsWithImageAndAddressFromDb(locationState, locationCity, boatType, ownerId);
                 boatsData.forEach(boat => {
-                    boat.imageIds = boat?.imageIds?.split(',')?.map(id => parseInt(id));
+                    boat.images = JSON.parse(boat.images);
                 });
             } catch (e) {
                 console.error(e);

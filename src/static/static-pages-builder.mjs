@@ -2,10 +2,16 @@ import fs from "node:fs/promises";
 import Signup from "../views/pages/signup.mjs";
 import Layout from "../views/layout.mjs";
 import Login from "../views/pages/login.mjs";
-import NotFound from "../views/pages/not-found.mjs";
+import Notfound from "../views/pages/notfound.mjs";
 import Home from "../views/pages/home.mjs";
 import path from "node:path";
 
+/**
+ * File Stats:
+ * - .mtime → The timestamp (UTC) indicating the last time this file was modified. E.g.: homeFileStats.mtime
+ * - .size → TThe size of the file in bytes. 1024000 bits = 1MB. E.g.: homeFileStats.size
+ * - .birthtime → TThe timestamp indicating the creation time of this file. E.g.: homeFileStats.birthtime
+ */
 export default class StaticPagesBuilder {
     static homeFileStats;
     static signupFileStats;
@@ -49,10 +55,10 @@ export default class StaticPagesBuilder {
         StaticPagesBuilder.loginFileStats = await fs.stat(loginPagePath);
     }
     static async notFound() {
-        const notFound = NotFound();
+        const notFound = Notfound();
         const layout = Layout({page: {title: 'Not Found'}}, [notFound]);
-        await fs.writeFile('src/static/not-found.html', layout, { encoding: 'utf8' });
-        const notFoundPagePath = path.resolve('src/static/not-found.html');
+        await fs.writeFile('src/static/notfound.html', layout, { encoding: 'utf8' });
+        const notFoundPagePath = path.resolve('src/static/notfound.html');
         StaticPagesBuilder.notFoundFileStats = await fs.stat(notFoundPagePath);
     }
 }

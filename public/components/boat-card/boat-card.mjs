@@ -3,7 +3,7 @@ export default class BoatCard extends HTMLElement {
         window.customElements.define('boat-card', this);
     }
     static get observedAttributes() {
-        return ['available'];
+        return ['boat-id', 'edit-enabled'];
     }
 
     /**
@@ -34,14 +34,24 @@ export default class BoatCard extends HTMLElement {
     #prevPhotoBtn;
     #nextPhotoBtn;
 
-    get available() {
-        return this.hasAttribute('available');
+    get boatId() {
+        return this.getAttribute('boat-id');
     }
-    set available(value) {
-        if (value === 'true' || value?.trim() === '') {
-            this.setAttribute('available', '');
+    set boatId(value) {
+        if (value === null || value === undefined || value?.trim() === '')  {
+            this.removeAttribute('boat-id');
         } else {
-            this.removeAttribute('available');
+            this.setAttribute('boat-id', value);
+        }
+    }
+    get editEnabled() {
+        return this.hasAttribute('edit-enabled');
+    }
+    set editEnabled(value) {
+        if (value === 'true' || value?.trim() === '') {
+            this.setAttribute('edit-enabled', '');
+        } else {
+            this.removeAttribute('edit-enabled');
         }
     }
 
@@ -66,6 +76,11 @@ export default class BoatCard extends HTMLElement {
         this.shadowRoot.addEventListener("click", this);
         this.#prevPhotoBtn.addEventListener('click', this.#prevPhotoEventHandler.bind(this));
         this.#nextPhotoBtn.addEventListener('click', this.#nextPhotoEventHandler.bind(this));
+        // console.log('edit enabled? ' + this.editEnabled);
+        // console.log('boatId:  ' + this.boatId);
+        if (!this.editEnabled) {
+            // console.log('BoatCard is disabled');
+        }
     }
 
     /**
@@ -75,6 +90,23 @@ export default class BoatCard extends HTMLElement {
      */
     handleEvent(event) {
         if (event.type === "click") {
+            // console.log(`event.bubbles? ${event.bubbles}`);
+            // console.log(`event.target.tagName: ${event.target.tagName}`); // The HTML element that triggered the event (where the event started) - Event Bubbling
+            // console.log(`event.currentTarget.tagName: ${event.currentTarget.tagName}`); // the HTML element in which the event handler is attached.
+            if (event.target.tagName !== 'svg' && event.target.tagName !== 'path') {
+                event.preventDefault();
+                window.location.href = this.editEnabled ? `/myboats/${this.boatId}` : `/boats/${this.boatId}`;
+                // if (targetUrl.startsWith("#")) {
+                //     // If it's an anchor link, scroll to the section
+                //     const targetElement = document.querySelector(targetUrl);
+                //     if (targetElement) {
+                //         targetElement.scrollIntoView({ behavior: "smooth" });
+                //     }
+                // } else {
+                //     // Otherwise, navigate to the URL
+                //    window.location.href = targetUrl;
+                // }
+            }
         }
     }
     #prevPhotoEventHandler(event) {
@@ -153,8 +185,11 @@ export default class BoatCard extends HTMLElement {
         }
         // Observing changes to attributes
         switch (name) {
-            case 'available':
-                this.available = newValue;
+            case 'boat-id':
+                this.boatId = newValue;
+                break;
+            case 'edit-enabled':
+                this.editEnabled = newValue;
                 break;
             default:
                 break;

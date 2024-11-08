@@ -9,6 +9,7 @@ import User from "../src/models/user.mjs";
 import Address from "../src/models/address.mjs";
 import Boat from "../src/models/boat.mjs";
 import Image from "../src/models/image.mjs";
+import DB from "../config/db.mjs";
 
 
 data.forEach(user => {
@@ -17,13 +18,14 @@ data.forEach(user => {
     user?.boats?.forEach((boat) => {
         const address = new Address(boat?.address?.state, boat?.address?.city, boat?.address?.country, boat?.address?.zipCode, boat?.address?.street);
         boat.address.id = Database.insert(address);
-        const boatObj = new Boat(user.id, boat.address.id, boat?.type, boat?.pricePerHour, boat?.title);
+        const boatObj = new Boat(user.id, boat.address.id, boat?.type, boat?.pricePerHour, boat?.title, boat?.description);
         boat.id = Database.insert(boatObj);
         boat?.images.forEach((image, index) => {
-            const imageObj = new Image(boat.id, image?.pathName, image?.name, image?.type, image?.size, index);
+            const imageObj = new Image(boat.id, image?.pathName, image?.name, image?.type, image?.size, index, '/tasks/uploads/images');
             image.id = Database.insert(imageObj);
         })
     })
 })
 const dataWithIds = JSON.stringify(data, null, 2);
 await fs.writeFile('tasks/data-with-ids.json', dataWithIds, {encoding: 'utf8'});
+DB.closePhysicalDBConnection();

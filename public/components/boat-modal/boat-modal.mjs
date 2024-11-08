@@ -64,7 +64,7 @@ class BoatModal extends HTMLElement {
         const formData = new FormData(this.#form);
         // Send form data to server
         // FIXME: Error handling when the there is an error in the fetch() or json()
-        const response = await window.fetch('/my-boats', {
+        const response = await window.fetch('/myboats', {
             method: 'POST',
             headers: {
                 'Accept': 'text/plain'
