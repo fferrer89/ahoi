@@ -24,7 +24,7 @@ export default async function boatRoute(req, res) {
     } catch (e) {
         console.error(e);
         res.writeHead(500, { 'Content-Type': 'text/plain' });
-        return res.end('Server Error'); // 500 Internal Server Error
+        return res.end('Server Error from querying the boats'); // 500 Internal Server Error
     }
     switch (req.method) { // /boats/:boatId
         case 'OPTIONS':

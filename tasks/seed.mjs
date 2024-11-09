@@ -26,6 +26,11 @@ data.forEach(user => {
         })
     })
 })
+//3518893
+const imageObj = new Image(null, 'seed_profile_picture1.jpg', 'seed_profile_picture1', 'image/jpeg', 3518893, 0, '/tasks/uploads/images', 1);
+Database.insert(imageObj);
+
 const dataWithIds = JSON.stringify(data, null, 2);
+
 await fs.writeFile('tasks/data-with-ids.json', dataWithIds, {encoding: 'utf8'});
 DB.closePhysicalDBConnection();

@@ -409,6 +409,51 @@ main#boats {
         }
     }
 }
+main#boat {
+    max-width: var(--main-content-width);
+    margin: 110px auto 5px;
+    & h3, & image-gallery + section {
+        padding-inline: var(--padding-inline-layout);
+    }
+    & h3 {
+        color: var(--secondary-color);
+        font-size: clamp(1.3rem, 5vw, 1.8rem);
+        @media (max-width: 391px) {
+            text-align: center;
+        }
+    }
+    & image-gallery + section {
+        > h4 {
+            margin-block: 0;
+            padding-block-start: 0.5em;
+            padding-block-end: 1em;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+        }
+        color: var(--secondary-color);
+        > figure {
+            margin: 0;
+            padding-block: 1em;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+            > img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+            }
+            > figcaption {
+                & h5, & p {
+                    margin-block: 0;
+                }
+            }
+        }
+        > p {
+            margin-block: 1.8em;
+        }
+    }
+}
 section#how-it-works {
     padding-inline: var(--padding-inline-layout);
     > h2 {

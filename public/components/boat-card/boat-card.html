@@ -8,16 +8,22 @@
             <figcaption>
                 <slot name="price-per-hour">PRICE_PER_HOUR</slot><!--$267/hour-->
             </figcaption>
-            <button type="button" id="prev-photo" disabled>
-                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24">
-                    <path d="M 13 5.9296875 L 6.9296875 12 L 13 18.070312 L 14.5 16.570312 L 9.9296875 12 L 14.5 7.4296875 L 13 5.9296875 z"></path>
-                </svg>
-            </button>
-            <button type="button" id="next-photo">
-                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24">
-                    <path d="M 10 5.9296875 L 8.5 7.4296875 L 13.070312 12 L 8.5 16.570312 L 10 18.070312 L 16.070312 12 L 10 5.9296875 z"></path>
-                </svg>
-            </button>
+            <menu>
+                <li>
+                    <button type="button" id="prev-photo" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24">
+                            <path d="M 13 5.9296875 L 6.9296875 12 L 13 18.070312 L 14.5 16.570312 L 9.9296875 12 L 14.5 7.4296875 L 13 5.9296875 z"></path>
+                        </svg>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" id="next-photo">
+                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24">
+                            <path d="M 10 5.9296875 L 8.5 7.4296875 L 13.070312 12 L 8.5 16.570312 L 10 18.070312 L 16.070312 12 L 10 5.9296875 z"></path>
+                        </svg>
+                    </button>
+                </li>
+            </menu>
         </figure>
         <section>
             <slot name="boat-location">LOCATION</slot><!--BOSTON, MA-->

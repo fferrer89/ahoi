@@ -23,16 +23,18 @@ export default class Image { // Class that provides methods for creating and ret
         Image.db.exec(`
         CREATE TABLE IF NOT EXISTS ${Image.#dbTableName} (
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            boatId INTEGER NOT NULL,
+            boatId INTEGER,
             pathName TEXT NOT NULL UNIQUE CHECK(LENGTH(TRIM(pathName)) > 0),
             name TEXT NOT NULL,
             type TEXT NOT NULL,
             size INTEGER NOT NULL,
             position INTEGER NOT NULL CHECK(position >= 0),
             directory TEXT NOT NULL DEFAULT '/uploads/images',
+            userId INTEGER,
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
             FOREIGN KEY(boatId) REFERENCES boats(id) ON DELETE CASCADE ON UPDATE RESTRICT
+            FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE ON UPDATE RESTRICT
             ) STRICT`);
     }
 
@@ -48,6 +50,7 @@ export default class Image { // Class that provides methods for creating and ret
     #size;
     #position;
     #directory;
+    #userId;
 
     /**
      * @param boatId
@@ -57,8 +60,9 @@ export default class Image { // Class that provides methods for creating and ret
      * @param size
      * @param position
      * @param directory
+     * @param userId
      */
-    constructor(boatId, pathName, name, type, size, position = 0, directory='/uploads/images') {
+    constructor(boatId, pathName, name, type, size, position = 0, directory='/uploads/images', userId = null) {
         this.#boatId = boatId;
         this.#pathName = pathName;
         this.#name = name;
@@ -66,6 +70,7 @@ export default class Image { // Class that provides methods for creating and ret
         this.#size = size;
         this.#position = position;
         this.#directory = directory;
+        this.#userId = userId
     }
     static get db() {
         return this.#db;
@@ -95,10 +100,10 @@ export default class Image { // Class that provides methods for creating and ret
         return Image.#dbTableName;
     }
     get dbImmutableFieldNames() {
-        return ['boatId', 'pathName', 'name', 'type', 'size', 'position', 'directory'];
+        return ['boatId', 'pathName', 'name', 'type', 'size', 'position', 'directory', 'userId'];
     }
     get dbImmutableFieldValues() {
-        return [this.boatId, this.pathName, this.name, this.type, this.size, this.position, this.directory];
+        return [this.boatId, this.pathName, this.name, this.type, this.size, this.position, this.directory, this.userId];
     }
     get id() {
         return this.#id;
@@ -123,6 +128,9 @@ export default class Image { // Class that provides methods for creating and ret
     }
     get directory() {
         return this.#directory;
+    }
+    get userId() {
+        return this.#userId;
     }
 }
 // console.log(Object.values(ACCOUNT_TYPES).join("', '"))

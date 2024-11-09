@@ -26,6 +26,9 @@ if (typeof window === "undefined") {
         const boatModalComponent = document.querySelector('boat-modal');
         boatModalComponent && await import('/public/components/boat-modal/boat-modal.mjs');
 
+        const imageGalleryComponent = document.querySelector('image-gallery');
+        imageGalleryComponent && await import('/public/components/image-gallery/image-gallery.mjs');
+
         /*
         Call script that implements the logic for the login and signup pages if the rendered HTML contains those forms
          */

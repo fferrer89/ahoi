@@ -1,10 +1,18 @@
-export default class BoatCard extends HTMLElement {
+export default class ImageGallery extends HTMLElement {
     static {
-        window.customElements.define('boat-card', this);
+        window.customElements.define('image-gallery', this);
     }
     static get observedAttributes() {
-        return ['boat-id', 'edit-enabled'];
+        return ['num-imgs'];
     }
+
+    #currentImageIndex = 0;
+    #numOfImages;
+    #imgCarousel;
+    #movePhotoEnabled = true;
+    #images;
+    #prevPhotoBtn;
+    #nextPhotoBtn;
 
     /**
      * In the class constructor, you can set up initial state and default values, register event listeners, ...
@@ -26,32 +34,16 @@ export default class BoatCard extends HTMLElement {
         // this.shadowRoot.appendChild(templateContent.cloneNode(true));
     }
 
-    #currentImageIndex = 0;
-    #numOfImages;
-    #imgCarousel;
-    #movePhotoEnabled = true;
-    #images;
-    #prevPhotoBtn;
-    #nextPhotoBtn;
-
-    get boatId() {
-        return this.getAttribute('boat-id');
+    get numImgs() {
+        return this.getAttribute('num-imgs');
     }
-    set boatId(value) {
+    set numImgs(value) {
         if (value === null || value === undefined || value?.trim() === '')  {
-            this.removeAttribute('boat-id');
+            this.removeAttribute('num-imgs');
+            this.#imgCarousel.removeAttribute('data-num-imgs');
         } else {
-            this.setAttribute('boat-id', value);
-        }
-    }
-    get editEnabled() {
-        return this.hasAttribute('edit-enabled');
-    }
-    set editEnabled(value) {
-        if (value === 'true' || value?.trim() === '') {
-            this.setAttribute('edit-enabled', '');
-        } else {
-            this.removeAttribute('edit-enabled');
+            this.setAttribute('num-imgs', value);
+            this.#imgCarousel.setAttribute('data-num-imgs', value);
         }
     }
 
@@ -68,19 +60,15 @@ export default class BoatCard extends HTMLElement {
      */
     connectedCallback() {
         this.#images = this.querySelectorAll('img');
-        this.#imgCarousel = this.shadowRoot.querySelector('section#image-carousel');
+        this.#imgCarousel = this.shadowRoot.querySelector('figure#image-carousel');
         this.#prevPhotoBtn = this.shadowRoot.querySelector('button#prev-photo');
         this.#nextPhotoBtn = this.shadowRoot.querySelector('button#next-photo');
         this.#numOfImages = this.#images.length;
         this.#removeChangeImgButtons(this.#numOfImages);
         this.shadowRoot.addEventListener("click", this);
+        window.addEventListener('resize', this.#windowResizeEventHandler.bind(this));
         this.#prevPhotoBtn.addEventListener('click', this.#prevPhotoEventHandler.bind(this));
         this.#nextPhotoBtn.addEventListener('click', this.#nextPhotoEventHandler.bind(this));
-        // console.log('edit enabled? ' + this.editEnabled);
-        // console.log('boatId:  ' + this.boatId);
-        if (!this.editEnabled) {
-            // console.log('BoatCard is disabled');
-        }
     }
 
     /**
@@ -90,20 +78,20 @@ export default class BoatCard extends HTMLElement {
      */
     handleEvent(event) {
         if (event.type === "click") {
-            // console.log(`event.bubbles? ${event.bubbles}`);
-            // console.log(`event.target.tagName: ${event.target.tagName}`); // The HTML element that triggered the event (where the event started) - Event Bubbling
-            // console.log(`event.currentTarget.tagName: ${event.currentTarget.tagName}`); // the HTML element in which the event handler is attached.
-            if (event.target.tagName !== 'svg' && event.target.tagName !== 'path') {
+            if (event.target.tagName === 'IMG') {
                 event.preventDefault();
-                window.location.href = this.editEnabled ? `/myboats/${this.boatId}` : `/boats/${this.boatId}`;
+                window.location.href = event.target.src;
             }
         }
+    }
+    #windowResizeEventHandler(event) {
+        this.#imgCarousel.style.transform = `translateX(0px)`;
     }
     #prevPhotoEventHandler(event) {
         if (this.#movePhotoEnabled)  {
             this.#movePhotoEnabled = false; // Disable prev/next click
             this.#currentImageIndex = (--this.#currentImageIndex + this.#numOfImages) % this.#numOfImages;
-            this.#imgCarousel.style.transform = `translateX(-${this.#currentImageIndex * 340}px)`;
+            this.#imgCarousel.style.transform = `translateX(-${this.#currentImageIndex * window.innerWidth}px)`;
             this.#toggleButtonDisable();
             window.setTimeout(() => this.#movePhotoEnabled = true, 400); // Enable next click after 0.4 seconds
         }
@@ -117,7 +105,7 @@ export default class BoatCard extends HTMLElement {
                 this.#images[this.#currentImageIndex].hidden = false;
                 this.#images[nextImageIndex].loading = 'eager';
             }
-            this.#imgCarousel.style.transform = `translateX(-${this.#currentImageIndex * 340}px)`;
+            this.#imgCarousel.style.transform = `translateX(-${this.#currentImageIndex * window.innerWidth}px)`;
             this.#toggleButtonDisable();
             window.setTimeout(() => this.#movePhotoEnabled = true, 400);
         }
@@ -147,6 +135,7 @@ export default class BoatCard extends HTMLElement {
         this.removeEventListener('click', this.handleEvent);
         this.removeEventListener('click', this.#prevPhotoEventHandler);
         this.removeEventListener('click', this.#nextPhotoEventHandler);
+        window.removeEventListener('resize', this.#windowResizeEventHandler);
     }
 
     /**
@@ -176,11 +165,8 @@ export default class BoatCard extends HTMLElement {
         }
         // Observing changes to attributes
         switch (name) {
-            case 'boat-id':
-                this.boatId = newValue;
-                break;
-            case 'edit-enabled':
-                this.editEnabled = newValue;
+            case 'num-imgs':
+                this.numImgs = newValue;
                 break;
             default:
                 break;

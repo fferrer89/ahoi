@@ -1,0 +1,124 @@
+:host-context(image-gallery) {
+    /*Style only applies to this custom component (HOST element) image-gallery that is inside of a section html element*/
+    display: block;
+    padding-inline: var(--padding-inline-layout);
+}
+figure {
+    margin-inline: 0;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 250px 250px;
+
+    align-content: center; /*grid- (vertical) y-axis*/
+    align-items: stretch; /*grid element- (vertical) y-axis*/
+
+    justify-content: center; /*grid- (horizontal) x-axis*/
+    justify-items: stretch; /*grid element- (horizontal) x-axis*/
+    gap: 8px;
+    & ::slotted(img) {
+        object-position: center center;
+        object-fit: cover;
+    }
+    & ::slotted(img:first-of-type) {
+        grid-row-start: 1;
+        grid-row-end: 3;
+    }
+    &[data-num-imgs="1"] {
+        grid-template-columns: 1fr;
+        grid-template-rows: 500px;
+        gap: 0;
+        & ::slotted(img:first-of-type) {
+            grid-row-start: initial;
+            grid-row-end: inherit;
+        }
+    }
+    &[data-num-imgs="2"] {
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 500px;
+        row-gap: 0;
+        & ::slotted(img:first-of-type) {
+            grid-row-start: initial;
+            grid-row-end: inherit;
+        }
+    }
+    &[data-num-imgs="3"] {
+        grid-template-columns: 2fr 1fr;
+    }
+    &[data-num-imgs="4"] {
+        & ::slotted(img:nth-of-type(4)) {
+            grid-column-start: 2;
+            grid-column-end: 4;
+        }
+    }
+}
+@media (max-width: 720px) {
+    /*This rule-set applies when the browser's viewport width <= 720px*/
+    :host(image-gallery) {
+        display: block;
+        padding-inline: 0;
+        height: 500px;
+        width: 100vw;
+        overflow: hidden;
+        position: relative;
+    }
+    figure {
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: stretch;
+        margin: 0;
+        gap: 0;
+        transform: translateX(0);
+        transition: transform 0.5s ease-in-out;
+        & ::slotted(img) {
+            flex-shrink: 0;
+            width: 100%;
+        }
+    }
+    menu {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        & li {
+            margin-inline: 12px;
+            padding: 0;
+            list-style: none;
+            display: inline-block;
+        }
+        & button {
+            border-radius: 50%;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            border: none;
+            background-color: transparent;
+            &[disabled] > svg {
+                display: none;
+                visibility: hidden;
+            }
+            > svg {
+                display: inline-block;
+                border-radius: 50%;
+                padding: 4px;
+                background-color: var(--tertiary-color);
+                &:hover {
+                    background-color: white;
+                    transform: scale(1.05);
+                }
+            }
+        }
+    }
+}
+
+::slotted(img[slot='boat-image']) {
+}
+::part(a) {
+}
+slot[name="boat-image"]::slotted(img:nth-of-type(3)) {
+}
