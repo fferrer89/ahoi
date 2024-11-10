@@ -1,6 +1,7 @@
 :host-context(section) {
     /*Style only applies to this custom component (HOST element) boat-card that is inside of a section html element*/
     /*border: 1px solid red;*/
+    /*DOES NOT WORK IN MOBILE*/
 }
 :host(*) {
     /*border: 1px solid red;*/

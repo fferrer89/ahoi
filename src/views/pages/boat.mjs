@@ -47,7 +47,7 @@ export default function Boat(props, children) {
                             </figure>
                             <p>${props?.boatData?.description}</p>
                         </section>
-                        <reservation-card price-per-hour="${props?.boatData?.pricePerHour}">
+                        <reservation-card price-per-hour="${props?.boatData?.pricePerHour}" service-fee="5">
                             <h4 slot="price-per-hour"><strong>$${props?.boatData?.pricePerHour}</strong><sub>/hour</sub></h4>
 <!--                            <input slot="check-in" id="check-in" name="checkIn" type="datetime-local" step="3600">-->
                             ${reservationCardTemplate}

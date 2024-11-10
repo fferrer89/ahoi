@@ -1,68 +1,74 @@
-:host-context(reservation-card) {
+:host(reservation-card) {
     /*Style only applies to this custom component (HOST element) image-gallery that is inside of a section html element*/
     /*display: block;*/
     box-shadow: 0 1px 5px dimgray;
     border-radius: 10px;
     margin-inline-start: clamp(2rem, 6vw, 5rem);
     padding: 20px;
-    @media (max-width: 660px) {
+    min-width: clamp(270px, 30vw, 310px);
+}
+@media (max-width: 660px) {
+    :host(reservation-card) {
         margin-inline-start: 0;
         margin-block: 2rem;
+        min-width: clamp(290px, 55vw, 310px);
     }
-    > form {
-        & ul {
-            padding: 0;
-            list-style: none;
-            & label {
-                display: inline-block;
-                margin-block: 4px;
-            }
-            > li {
-                margin-block: 0.8rem;
-                &:first-of-type, &:nth-of-type(2) {
-                    /*border: 1px solid rgba(128, 128, 128, 0.5);*/
-                    /*padding: 0.5rem;*/
-                }
-            }
-        }
-        & button {
+}
+form {
+    & ul {
+        padding: 0;
+        list-style: none;
+        & label {
             display: block;
-            width: 100%;
-            border-radius: 5px;
-            border-width: 1px;
-            padding: 7px 9px;
-            background-color: var(--primary-color);
-            color: white;
-            margin-block: 30px;
+            margin-block: 4px;
+        }
+        > li {
+            margin-block: 0.8rem;
+        }
+    }
+    & button {
+        display: block;
+        width: 100%;
+        border-radius: 5px;
+        border-width: 1px;
+        padding: 7px 9px;
+        background-color: var(--primary-color);
+        color: white;
+        margin-block-start: 30px;
+        margin-block-end: 15px;
+    }
+}
+footer {
+    & table {
+        width: 100%; /* Adjust the width as needed */
+        border-collapse: collapse;
+        & tr {
+            & th, & td {
+                font-weight: normal;
+                padding-block: 5px;
+            }
+            & th {
+                text-align: left;
+            }
+            & td {
+                text-align: right;
+            }
+        }
+        & tbody tr:last-of-type {
+            & th, & td {
+                padding-block-end: 15px;
+            }
+        }
+        & tfoot {
+            border-top: 1px solid rgba(128, 128, 128, 0.5);
+            & th, & td {
+                font-weight: bold;
+                padding-block-start: 20px;
+                padding-block-end: 10px;
+            }
         }
     }
 }
-
-
-
-
-
-input {
-    --webkit-datetime-edit-hour-field: none;
-}
-* {
-    & input::-webkit-calendar-picker-indicator {
-        /*background-color: red;*/
-    }
-    & input::-webkit-calendar-picker-indicator:hover {
-        /*background-color: orange;*/
-    }
-    & input::-webkit-datetime-edit-hour-field {
-       /*color: green;*/
-    }
-    & input[type="datetime-local"]::-webkit-datetime-edit-minute-field {
-        /*color: blue;*/
-        display: none; /*TODO: important to keep this!!*/
-        /*visibility: hidden;*/
-    }
-    & input::-webkit-datetime-edit-ampm-field {
-        /*color: pink;*/
-        /*display: none;*/
-        /*visibility: hidden;*/
-    }
+.currency-symbol {
+    margin-inline-end: 1px;
 }

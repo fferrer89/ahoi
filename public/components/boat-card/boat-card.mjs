@@ -95,6 +95,8 @@ export default class BoatCard extends HTMLElement {
             // console.log(`event.currentTarget.tagName: ${event.currentTarget.tagName}`); // the HTML element in which the event handler is attached.
             if (event.target.tagName !== 'svg' && event.target.tagName !== 'path') {
                 event.preventDefault();
+                const boatsBaseUrl = `/boats/${this.boatId}`;
+                // If date is not null, add query params to boat base url
                 window.location.href = this.editEnabled ? `/myboats/${this.boatId}` : `/boats/${this.boatId}`;
                 // TODO: Store the current date in local storage variable, which gets picked up (and deleted) when the reservation-card component gets loaded (connectedCallback())
             }
@@ -131,6 +133,20 @@ export default class BoatCard extends HTMLElement {
             this.#prevPhotoBtn.remove();
             this.#nextPhotoBtn.remove();
         }
+    }
+
+    /**
+     * Usage:
+     * const url = 'https://example.com';
+     * const newUrl = addQueryParam(url, 'page', '2');
+     * console.log(newUrl); // Output: https://example.com?page=2
+     */
+    #addQueryParam(url, param, value) {
+        const urlObj = new URL(url);
+        const params = new URLSearchParams(urlObj.search);
+        params.set(param, value);
+        urlObj.search = params.toString();
+        return urlObj.toString();
     }
 
     /**

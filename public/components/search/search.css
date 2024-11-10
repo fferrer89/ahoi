@@ -1,5 +1,6 @@
 :host-context(section) {
     /*Style only applies to this custom component (HOST element) search-ahoi that is inside of a section html element*/
+    /*DOES NOT WORK IN MOBILE*/
 }
 :host(search-ahoi) {
     /* Apply default style to this component (search-ahoi). The style in the "normal/light DOM" take precedence over this style*/

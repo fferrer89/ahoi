@@ -5,19 +5,18 @@
             <h4>Add dates for prices</h4>
         </slot>
     </header>
-<!--    <form action="./boats/:boatId/bookings" method="POST" part="reservation">-->
-    <form>
+    <form action="/boats/:boatId/bookings" method="POST" part="reservation">
         <ul>
             <li>
                 <label for="check-in">Check-in</label>
                 <slot name="check-in">
 <!--                    <input id="check-in" name="checkIn" type="text" value="Add date">-->
-                    <input id="check-in" name="check-in" type="datetime-local" step="3600">
+                    <input id="check-in" name="checkIn" type="datetime-local" step="1800" required>
                 </slot>
             </li>
             <li>
                 <label for="check-out">Check-out</label>
-                <input id="check-out" name="checkOut" type="datetime-local" step="3600">
+                <input id="check-out" name="checkOut" type="datetime-local" step="1800" required>
 <!--                <input id="check-out" name="checkOut" type="text" value="Add date">-->
             </li>
             <li>
@@ -26,6 +25,32 @@
             </li>
         </ul>
     </form>
-    <footer>
+    <footer id="price-summary" hidden>
+        <table>
+            <tbody>
+                <tr id="price-owner">
+                    <th scope="row">
+                        <slot name="price-owner">PRICE_OWNER</slot>
+                    </th>
+                    <td>
+                        <slot name="price-owner-total">TOTAL</slot>
+                    </td>
+                </tr>
+                <tr id="service-fee">
+                    <th scope="row">Service fee</th>
+                    <td>
+                        <slot name="service-fee">SERVICE_FEE</slot>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr id="total-price">
+                    <th scope="row">Total price</th>
+                    <td>
+                        <slot name="total-price">TOTAL_PRICE</slot>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
     </footer>
 </template>

@@ -1,4 +1,4 @@
-:host-context(image-gallery) {
+:host(image-gallery) {
     /*Style only applies to this custom component (HOST element) image-gallery that is inside of a section html element*/
     display: block;
     padding-inline: var(--padding-inline-layout);
