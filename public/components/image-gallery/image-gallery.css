@@ -4,10 +4,10 @@
     padding-inline: var(--padding-inline-layout);
 }
 figure {
-    margin-inline: 0;
+    margin: 0;
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 250px 250px;
+    grid-template-rows: 180px 180px;
 
     align-content: center; /*grid- (vertical) y-axis*/
     align-items: stretch; /*grid element- (vertical) y-axis*/
@@ -25,7 +25,7 @@ figure {
     }
     &[data-num-imgs="1"] {
         grid-template-columns: 1fr;
-        grid-template-rows: 500px;
+        grid-template-rows: 360px;
         gap: 0;
         & ::slotted(img:first-of-type) {
             grid-row-start: initial;
@@ -34,7 +34,7 @@ figure {
     }
     &[data-num-imgs="2"] {
         grid-template-columns: 2fr 1fr;
-        grid-template-rows: 500px;
+        grid-template-rows: 360px;
         row-gap: 0;
         & ::slotted(img:first-of-type) {
             grid-row-start: initial;
@@ -56,7 +56,7 @@ figure {
     :host(image-gallery) {
         display: block;
         padding-inline: 0;
-        height: 500px;
+        height: 360px;
         width: 100vw;
         overflow: hidden;
         position: relative;
@@ -67,7 +67,6 @@ figure {
         flex-direction: row;
         justify-content: flex-start;
         align-items: stretch;
-        margin: 0;
         gap: 0;
         transform: translateX(0);
         transition: transform 0.5s ease-in-out;

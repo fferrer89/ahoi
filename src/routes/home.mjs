@@ -61,7 +61,7 @@ export default async function homeRoute(req, res) {
                 acceptContentType?.includes("text/html")) {
                 try {
                     let homePage;
-                    if (req?.session?.id) {
+                    if (req?.session?.user?.id) {
                         // If user is authenticated, return the dynamic home page
                         const home = Home();
                         const layout = Layout({

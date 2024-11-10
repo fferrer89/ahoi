@@ -79,8 +79,8 @@ export default class ImageGallery extends HTMLElement {
     handleEvent(event) {
         if (event.type === "click") {
             if (event.target.tagName === 'IMG') {
-                event.preventDefault();
-                window.location.href = event.target.src;
+                // event.preventDefault();
+                // window.location.href = event.target.src;
             }
         }
     }

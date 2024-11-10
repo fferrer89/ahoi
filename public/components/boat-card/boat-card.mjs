@@ -96,6 +96,7 @@ export default class BoatCard extends HTMLElement {
             if (event.target.tagName !== 'svg' && event.target.tagName !== 'path') {
                 event.preventDefault();
                 window.location.href = this.editEnabled ? `/myboats/${this.boatId}` : `/boats/${this.boatId}`;
+                // TODO: Store the current date in local storage variable, which gets picked up (and deleted) when the reservation-card component gets loaded (connectedCallback())
             }
         }
     }

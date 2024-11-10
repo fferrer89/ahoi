@@ -357,7 +357,7 @@ main#home {
 }
 main#boats {
     > section:first-of-type {
-        margin-block-start: 90px;
+        margin-block-start: 75px;
         padding-block: 1.8rem;
         border-bottom: 2px solid rgba(0, 0, 0, 0.1);
         > search-ahoi {
@@ -411,28 +411,38 @@ main#boats {
 }
 main#boat {
     max-width: var(--main-content-width);
-    margin: 110px auto 5px;
+    margin: 100px auto 5px;
+    padding-block-end: 2rem;
     & h3, & image-gallery + section {
         padding-inline: var(--padding-inline-layout);
     }
     & h3 {
         color: var(--secondary-color);
         font-size: clamp(1.3rem, 5vw, 1.8rem);
+        margin-block: 0.5em;
         @media (max-width: 391px) {
             text-align: center;
         }
     }
     & image-gallery + section {
-        > h4 {
+        padding-block: 2rem;
+        color: var(--secondary-color);
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        justify-content: space-between;
+        @media (max-width: 660px) {
+            flex-direction: column;
+            align-items: center;
+        }
+        & h4 {
             margin-block: 0;
-            padding-block-start: 0.5em;
             padding-block-end: 1em;
             border-bottom: 1px solid rgba(128, 128, 128, 0.5);
         }
-        color: var(--secondary-color);
-        > figure {
+        & figure {
             margin: 0;
-            padding-block: 1em;
+            padding-block: 0.5em;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -445,7 +455,7 @@ main#boat {
             }
             > figcaption {
                 & h5, & p {
-                    margin-block: 0;
+                    margin-block: 0.1em;
                 }
             }
         }

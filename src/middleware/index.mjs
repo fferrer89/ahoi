@@ -48,9 +48,9 @@ export default function middlewares(req, res) {
     // !res.writableEnded && authChallenge(req, res); // authorization:  Basic YWRkc2Zhc2Q6c2Zhc2Rm
     // TODO: Delete below
     // Mock an authenticated user
-    // req.session = {
-    //     user: {
-    //         id: 1, username: 'owner', userType: 'Boat Owner'
-    //     }
-    // };
+    req.session = {
+        user: {
+            id: 1, username: 'owner', userType: 'Boat Owner'
+        }
+    };
 }

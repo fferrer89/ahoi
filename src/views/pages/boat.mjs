@@ -11,9 +11,12 @@ import fs from "node:fs";
  */
 export default function Boat(props, children) {
     let imageGalleryTemplatePath, imageGalleryTemplate;
+    let reservationCardTemplatePath, reservationCardTemplate;
     try {
         imageGalleryTemplatePath = path.resolve('public/components/image-gallery/image-gallery.html');
         imageGalleryTemplate = fs.readFileSync(imageGalleryTemplatePath, { encoding: 'utf8' });
+        reservationCardTemplatePath = path.resolve('public/components/reservation-card/reservation-card.html');
+        reservationCardTemplate = fs.readFileSync(reservationCardTemplatePath, { encoding: 'utf8' })
     } catch (err) {
         console.error(err);
     }
@@ -31,18 +34,24 @@ export default function Boat(props, children) {
                         ${imageGalleryTemplate}
                     </image-gallery>
                     <section>
-                        <h4>${props?.boatData?.boatType} at ${props?.boatData?.city}, ${props?.boatData?.state}</h4>
-                        <figure>
-                            <img src="/tasks/uploads/images/28" alt="Profile picture of user">
-                            <figcaption>
-                                <hgroup>
-                                    <h5>Owned by ${props?.boatData?.username}</h5>
-                                    <p><small>Superowner – 1 year renting</small></p>
-                                </hgroup>
-                            </figcaption>
-                        </figure>
-                        <p>${props?.boatData?.description}</p>
-                        <reservation-card price-per-hour="${props?.boatData?.pricePerHour}"></reservation-card>
+                        <section id="boat-info">
+                            <h4>${props?.boatData?.boatType} at ${props?.boatData?.city}, ${props?.boatData?.state}</h4>
+                            <figure>
+                                <img src="/tasks/uploads/images/28" alt="Profile picture of user">
+                                <figcaption>
+                                    <hgroup>
+                                        <h5>Owned by ${props?.boatData?.username}</h5>
+                                        <p><small>Superowner – 1 year renting</small></p>
+                                    </hgroup>
+                                </figcaption>
+                            </figure>
+                            <p>${props?.boatData?.description}</p>
+                        </section>
+                        <reservation-card price-per-hour="${props?.boatData?.pricePerHour}">
+                            <h4 slot="price-per-hour"><strong>$${props?.boatData?.pricePerHour}</strong><sub>/hour</sub></h4>
+<!--                            <input slot="check-in" id="check-in" name="checkIn" type="datetime-local" step="3600">-->
+                            ${reservationCardTemplate}
+                        </reservation-card>
                     </section>
                 </section>
             </main>`

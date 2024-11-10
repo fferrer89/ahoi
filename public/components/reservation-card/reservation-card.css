@@ -1,0 +1,68 @@
+:host-context(reservation-card) {
+    /*Style only applies to this custom component (HOST element) image-gallery that is inside of a section html element*/
+    /*display: block;*/
+    box-shadow: 0 1px 5px dimgray;
+    border-radius: 10px;
+    margin-inline-start: clamp(2rem, 6vw, 5rem);
+    padding: 20px;
+    @media (max-width: 660px) {
+        margin-inline-start: 0;
+        margin-block: 2rem;
+    }
+    > form {
+        & ul {
+            padding: 0;
+            list-style: none;
+            & label {
+                display: inline-block;
+                margin-block: 4px;
+            }
+            > li {
+                margin-block: 0.8rem;
+                &:first-of-type, &:nth-of-type(2) {
+                    /*border: 1px solid rgba(128, 128, 128, 0.5);*/
+                    /*padding: 0.5rem;*/
+                }
+            }
+        }
+        & button {
+            display: block;
+            width: 100%;
+            border-radius: 5px;
+            border-width: 1px;
+            padding: 7px 9px;
+            background-color: var(--primary-color);
+            color: white;
+            margin-block: 30px;
+        }
+    }
+}
+
+
+
+
+
+input {
+    --webkit-datetime-edit-hour-field: none;
+}
+* {
+    & input::-webkit-calendar-picker-indicator {
+        /*background-color: red;*/
+    }
+    & input::-webkit-calendar-picker-indicator:hover {
+        /*background-color: orange;*/
+    }
+    & input::-webkit-datetime-edit-hour-field {
+       /*color: green;*/
+    }
+    & input[type="datetime-local"]::-webkit-datetime-edit-minute-field {
+        /*color: blue;*/
+        display: none; /*TODO: important to keep this!!*/
+        /*visibility: hidden;*/
+    }
+    & input::-webkit-datetime-edit-ampm-field {
+        /*color: pink;*/
+        /*display: none;*/
+        /*visibility: hidden;*/
+    }
+}
