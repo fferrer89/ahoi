@@ -50,7 +50,12 @@ export default function middlewares(req, res) {
     // Mock an authenticated user
     // req.session = {
     //     user: {
-    //         id: 1, username: 'owner', userType: 'Boat Owner'
+    //         id: 1, username: 'John Inc & Boats', userType: 'Boat Owner'
     //     }
     // };
+    req.session = {
+        user: {
+            id: 4, username: 'joseph', userType: 'Boat Renter'
+        }
+    };
 }

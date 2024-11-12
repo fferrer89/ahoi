@@ -5,6 +5,8 @@ export default class Booking {
     static #db = DB.physicalDBConnection;
     static #dbTableName = 'bookings';
     // sqlite Data Types: NULL, INTEGER, REAL, TEXT, BLOB
+    // checkIn → 2024-11-12 07:00:00
+    // checkOut →  2024-11-12 13:00:00
     // createdAt → 1727270175
     // createdAtStr → 2024-09-25 13:16:15
     static {
@@ -13,12 +15,12 @@ export default class Booking {
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             userId INTEGER NOT NULL,
             boatId INTEGER NOT NULL,
-            date INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
-            dateStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
+            checkIn TEXT NOT NULL,
+            checkOut TEXT NOT NULL,
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,
             createdAtStr TEXT DEFAULT (DATETIME('now')) NOT NULL,
             FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE,
-            FOREIGN KEY(boatId) REFERENCES boats(id) ON DELETE CASCADE,
+            FOREIGN KEY(boatId) REFERENCES boats(id) ON DELETE CASCADE
             ) STRICT`);
     }
     /**
@@ -28,20 +30,20 @@ export default class Booking {
     #id;
     #userId;
     #boatId;
-    #date;
-    #dateStr;
+    #checkIn;
+    #checkOut;
 
     /**
      * @param boatId
      * @param userId
-     * @param date
-     * @param dateStr
+     * @param checkIn
+     * @param checkOut
      */
-    constructor(userId, boatId, date, dateStr) {
+    constructor(userId, boatId, checkIn, checkOut) {
         this.#userId = userId;
         this.#boatId = boatId;
-        this.#date = date;
-        this.#dateStr = dateStr;
+        this.#checkIn = checkIn;
+        this.#checkOut = checkOut;
     }
     static get db() {
         return this.#db;
@@ -62,10 +64,10 @@ export default class Booking {
         return Booking.#dbTableName;
     }
     get dbImmutableFieldNames() {
-        return ['userId', 'boatId', 'date', 'dateStr'];
+        return ['userId', 'boatId', 'checkIn', 'checkOut'];
     }
     get dbImmutableFieldValues() {
-        return [this.userId, this.boatId, this.date, this.dateStr];
+        return [this.userId, this.boatId, this.checkIn, this.checkOut];
     }
     get id() {
         return this.#id;
@@ -76,10 +78,10 @@ export default class Booking {
     get boatId() {
         return this.#boatId;
     }
-    get date() {
-        return this.#date;
+    get checkIn() {
+        return this.#checkIn;
     }
-    get dateStr() {
-        return this.#dateStr;
+    get checkOut() {
+        return this.#checkOut;
     }
 }

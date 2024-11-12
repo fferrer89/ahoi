@@ -29,8 +29,8 @@ if (typeof window === "undefined") {
         const imageGalleryComponent = document.querySelector('image-gallery');
         imageGalleryComponent && await import('/public/components/image-gallery/image-gallery.mjs');
 
-        const reservationCardComponent = document.querySelector('reservation-card');
-        reservationCardComponent && await import('/public/components/reservation-card/reservation-card.mjs');
+        const bookingCardComponent = document.querySelector('booking-card');
+        bookingCardComponent && await import('/public/components/booking-card/booking-card.mjs');
 
         /*
         Call script that implements the logic for the login and signup pages if the rendered HTML contains those forms

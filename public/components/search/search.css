@@ -96,8 +96,8 @@ select {
     &[aria-visited=false] {
         color: #999;
     }
-    > option#hidden-option {
-        display: none;
+    > option[aria-disabled=true] {
+        /*display: none;*/
     }
 }
 input {
@@ -117,9 +117,6 @@ label, svg, path {
 }
 label {
     white-space: nowrap;
-}
-:host-context(section) {
-    /*Style only applies to this custom component (HOST element) search-ahoi that is inside of a section html element*/
 }
 /*The global part attribute makes a shadow tree element visible to its parent DOM. In this way, you can apply CSS
 styles to elements in the shadow tree from outside of it.*/

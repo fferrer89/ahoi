@@ -1,16 +1,18 @@
-class ReservationCard extends HTMLElement {
+class BookingCard extends HTMLElement {
     static {
-        window.customElements.define('reservation-card', this);
+        window.customElements.define('booking-card', this);
     }
     static get observedAttributes() {
-        return ['price-per-hour', 'service-fee'];
+        return ['price-per-hour', 'service-fee', 'boat-id'];
     }
+    #form;
     #checkIn;
     #checkOut;
     #priceSummary;
     #hoursReserved;
     #priceOwner;
     #totalPrice;
+    #submitBtn;
     constructor() {
         super();
     }
@@ -37,34 +39,53 @@ class ReservationCard extends HTMLElement {
             this.setAttribute('service-fee', value);
         }
     }
+    get boatId() {
+        return this.getAttribute('boat-id');
+    }
+    set boatId(value) {
+        if (value === null || value === undefined || value?.trim() === '')  {
+            this.removeAttribute('boat-id');
+        } else {
+            this.setAttribute('boat-id', value);
+        }
+    }
     connectedCallback() {
+        this.#form = this.shadowRoot.querySelector('form[method="post"]');
         this.#checkIn = this.shadowRoot.querySelector('input[type="datetime-local"]#check-in');
         this.#checkOut = this.shadowRoot.querySelector('input[type="datetime-local"]#check-out');
+        this.#submitBtn = this.shadowRoot.querySelector('button[type="submit"]');
         this.#priceSummary = this.shadowRoot.querySelector('footer#price-summary');
         this.#checkIn.addEventListener('change', this.#changeCheckInDateEventHandler.bind(this));
-        this.#checkOut.addEventListener('change', this.#calculateReservationPriceEventHandler.bind(this));
+        this.#checkOut.addEventListener('change', this.#changeCheckOutDateEventHandler.bind(this));
         this.shadowRoot.addEventListener("submit", this);
     }
     handleEvent(event) {
         if (event.type === "submit") {
-            this.#submitReservationEventHandler(event);
+            this.#submitBookingEventHandler(event);
         }
     }
-    #submitReservationEventHandler(event) {
-        event.preventDefault();
-        console.log('Reservation Submitted!')
+    #submitBookingEventHandler(event) {
+        // event.preventDefault();
+        // Update the action route endpoint
+        this.#form.action = `/boats/${this.boatId}/bookings`;
+        console.log('Booking Submitted!');
+        // TODO: Send email with reservation details to renter and owner (and admin member?)
     }
     #changeCheckInDateEventHandler(event) {
+        this.#checkIn?.reportValidity();
+        console.log(this.#checkIn?.validity?.stepMismatch);
         if (this.#checkIn?.validity?.valid) {
             const startTimeNew = new Date(this.#checkIn.valueAsNumber + (1000 * 60 * 60));
-            console.log(startTimeNew.toISOString().slice(0, 16));
             this.#checkOut.min = startTimeNew.toISOString().slice(0, 16);
             this.#checkOut.value = startTimeNew.toISOString().slice(0, 16);
         }
-        this.#calculateReservationPriceEventHandler(event);
+        this.#calculateBookingPriceEventHandler(event);
     }
-    #calculateReservationPriceEventHandler(event) {
-        console.log('Checkout changed!')
+    #changeCheckOutDateEventHandler(event) {
+        this.#checkOut?.reportValidity();
+        this.#calculateBookingPriceEventHandler(event);
+    }
+    #calculateBookingPriceEventHandler(event) {
         // console.log(this.#checkOut?.value); // 2024-11-10T00:26
         // console.log(this.#checkOut?.valueAsNumber); // 1731238200000 (timestamp (in milliseconds))
         const millisecondsDifference = (this.#checkOut?.valueAsNumber - this.#checkIn?.valueAsNumber);
@@ -74,11 +95,11 @@ class ReservationCard extends HTMLElement {
             this.#hoursReserved = millisecondsDifference / (1000 * 60 * 60);
             this.#priceOwner = this.pricePerHour * this.#hoursReserved;
             this.#totalPrice = this.#priceOwner + this.serviceFee;
-            console.log(this.#hoursReserved);
-            console.log(this.#priceOwner);
             // Update the footer to include the price summary
+            this.#submitBtn.textContent = 'Reserve';
             this.#createPriceSummaryFooter();
         } else {
+            this.#submitBtn.textContent = 'Check availability';
             this.#priceSummary.hidden = true;
         }
     }
@@ -145,9 +166,9 @@ class ReservationCard extends HTMLElement {
         priceSummary.hidden = false;
     }
     disconnectedCallback() {
-        this.removeEventListener('submit', this.#submitReservationEventHandler);
+        this.removeEventListener('submit', this.#submitBookingEventHandler);
         this.removeEventListener('change', this.#changeCheckInDateEventHandler);
-        this.removeEventListener('change', this.#calculateReservationPriceEventHandler);
+        this.removeEventListener('change', this.#calculateBookingPriceEventHandler);
     }
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) {
@@ -159,6 +180,9 @@ class ReservationCard extends HTMLElement {
                 break;
             case 'service-fee':
                 this.serviceFee = newValue;
+                break;
+            case 'boatId':
+                this.boatId = newValue;
                 break;
             default:
                 break;

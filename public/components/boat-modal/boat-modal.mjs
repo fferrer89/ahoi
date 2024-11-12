@@ -4,8 +4,7 @@ class BoatModal extends HTMLElement {
     static {
         window.customElements.define('boat-modal', this);
     }
-    static get observedAttributes() {
-    }
+    // static observedAttributes = [];
 
     #dialog;
     #form;
@@ -76,38 +75,6 @@ class BoatModal extends HTMLElement {
         const boatCard = boatCardHtmlDoc?.body?.firstChild;
         const boatCards = window.document.querySelector('section#boat-cards');
         boatCards.appendChild(boatCard);
-        // const responseBody = await response.json()
-        // // Create a boat-card and append it to the end of the boar-cards section
-        // const boatImage = document.createElement('img');
-        // boatImage.src = `/uploads/images/${responseBody?.imageId}`;
-        // boatImage.alt = `${responseBody?.type} image`;
-        // boatImage.slot = 'boat-image';
-        //
-        // const pricePerHour = document.createElement('p');
-        // const price = document.createElement('strong');
-        // price.textContent = `$${responseBody?.pricePerHour}`;
-        // pricePerHour.appendChild(price);
-        // const subTime = document.createElement('sub');
-        // subTime.textContent = '/hour';
-        // pricePerHour.appendChild(subTime);
-        // pricePerHour.slot = 'price-per-hour';
-        //
-        // const location = document.createElement('p');
-        // location.textContent = `${responseBody?.address?.city?.toUpperCase()}, ${responseBody?.address?.state?.toUpperCase()}`;
-        // location.slot = 'boat-location';
-        //
-        // const title = document.createElement('p');
-        // title.textContent = `${responseBody?.title}`;
-        // title.slot = 'boat-title';
-        //
-        // const boatCards = document.querySelector('section#boat-cards');
-        // const boatCard = document.createElement('boat-card');
-        // boatCard.appendChild(boatImage);
-        // boatCard.appendChild(pricePerHour);
-        // boatCard.appendChild(location);
-        // boatCard.appendChild(title);
-        // boatCards.appendChild(boatCard);
-
         // Update the h3 with correct number of boats (data-num-boats) and with appropriate text
         const headingNumBoats = document.querySelector('h3[data-num-boats]');
         const numOfBoatsCur = headingNumBoats?.dataset?.numBoats;

@@ -2,10 +2,9 @@ export default class ImageGallery extends HTMLElement {
     static {
         window.customElements.define('image-gallery', this);
     }
-    static get observedAttributes() {
-        return ['num-imgs'];
-    }
+    static observedAttributes =  ['num-imgs'];
 
+    #windowWidth = window.innerWidth;
     #currentImageIndex = 0;
     #numOfImages;
     #imgCarousel;
@@ -85,7 +84,12 @@ export default class ImageGallery extends HTMLElement {
         }
     }
     #windowResizeEventHandler(event) {
-        this.#imgCarousel.style.transform = `translateX(0px)`;
+        // Check window width has actually changed and it's not just iOS triggering a resize event on scroll
+        if (window.innerWidth !== this.#windowWidth) {
+            this.#windowWidth = window.innerWidth; // Update the window width for next time
+            this.#imgCarousel.style.transform = `translateX(0px)`;
+        }
+
     }
     #prevPhotoEventHandler(event) {
         if (this.#movePhotoEnabled)  {

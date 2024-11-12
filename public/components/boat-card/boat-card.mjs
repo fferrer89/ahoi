@@ -2,9 +2,7 @@ export default class BoatCard extends HTMLElement {
     static {
         window.customElements.define('boat-card', this);
     }
-    static get observedAttributes() {
-        return ['boat-id', 'edit-enabled'];
-    }
+    static observedAttributes = ['boat-id', 'edit-enabled'];
 
     /**
      * In the class constructor, you can set up initial state and default values, register event listeners, ...
@@ -98,7 +96,7 @@ export default class BoatCard extends HTMLElement {
                 const boatsBaseUrl = `/boats/${this.boatId}`;
                 // If date is not null, add query params to boat base url
                 window.location.href = this.editEnabled ? `/myboats/${this.boatId}` : `/boats/${this.boatId}`;
-                // TODO: Store the current date in local storage variable, which gets picked up (and deleted) when the reservation-card component gets loaded (connectedCallback())
+                // TODO: Store the current date in local storage variable, which gets picked up (and deleted) when the booking-card component gets loaded (connectedCallback())
             }
         }
     }

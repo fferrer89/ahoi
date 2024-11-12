@@ -1,27 +1,24 @@
-<template id="reservation-card" shadowrootmode="open">
-    <link rel="stylesheet" href="/public/components/reservation-card/reservation-card.css">
+<template id="booking-card" shadowrootmode="open">
+    <link rel="stylesheet" href="/public/components/booking-card/booking-card.css">
     <header>
         <slot name="price-per-hour">
             <h4>Add dates for prices</h4>
         </slot>
     </header>
-    <form action="/boats/:boatId/bookings" method="POST" part="reservation">
+    <form action="/boats/:boatId/bookings" method="POST" part="booking">
         <ul>
             <li>
                 <label for="check-in">Check-in</label>
                 <slot name="check-in">
-<!--                    <input id="check-in" name="checkIn" type="text" value="Add date">-->
                     <input id="check-in" name="checkIn" type="datetime-local" step="1800" required>
                 </slot>
             </li>
             <li>
                 <label for="check-out">Check-out</label>
                 <input id="check-out" name="checkOut" type="datetime-local" step="1800" required>
-<!--                <input id="check-out" name="checkOut" type="text" value="Add date">-->
             </li>
             <li>
-<!--                <button type="submit">Check availability</button>-->
-                <button type="submit">Reserve</button>
+                <button type="submit">Check availability</button>
             </li>
         </ul>
     </form>

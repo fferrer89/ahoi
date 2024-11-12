@@ -62,4 +62,28 @@ function decodeBasicAuth(authHeader) {
     return { email, password };
 }
 
-export { fileExtensionToMIMEType, createDirectoryIfNotExists, decodeBasicAuth};
+/**
+ * Takes as string input representing a valid date in the following format (2024-11-10T06:26) and converts to a string \
+ * output representing a date in this valid format (2024-11-10 06:26:00). This is used as the date-time stored in the
+ * sqlite db are stored in the output format, but the date-time return from the HTML form is in the input format.
+ *
+ * For example:
+ *  2024-11-10T06:26 -> 2024-11-10 06:26:00
+ *  2024-11-10T17:54 -> 2024-11-10 17:54:00
+ *  2024-11-10T20:00 -> 2024-11-10 20:00:00
+ *
+ * @param {string} inputDate a valid date in the following format (e.g.: 2024-11-10T06:26)
+ * @return {string} the inputted date converted to the following format (e.g.: 2024-11-10 06:26:00)
+ */
+function convertDateFormat(inputDate) {
+    // Split the input date string into date and time parts
+    const [datePart, timePart] = inputDate.split('T');
+    // Extract the time part without the 'T'
+    const timeWithoutT = timePart.substring(0, timePart.length);
+    // Add seconds to the time part
+    const timeWithSeconds = `${timeWithoutT}:00`;
+    // Combine the date and time parts with a space
+    return `${datePart} ${timeWithSeconds}`;
+}
+
+export { fileExtensionToMIMEType, createDirectoryIfNotExists, convertDateFormat, decodeBasicAuth};

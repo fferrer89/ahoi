@@ -1,4 +1,4 @@
-:host(reservation-card) {
+:host(booking-card) {
     /*Style only applies to this custom component (HOST element) image-gallery that is inside of a section html element*/
     /*display: block;*/
     box-shadow: 0 1px 5px dimgray;
@@ -8,7 +8,7 @@
     min-width: clamp(270px, 30vw, 310px);
 }
 @media (max-width: 660px) {
-    :host(reservation-card) {
+    :host(booking-card) {
         margin-inline-start: 0;
         margin-block: 2rem;
         min-width: clamp(290px, 55vw, 310px);
@@ -25,6 +25,9 @@ form {
         > li {
             margin-block: 0.8rem;
         }
+        & input:user-invalid {
+            border: 2px solid red;
+        }
     }
     & button {
         display: block;
@@ -36,6 +39,9 @@ form {
         color: white;
         margin-block-start: 30px;
         margin-block-end: 15px;
+        &:active {
+            transform: scale(0.95);
+        }
     }
 }
 footer {
@@ -70,5 +76,5 @@ footer {
     }
 }
 .currency-symbol {
-    margin-inline-end: 1px;
+    margin-inline-end: 2px;
 }

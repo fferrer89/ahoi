@@ -11,12 +11,12 @@ import fs from "node:fs";
  */
 export default function Boat(props, children) {
     let imageGalleryTemplatePath, imageGalleryTemplate;
-    let reservationCardTemplatePath, reservationCardTemplate;
+    let bookingCardTemplatePath, bookingCardTemplate;
     try {
         imageGalleryTemplatePath = path.resolve('public/components/image-gallery/image-gallery.html');
         imageGalleryTemplate = fs.readFileSync(imageGalleryTemplatePath, { encoding: 'utf8' });
-        reservationCardTemplatePath = path.resolve('public/components/reservation-card/reservation-card.html');
-        reservationCardTemplate = fs.readFileSync(reservationCardTemplatePath, { encoding: 'utf8' })
+        bookingCardTemplatePath = path.resolve('public/components/booking-card/booking-card.html');
+        bookingCardTemplate = fs.readFileSync(bookingCardTemplatePath, { encoding: 'utf8' })
     } catch (err) {
         console.error(err);
     }
@@ -47,11 +47,13 @@ export default function Boat(props, children) {
                             </figure>
                             <p>${props?.boatData?.description}</p>
                         </section>
-                        <reservation-card price-per-hour="${props?.boatData?.pricePerHour}" service-fee="5">
+                        <booking-card price-per-hour="${props?.boatData?.pricePerHour}" 
+                                      service-fee="5"
+                                      boat-id="${props?.boatData?.boatId}">
                             <h4 slot="price-per-hour"><strong>$${props?.boatData?.pricePerHour}</strong><sub>/hour</sub></h4>
 <!--                            <input slot="check-in" id="check-in" name="checkIn" type="datetime-local" step="3600">-->
-                            ${reservationCardTemplate}
-                        </reservation-card>
+                            ${bookingCardTemplate}
+                        </booking-card>
                     </section>
                 </section>
             </main>`

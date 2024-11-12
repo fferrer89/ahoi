@@ -9,6 +9,7 @@ import imageRoute from "./image.mjs";
 import logoutRoute from "./logout.mjs";
 import notFoundController from "../controllers/notfound.mjs";
 import boatRoute from "./boat.mjs";
+import boatBookingsRoute from "./boat-bookings.mjs";
 
 /**
  * Route handling based on the pathname
@@ -39,9 +40,17 @@ export default async function routes(req, res) {
             // POST to post a booking for this boat
             // When the user clicks the "Book" button, a dialog will appear with the info about the booking and a confirmation button that when
             // clicked, submits the booking request
+            // POST redirects to the booking confirmation page or to the '/boats/bookings'
+            boatBookingsRoute(req, res);
             break;
         case '/boats/bookings': //  Your boat bookings (Boat Renter)
             // Protected resource for Boat Renters. See all/upcoming bookings that this renter has made
+            // POST to post a booking for this boat
+            // bookingsRoute(req, res);
+            break;
+        case '/boats/bookings/:bookingId': //  Your boat bookings (Boat Renter)
+            // Protected resource for Boat Renters. See all/upcoming bookings that this renter has made
+            // POST to post a booking for this boat
             // bookingsRoute(req, res);
             break;
         case '/myboats':
@@ -54,7 +63,11 @@ export default async function routes(req, res) {
             break;
         case '/myboats/bookings':
             // Protected resource for Boat Owner to see all the bookings for all his boats. Upcomming bookings, ...
-            // bookingsRoute(req, res); OR myBoatBookingsRoute(req, res); if need to be different that the name used for the '/boats/bookings' route
+            // myboatsBookingsRoute(req, res); OR myBoatBookingsRoute(req, res); if need to be different that the name used for the '/boats/bookings' route
+            break;
+        case '/myboats/bookings/:bookingId':
+            // Protected resource for Boat Owner to see all the bookings for all his boats. Upcomming bookings, ...
+            // myboatsBookingRoute(req, res); OR myBoatBookingsRoute(req, res); if need to be different that the name used for the '/boats/bookings' route
             break;
         case `/users/${req.params?.userId}`:
             // /users/:userId -> "Your Profile" (To update the user personal information)

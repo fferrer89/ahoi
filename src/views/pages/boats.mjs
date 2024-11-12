@@ -19,7 +19,7 @@ export default function Boats(props, children) {
     return (
         html`<main id="boats">
                 <section>
-                    <search-ahoi max-years-ahead-reservation="4"
+                    <search-ahoi max-years-ahead-booking="4"
                                  location="${props?.searchValues?.location}"
                                  date="${props?.searchValues?.date}"
                                  boat-type="${props?.searchValues?.boatType}">
