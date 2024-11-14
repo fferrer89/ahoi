@@ -86,4 +86,41 @@ function convertDateFormat(inputDate) {
     return `${datePart} ${timeWithSeconds}`;
 }
 
-export { fileExtensionToMIMEType, createDirectoryIfNotExists, convertDateFormat, decodeBasicAuth};
+/**
+ * Example usage:
+ * const inputDate = '2024-11-13 14:30:00';
+ * const formattedDate = formatDate(inputDate);
+ * console.log(formattedDate); // Output: "13th November, Wednesday"
+ * @param inputDate
+ */
+function formatDate(inputDate) {
+    // Create a Date object from the input string
+    const date = new Date(inputDate);
+    // Get the day, month, and weekday using Intl.DateTimeFormat
+    const formatter = new Intl.DateTimeFormat('en-US', {
+        day: 'numeric',
+        month: 'short', // long, short
+        weekday: 'long'
+    });
+    const formattedDate = formatter.format(date); // Wednesday, November 13
+    // Extract the day and add the ordinal suffix
+    const dateFormatted = formattedDate.split(' ');
+    const weekday = dateFormatted[0].slice(0, -1); // Wednesday
+    const month = dateFormatted[1]; // November
+    const day = parseInt(dateFormatted[2]); // 13
+    const daySuffix = getOrdinalSuffix(day); // th
+    return { day, daySuffix, month, weekday };
+}
+function getOrdinalSuffix(day) {
+    if (day % 10 === 1 && day !== 11) {
+        return 'st';
+    } else if (day % 10 === 2 && day !== 12) {
+        return 'nd';
+    } else if (day % 10 === 3 && day !== 13) {
+        return 'rd';
+    } else {
+        return 'th';
+    }
+}
+
+export { fileExtensionToMIMEType, createDirectoryIfNotExists, convertDateFormat, decodeBasicAuth, formatDate};

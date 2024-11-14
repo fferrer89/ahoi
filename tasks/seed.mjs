@@ -10,6 +10,7 @@ import Address from "../src/models/address.mjs";
 import Boat from "../src/models/boat.mjs";
 import Image from "../src/models/image.mjs";
 import DB from "../config/db.mjs";
+import Booking from "../src/models/booking.mjs";
 
 
 data.forEach(user => {
@@ -20,9 +21,15 @@ data.forEach(user => {
         boat.address.id = Database.insert(address);
         const boatObj = new Boat(user.id, boat.address.id, boat?.type, boat?.pricePerHour, boat?.title, boat?.description);
         boat.id = Database.insert(boatObj);
-        boat?.images.forEach((image, index) => {
+        // const booking = new Booking(user.id, boat.id, checkIn, checkOut, hoursReserved, ownerAmount, serviceFee);
+        // bookingId = Database.insert(booking);
+        boat?.images?.forEach((image, index) => {
             const imageObj = new Image(boat.id, image?.pathName, image?.name, image?.type, image?.size, index, '/tasks/uploads/images');
             image.id = Database.insert(imageObj);
+        })
+        boat?.bookings?.forEach((booking) => {
+            const bookingObj = new Booking(booking?.renterId, boat.id, booking?.checkIn, booking?.checkOut, booking?.hoursReserved, booking?.ownerAmount, booking?.serviceFee);
+            booking.id = Database.insert(bookingObj);
         })
     })
 })

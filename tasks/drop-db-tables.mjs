@@ -14,5 +14,6 @@ dbTables?.forEach(table => {
 dBConnection?.exec(`DROP TABLE IF EXISTS addresses`);
 dBConnection?.exec(`DROP TABLE IF EXISTS boats`);
 dBConnection?.exec(`DROP TABLE IF EXISTS images`);
+dBConnection?.exec(`DROP TABLE IF EXISTS bookings`);
 dBConnection?.exec(`DROP TABLE IF EXISTS users`);
 DB.closePhysicalDBConnection();

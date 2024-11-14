@@ -228,7 +228,7 @@ body > header {
                     display: none;
                 }
                 > li > a {
-                    padding-inline: 1rem;
+                    padding-inline: 0.4rem;
                 }
             }
         }
@@ -239,6 +239,9 @@ body > header {
                 > li:has(a[href$='#find-your-crew']) {
                     display: none;
                 }
+                & a {
+                    padding-inline: 0.5rem;
+                }
             }
         }
     }
@@ -247,6 +250,9 @@ body > header {
         justify-content: space-between;
          > nav, > figure {
              margin-inline: 3px;
+             & a {
+                 padding-inline: 0.3rem;
+             }
          }
     }
 }
@@ -463,6 +469,70 @@ main#boat {
             margin-block: 1.8em;
         }
     }
+}
+#bookings {
+    margin: 100px auto 5px;
+    & h2, > section {
+        padding-inline: var(--padding-inline-layout);
+    }
+    & h2 {
+        color: var(--secondary-color);
+        font-size: clamp(1.3rem, 5vw, 1.8rem);
+        margin-block: 0.5em;
+    }
+     > section {
+         > article {
+             border-radius: 15px;
+             box-shadow: 1px 1px 7px 1px rgba(0, 0, 0, 0.2);
+             min-height: 350px;
+             width: clamp(330px, 60vw, 450px);
+             margin: 3rem auto;
+             padding: clamp(20px, 20vw, 25px) 0 clamp(20px, 20vw, 25px) clamp(20px, 20vw, 25px);
+             > header {
+                 display: flex;
+                 flex-direction: row;
+                 justify-content: space-between;
+                 align-items: center;
+                 margin-block-end: 1.5rem;
+                 > time {
+                     > strong {
+                         display: block;
+                         font-size: x-large;
+                     }
+                     > span {
+                         font-size: larger;
+                     }
+
+                 }
+                 > mark {
+                     font-size: x-large;
+                     background-color: rgba(0, 0, 0, 0.1);
+                     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+                     color: var(--filter-input-color);
+                     padding-block: 0.5rem;
+                     padding-inline: 1.5rem 1rem;
+                     border-top-left-radius: 20px;
+                     border-bottom-left-radius: 20px;
+                 }
+             }
+              > section {
+                  border-top: 1px solid rgba(128, 128, 128, 0.5);
+                  padding-block-start: 1.5rem;
+                  margin-inline-end: clamp(20px, 20vw, 25px);
+                  > dl {
+                      > dt {
+                          margin-block: 0.8rem 0.2rem;
+                          &::after{
+                              content: ':';
+                          }
+                      }
+                      > dd {
+                          display: inline-block;
+                      }
+                  }
+              }
+         }
+     }
 }
 section#how-it-works {
     padding-inline: var(--padding-inline-layout);

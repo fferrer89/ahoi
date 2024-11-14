@@ -67,11 +67,13 @@ export default function Layout(props, children) {
                                 <li>
                                     <a href="/myboats"${(title === 'Your Fleet') && 'aria-current="page"'}>Your Fleet</a>                 
                                 </li>
-<!--                                <li><a href="/boats/bookings" ${(title === 'Your Boat Bookings') && 'aria-current="page"'}>Your Boat Bookings</a></li>  -->
+<!--                                <li><a href="/myboats/bookings" ${(title === 'Your Boat Bookings') && 'aria-current="page"'}>Your Boat Bookings</a></li>  -->
                         `}
                         <!-- Links displayed only to logged boat renter users -->
                         ${user?.userType === ACCOUNT_TYPES.BOAT_RENTER && `
-<!--                                <li><a href="/users/bookings" ${(title === 'Your Bookings') && 'aria-current="page"'}>Your Bookings</a></li>-->
+                                <li>
+                                    <a href="/boats/bookings" ${(title === 'Your Bookings') && 'aria-current="page"'}>Your Bookings</a> 
+                                </li>
                         `}
                         <!-- Links displayed to all logged users (boat renter or boat owners) -->
                         ${user?.id ? 

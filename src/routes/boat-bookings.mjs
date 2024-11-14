@@ -85,10 +85,18 @@ export default async function boatBookingsRoute(req, res) {
             // TODO: Input validation checks (dates should be in the following format (2024-11-10T06:26)
             if (contentType?.includes("application/json") || contentType?.includes("application/x-www-form-urlencoded")) {
                 // TODO: Validate that boat does not already have a booking between checkIn and checkOut
+                // Calculate booking price
+                const checkInDate = new Date(req?.body?.checkIn);
+                const checkOutDate = new Date(req?.body?.checkOut);
+                const millisecondsDifference = (checkOutDate - checkInDate);
+                const hoursReserved = millisecondsDifference / (1000 * 60 * 60);
+                // TODO: validation on dates submitted
+                const ownerAmount = boatData.pricePerHour * hoursReserved;
+                const serviceFee = 5;
                 // Create booking
-                checkIn = convertDateFormat(req?.body?.checkIn);
-                checkOut = convertDateFormat(req?.body?.checkOut);
-                const booking = new Booking(req?.session?.user?.id, boatId, checkIn, checkOut);
+                checkIn = convertDateFormat(req?.body?.checkIn); // 2024-11-13T13:00 -> 2024-11-13 13:00:00
+                checkOut = convertDateFormat(req?.body?.checkOut); // 2024-11-13T14:00 -> 2024-11-13 14:00:00
+                const booking = new Booking(req?.session?.user?.id, boatId, checkIn, checkOut, hoursReserved, ownerAmount, serviceFee);
                 bookingId = Database.insert(booking);
             } else {
                 res.writeHead(415, {'Accept-Post': ['application/json; charset=utf-8', 'application/x-www-form-urlencoded', 'multipart/form-data']});
@@ -99,9 +107,9 @@ export default async function boatBookingsRoute(req, res) {
                 acceptContentTypePost?.includes("text/*") ||
                 acceptContentTypePost?.includes("text/html")) {
                 // Default response body type globally and for 'html' types
-                res.writeHead(201, { 'Content-Type': 'text/plain; charset=UTF-8' }); // FIXME: text/html
-                // TODO: Redirect to bookings page
-                return res.end(`bookingId: ${bookingId}`);
+                // Redirect to bookings page
+                res.writeHead(303, {'Content-Type': 'text/html', 'Location': '/boats/bookings'});
+                return res.end(); // 303 (See Other)
             } else if (acceptContentTypePost?.includes("application/*") ||
                 acceptContentTypePost?.includes("application/json")) {
                 res.writeHead(201, {'Content-Type': 'application/json; charset=UTF-8'});

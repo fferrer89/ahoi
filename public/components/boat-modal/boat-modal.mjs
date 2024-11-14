@@ -4,8 +4,7 @@ class BoatModal extends HTMLElement {
     static {
         window.customElements.define('boat-modal', this);
     }
-    // static observedAttributes = [];
-
+    // static get observedAttributes() {}
     #dialog;
     #form;
     /**

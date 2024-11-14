@@ -2,7 +2,9 @@ class Search extends HTMLElement {
     static {
         window.customElements.define('search-ahoi', this);
     }
-    static observedAttributes = ['max-years-ahead-booking', 'location', 'date', 'boat-type', 'required-search-inputs'];
+    static get observedAttributes() {
+        return ['max-years-ahead-booking', 'location', 'date', 'boat-type', 'required-search-inputs'];
+    }
 
     static #getCurrentDate(yearIncrementer=0) {
         const today = new Date();
@@ -162,13 +164,23 @@ class Search extends HTMLElement {
         this.#dateAttr.min = Search.#getCurrentDate();
         this.#dateAttr.max = Search.#getCurrentDate(this.maxYearsAheadBooking);
         // -------------------------------------- Event Listeners ---------------------------------------
-        this.#dateAttr.addEventListener('touchstart', this.#firstClickOnDateEventHandler.bind(this));
+        this.#dateAttr.addEventListener('touchstart', this.#firstClickOnDateEventHandler.bind(this), {once: true});
+        this.#dateAttr.addEventListener('click', this.#firstClickOnDateEventHandler.bind(this), {once: true});
         this.#dateAttr.addEventListener('change', this.#changeValueOfDateEventHandler.bind(this));
         this.#boatTypeAttr.addEventListener('change', this.#firstChangeValueOnBoatTypeEventHandler.bind(this), {once: true});
         this.#boatTypeAttr.addEventListener('touchstart', (event) => {
             let boatTypeOption = this.#boatTypeAttr.options[0];
-            this.#boatTypeAttr.removeChild(boatTypeOption);
-            this.#boatTypeAttr.setAttribute('aria-visited', 'true');
+            if (boatTypeOption.value === '') {
+                this.#boatTypeAttr.removeChild(boatTypeOption);
+                this.#boatTypeAttr.setAttribute('aria-visited', 'true');
+            }
+        }, {once: true});
+        this.#boatTypeAttr.addEventListener('click', (event) => {
+            let boatTypeOption = this.#boatTypeAttr.options[0];
+            if (boatTypeOption.value === '') {
+                this.#boatTypeAttr.removeChild(boatTypeOption);
+                this.#boatTypeAttr.setAttribute('aria-visited', 'true');
+            }
         }, {once: true});
 
     }

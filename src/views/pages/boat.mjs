@@ -49,7 +49,8 @@ export default function Boat(props, children) {
                         </section>
                         <booking-card price-per-hour="${props?.boatData?.pricePerHour}" 
                                       service-fee="5"
-                                      boat-id="${props?.boatData?.boatId}">
+                                      boat-id="${props?.boatData?.boatId}"
+                                      user-id="${props?.user?.id}">
                             <h4 slot="price-per-hour"><strong>$${props?.boatData?.pricePerHour}</strong><sub>/hour</sub></h4>
 <!--                            <input slot="check-in" id="check-in" name="checkIn" type="datetime-local" step="3600">-->
                             ${bookingCardTemplate}

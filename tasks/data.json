@@ -1,5 +1,17 @@
 [
   {
+    "email": "joseph@hotmail.com",
+    "password": "1234abcd?",
+    "userType": "Boat Renter",
+    "username": "joseph"
+  },
+  {
+    "email": "philip@me.com",
+    "password": "1234abcd?",
+    "userType": "Boat Renter",
+    "username": "Phil"
+  },
+  {
     "email": "john@gmail.com",
     "password": "1234abcd?",
     "userType": "Boat Owner",
@@ -47,6 +59,32 @@
             "name": "seed_john_boat1_photo5",
             "type": "image/jpeg",
             "size": 3741075
+          }
+        ],
+        "bookings": [
+          {
+            "renterId": 1,
+            "checkIn": "2024-11-13 08:30:00",
+            "checkOut": "2024-11-13 09:30:00",
+            "hoursReserved": 1,
+            "ownerAmount": 155,
+            "serviceFee": 5
+          },
+          {
+            "renterId": 1,
+            "checkIn": "2024-11-13 10:00:00",
+            "checkOut": "2024-11-13 11:00:00",
+            "hoursReserved": 1,
+            "ownerAmount": 155,
+            "serviceFee": 5
+          },
+          {
+            "renterId": 1,
+            "checkIn": "2024-11-13 13:00:00",
+            "checkOut": "2024-11-13 17:30:00",
+            "hoursReserved": 4.5,
+            "ownerAmount": 697.5,
+            "serviceFee": 5
           }
         ]
       },
@@ -137,6 +175,24 @@
             "name": "seed_john_boat3_photo4",
             "type": "image/jpeg",
             "size": 1799358
+          }
+        ],
+        "bookings": [
+          {
+            "renterId": 1,
+            "checkIn": "2024-11-14 07:00:00",
+            "checkOut": "2024-11-14 11:30:00",
+            "hoursReserved": 4.5,
+            "ownerAmount": 2255,
+            "serviceFee": 5
+          },
+          {
+            "renterId": 2,
+            "checkIn": "2024-11-27 13:00:00",
+            "checkOut": "2024-11-27 17:00:00",
+            "hoursReserved": 4,
+            "ownerAmount": 2005,
+            "serviceFee": 5
           }
         ]
       },
@@ -332,17 +388,5 @@
     "password": "1234abcd?",
     "userType": "Boat Owner",
     "username": "Mary"
-  },
-  {
-    "email": "joseph@hotmail.com",
-    "password": "1234abcd?",
-    "userType": "Boat Renter",
-    "username": "joseph"
-  },
-  {
-    "email": "philip@me.com",
-    "password": "1234abcd?",
-    "userType": "Boat Renter",
-    "username": "Phil"
   }
 ]

@@ -10,6 +10,7 @@ import logoutRoute from "./logout.mjs";
 import notFoundController from "../controllers/notfound.mjs";
 import boatRoute from "./boat.mjs";
 import boatBookingsRoute from "./boat-bookings.mjs";
+import bookingsRoute from "./bookings.mjs";
 
 /**
  * Route handling based on the pathname
@@ -46,7 +47,7 @@ export default async function routes(req, res) {
         case '/boats/bookings': //  Your boat bookings (Boat Renter)
             // Protected resource for Boat Renters. See all/upcoming bookings that this renter has made
             // POST to post a booking for this boat
-            // bookingsRoute(req, res);
+            bookingsRoute(req, res);
             break;
         case '/boats/bookings/:bookingId': //  Your boat bookings (Boat Renter)
             // Protected resource for Boat Renters. See all/upcoming bookings that this renter has made

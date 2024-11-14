@@ -2,7 +2,9 @@ export default class ImageGallery extends HTMLElement {
     static {
         window.customElements.define('image-gallery', this);
     }
-    static observedAttributes =  ['num-imgs'];
+    static get observedAttributes() {
+        return ['num-imgs'];
+    }
 
     #windowWidth = window.innerWidth;
     #currentImageIndex = 0;

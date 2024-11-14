@@ -3,7 +3,7 @@ class BookingCard extends HTMLElement {
         window.customElements.define('booking-card', this);
     }
     static get observedAttributes() {
-        return ['price-per-hour', 'service-fee', 'boat-id'];
+        return ['price-per-hour', 'service-fee', 'boat-id', 'user-id'];
     }
     #form;
     #checkIn;
@@ -49,6 +49,16 @@ class BookingCard extends HTMLElement {
             this.setAttribute('boat-id', value);
         }
     }
+    get userId() {
+        return this.getAttribute('user-id');
+    }
+    set userId(value) {
+        if (value === null || value === undefined || value?.trim() === '')  {
+            this.removeAttribute('user-id');
+        } else {
+            this.setAttribute('user-id', value);
+        }
+    }
     connectedCallback() {
         this.#form = this.shadowRoot.querySelector('form[method="post"]');
         this.#checkIn = this.shadowRoot.querySelector('input[type="datetime-local"]#check-in');
@@ -65,15 +75,17 @@ class BookingCard extends HTMLElement {
         }
     }
     #submitBookingEventHandler(event) {
-        // event.preventDefault();
+        if (!this.userId) {
+            this.#submitBtn.setCustomValidity('Log in as a Boat Renter to make a reservation');
+            this.#submitBtn.reportValidity();
+            event.preventDefault();
+        }
         // Update the action route endpoint
         this.#form.action = `/boats/${this.boatId}/bookings`;
-        console.log('Booking Submitted!');
         // TODO: Send email with reservation details to renter and owner (and admin member?)
     }
     #changeCheckInDateEventHandler(event) {
         this.#checkIn?.reportValidity();
-        console.log(this.#checkIn?.validity?.stepMismatch);
         if (this.#checkIn?.validity?.valid) {
             const startTimeNew = new Date(this.#checkIn.valueAsNumber + (1000 * 60 * 60));
             this.#checkOut.min = startTimeNew.toISOString().slice(0, 16);
@@ -183,6 +195,9 @@ class BookingCard extends HTMLElement {
                 break;
             case 'boatId':
                 this.boatId = newValue;
+                break;
+            case 'userId':
+                this.userId = newValue;
                 break;
             default:
                 break;
