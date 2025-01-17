@@ -85,15 +85,27 @@ class BookingCard extends HTMLElement {
         // TODO: Send email with reservation details to renter and owner (and admin member?)
     }
     #changeCheckInDateEventHandler(event) {
-        this.#checkIn?.reportValidity();
         if (this.#checkIn?.validity?.valid) {
             const startTimeNew = new Date(this.#checkIn.valueAsNumber + (1000 * 60 * 60));
             this.#checkOut.min = startTimeNew.toISOString().slice(0, 16);
             this.#checkOut.value = startTimeNew.toISOString().slice(0, 16);
+        } else {
+            if (this.#checkIn?.validity?.stepMismatch && this.#isMobile()) {
+                this.#checkIn.setCustomValidity('Check-in can only contain increments of 30 minutes');
+            } else {
+                this.#checkIn.setCustomValidity('');
+            }
+            this.#checkIn?.reportValidity();
         }
+
         this.#calculateBookingPriceEventHandler(event);
     }
     #changeCheckOutDateEventHandler(event) {
+        if (this.#checkOut?.validity?.stepMismatch  && this.#isMobile()) {
+            this.#checkOut.setCustomValidity('Check-out can only contain increments of 30 minutes');
+        } else {
+            this.#checkOut.setCustomValidity('');
+        }
         this.#checkOut?.reportValidity();
         this.#calculateBookingPriceEventHandler(event);
     }
@@ -176,6 +188,11 @@ class BookingCard extends HTMLElement {
         priceTotal.appendChild(totalPriceElement);
 
         priceSummary.hidden = false;
+    }
+
+    #isMobile() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        return /mobile|tablet|ipad|android|iphone|windows phone/i.test(userAgent);
     }
     disconnectedCallback() {
         this.removeEventListener('submit', this.#submitBookingEventHandler);

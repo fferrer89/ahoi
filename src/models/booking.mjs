@@ -11,6 +11,29 @@ export default class Booking {
     // checkOut →  2024-11-12 13:00:00
     // createdAt → 1727270175
     // createdAtStr → 2024-09-25 13:16:15
+    /**
+     * Date Functions/Manipulations in SQLite
+     *
+     * SELECT createdAt, createdAtStr, date(createdAtStr), time(createdAtStr), datetime(createdAtStr), unixepoch(createdAtStr), timediff(checkOut, checkIn), substr(timediff(checkOut,checkIn), 13, 5), strftime('%H', substr(timediff(checkOut,checkIn), 13, 5))  FROM bookings;
+     *
+     * createdAt → 1731552179
+     * createdAtStr → 2024-11-14 02:42:59
+     * datetime(createdAtStr) → 2024-11-14 02:42:59
+     * date(createdAtStr) → 2024-11-14
+     * time(createdAtStr) →  02:42:59
+     * unixepoch(createdAtStr) →  1731552179 === (STRFTIME('%s', 'now')) === createdAt
+     *
+     * checkIn → 2024-11-13 13:00:00
+     * checkOut → 2024-11-13 17:30:00
+     * timediff(checkOut, checkIn) → +0000-00-00 04:30:00.000
+     * substr(timediff(checkOut, checkIn), 13, 5) → 04:30
+     * strftime('%H', substr(timediff(checkOut,checkIn), 13, 5)) → 04
+     * strftime('%m/%d/%Y', checkOut) → 11/13/2024
+     * strftime('%H', checkOut) – strftime('%H', checkIn) → 4
+     *
+     * CAST(unixepoch(checkOut) – unixepoch(checkIn) AS REAL) / 3600 → 4.5
+     * CAST(STRFTIME('%s', checkOut) - STRFTIME('%s', checkIn) AS REAL) / 3600 → 4.5
+     */
     static {
         Booking.db.exec(`
         CREATE TABLE IF NOT EXISTS ${Booking.#dbTableName} (
@@ -20,6 +43,8 @@ export default class Booking {
             checkIn TEXT NOT NULL,
             checkOut TEXT NOT NULL,
             hoursReserved REAL NOT NULL CHECK(hoursReserved >= 0),
+            hoursReservedVirtual REAL NOT NULL GENERATED ALWAYS AS (CAST(unixepoch(checkOut) - unixepoch(checkIn) AS REAL) / 3600) VIRTUAL CHECK(hoursReserved >= 0),
+            hoursReservedStored REAL NOT NULL GENERATED ALWAYS AS (CAST(unixepoch(checkOut) - unixepoch(checkIn) AS REAL) / 3600) STORED CHECK(hoursReserved >= 0),
             ownerAmount REAL NOT NULL CHECK(ownerAmount >= 0),
             serviceFee REAL DEFAULT 5 CHECK(serviceFee >= 0),
             createdAt INTEGER DEFAULT (STRFTIME('%s', 'now')) NOT NULL,

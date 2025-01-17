@@ -227,20 +227,18 @@ body > header {
                 > li:has(a[href$='#how-it-works']) {
                     display: none;
                 }
-                > li > a {
-                    padding-inline: 0.4rem;
-                }
             }
         }
     }
-    @container page-header (max-width: 650px) {
+    @container page-header (max-width: 680px) {
         > nav {
+            margin-inline: 3px;
             > ul {
                 > li:has(a[href$='#find-your-crew']) {
                     display: none;
                 }
-                & a {
-                    padding-inline: 0.5rem;
+                > li > a {
+                    padding-inline: 0.8rem;
                 }
             }
         }
@@ -250,10 +248,12 @@ body > header {
         justify-content: space-between;
          > nav, > figure {
              margin-inline: 3px;
-             & a {
-                 padding-inline: 0.3rem;
-             }
          }
+        > nav > ul > li {
+            & a {
+                padding-inline: 0.5rem;
+            }
+        }
     }
 }
 

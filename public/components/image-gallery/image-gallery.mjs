@@ -41,10 +41,8 @@ export default class ImageGallery extends HTMLElement {
     set numImgs(value) {
         if (value === null || value === undefined || value?.trim() === '')  {
             this.removeAttribute('num-imgs');
-            this.#imgCarousel.removeAttribute('data-num-imgs');
         } else {
             this.setAttribute('num-imgs', value);
-            this.#imgCarousel.setAttribute('data-num-imgs', value);
         }
     }
 
@@ -172,7 +170,8 @@ export default class ImageGallery extends HTMLElement {
         // Observing changes to attributes
         switch (name) {
             case 'num-imgs':
-                this.numImgs = newValue;
+                this.#imgCarousel = this.shadowRoot.querySelector('figure#image-carousel');
+                this.#imgCarousel.setAttribute('data-num-imgs', newValue);
                 break;
             default:
                 break;
