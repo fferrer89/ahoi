@@ -22,17 +22,18 @@ export default class Database {
      *    const updateStmt = db.prepare('UPDATE your_table SET column1 = ?, column2 = ? WHERE id = ?');
      *    updateStmt.run(new_value1, new_value2, id_of_record_to_update);
      * @param data
+     * @param id
      * @return {StatementResultingChanges}
      */
-    static updateAll(data) {
-        const dbTable = data.dbTableName;
-        const fieldNames = data.dbMutableFieldNames;
-        const fieldValues = data.dbMutableFieldValues;
-
+    static updateAll(data, id) {
+        const dbTable = data.dbTableName; // e.g: boats
+        const fieldNames = data.dbMutableFieldNames; // e.g: ['ownerId', 'addressId', 'type', 'pricePerHour', 'title', 'description']
+        const fieldValues = data.dbMutableFieldValues; // e.g: [1123, 453, "renter", 55, "Magificent", "Best boat ever!!"]
         const update = data.db.prepare(
-            `UPDATE ${dbTable} SET ${fieldNames.map(val => `${val}=?`).join()} WHERE id = ?`
+            `UPDATE ${dbTable} SET ${fieldNames.map(val => `${val}=?`).join(',')} WHERE id = ${id}`
         );
-        const record = update.run(...fieldValues.push(data.id));
+        // const record = update.run(...fieldValues.push(data.id));
+        const record = update.run(...fieldValues);
         return record;
     }
     static update(data) {

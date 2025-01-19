@@ -6,6 +6,7 @@ import {default as BoatView} from "../views/pages/boat.mjs";
 import Layout from "../views/layout.mjs";
 import notFoundController from "../controllers/notfound.mjs";
 
+
 /**
  * Route handler for the boat page
  *
@@ -14,7 +15,7 @@ import notFoundController from "../controllers/notfound.mjs";
  */
 export default async function boatRoute(req, res) {
     let boatId = req.params?.boatId;
-    let boatData;
+    let boatData, imagePath, imageFullPath;
     try {
         boatData = Boat.getBoatWithImageAndAddressFromDb(boatId);
         if (!boatData.boatId) {

@@ -80,7 +80,7 @@ export default class Boat { // Class that provides methods for creating and retr
                         ${this.dbTableName}.type as boatType, ${this.dbTableName}.pricePerHour, 
                         ${this.dbTableName}.title, ${User.dbTableName}.username,
                         ${Address.dbTableName}.city, ${Address.dbTableName}.state,
-                        json_group_array(json_object('id', ${Image.dbTableName}.id, 'directory', ${Image.dbTableName}.directory)) AS images
+                        json_group_array(json_object('id', ${Image.dbTableName}.id, 'directory', ${Image.dbTableName}.directory, 'imageType', ${Image.dbTableName}.type, 'pathName', ${Image.dbTableName}.pathName)) AS images
                  FROM ${this.dbTableName} 
                     INNER JOIN ${Address.dbTableName} on ${Address.dbTableName}.id = ${this.dbTableName}.addressId
                     INNER JOIN ${Image.dbTableName} on ${Image.dbTableName}.boatId = ${this.dbTableName}.id
@@ -239,6 +239,12 @@ export default class Boat { // Class that provides methods for creating and retr
     get dbImmutableFieldValues() {
         return [this.ownerId, this.addressId, this.type, this.pricePerHour, this.title, this.description];
     }
+    get dbMutableFieldNames() {
+        return ['pricePerHour', 'title', 'description'];
+    }
+    get dbMutableFieldValues() {
+        return [this.pricePerHour, this.title, this.description];
+    }
     get id() {
         return this.#id;
     }
@@ -259,5 +265,8 @@ export default class Boat { // Class that provides methods for creating and retr
     }
     get description() {
         return this.#description;
+    }
+    set description(description) {
+        this.#description = description;
     }
 }

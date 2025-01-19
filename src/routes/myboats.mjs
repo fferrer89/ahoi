@@ -9,7 +9,7 @@ import Layout from "../views/layout.mjs";
 import fs from "node:fs/promises";
 import {ACCOUNT_TYPES} from "../utils/constants.mjs";
 import BoatCard from "../views/boat-card.mjs";
-
+import {GoogleGenerativeAI} from "@google/generative-ai";
 /**
  * Route handler for the home page
  *
@@ -17,6 +17,15 @@ import BoatCard from "../views/boat-card.mjs";
  * @param res
  */
 export default async function myBoatsRoute(req, res) {
+    // Converts local file information to a GoogleGenerativeAI.Part object.
+    function fileToGenerativePart(path, mimeType) {
+        return {
+            inlineData: {
+                data: Buffer.from(fsSync.readFileSync(path)).toString("base64"),
+                mimeType
+            },
+        };
+    }
     switch (req.method) {
         case 'OPTIONS':
             /*
@@ -169,15 +178,36 @@ export default async function myBoatsRoute(req, res) {
                 const boat = new Boat(req.session.user.id, addressId, req.body?.type, req.body?.pricePerHour, req.body?.title, null);
                 boatId = Database.insert(boat);
                 // Create Image/s (linked to the boat)
+                // Turn images to Part objects
+                console.log(process.env.NODE_APP_ROOT_DIR); // /Users/kikoferrer/Documents/Apps/web-applications/ahoi
+                // `${process.env.NODE_APP_ROOT_DIR}${image.directory}/${image.pathName}`
+                let imageParts = [];
                 if (req.body?.boatImages instanceof Array) {
                     images = req.body?.boatImages?.map((image, index) => {
                         const img = new Image(boatId, image?.pathName, image?.name, image?.type, image?.size, index);
+                        const filePart1 = fileToGenerativePart(`${process.env.NODE_APP_ROOT_DIR}${img.directory}/${img.pathName}`, img.type)
+                        imageParts.push(filePart1);
                         return {id: Database.insert(img), directory: img.directory};
                     });
                 } else {
                     const img = new Image(boatId, req.body?.boatImages?.pathName, req.body?.boatImages?.name, req.body?.boatImages?.type, req.body?.boatImages?.size, 0);
+                    const filePart1 = fileToGenerativePart(`${process.env.NODE_APP_ROOT_DIR}${img.directory}/${img.pathName}`, img.type)
+                    imageParts.push(filePart1);
                      images = [{id: Database.insert(img), directory: img.directory}];
                 }
+                // Use AI to update the boat description field with the given images and boat information.
+                const genAI = new GoogleGenerativeAI(process.env.API_KEY_GEMINI_AI);
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                const prompt = `Generate a boat description of about 500 characters based on the following boat characteristics and images:
+                    - Boat Title: ${req.body?.title}
+                    - Boat Address: ${req.body?.city}, ${req.body?.state}
+                    - Boat Type: ${req.body?.type}
+                    - Price per Hour: $ ${req.body?.pricePerHour}
+                `;
+                const result = await model.generateContent([prompt, ...imageParts]);
+                boat.description = result.response.text();
+
+                Database.updateAll(boat, boatId);
             } else {
                 res.writeHead(415, {'Accept-Post': ['application/json; charset=utf-8', 'application/x-www-form-urlencoded', 'multipart/form-data']});
                 return res.end(); // 415 Unsupported Media Type

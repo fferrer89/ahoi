@@ -68,3 +68,5 @@ build/*
 
 build/boats/*
 !build/boats/.gitkeep
+
+package-json.lock

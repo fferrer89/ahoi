@@ -13,7 +13,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "homepage": "https://ahoi.app#readme",
-  "keywords": ["node.js", "sqlite", "web components", "aws ec2", "vanilla js", "vanilla css"],
+  "keywords": [
+    "node.js",
+    "sqlite",
+    "web components",
+    "aws ec2",
+    "vanilla js",
+    "vanilla css"
+  ],
   "author": {
     "name": "Kiko Ferrer",
     "email": "ffcatala@gmail.com",
@@ -27,9 +34,11 @@
     }
   ],
   "license": "MIT",
-  "os": ["Ubuntu", "linux"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fferrer89/ahoi.git"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
   }
 }
