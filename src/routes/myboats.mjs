@@ -197,14 +197,34 @@ export default async function myBoatsRoute(req, res) {
                 }
                 // Use AI to update the boat description field with the given images and boat information.
                 const genAI = new GoogleGenerativeAI(process.env.API_KEY_GEMINI_AI);
-                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-                const prompt = `Generate a boat description of about 500 characters based on the following boat characteristics and images:
+                const model = genAI.getGenerativeModel({
+                    model: "gemini-1.5-flash",
+                    systemInstruction: "Generated responses must be more than 400 and less than 800 characters long"
+                });
+                const prompt = `Generate a boat description based on the following boat characteristics and images:
                     - Boat Title: ${req.body?.title}
                     - Boat Address: ${req.body?.city}, ${req.body?.state}
                     - Boat Type: ${req.body?.type}
                     - Price per Hour: $ ${req.body?.pricePerHour}
                 `;
-                const result = await model.generateContent([prompt, ...imageParts]);
+                const result = await model.generateContent({
+                    contents: [
+                        {
+                            role: 'user',
+                            parts: [
+                                {
+                                    text: prompt,
+                                },
+                                ...imageParts,
+                            ]
+                        }
+                    ],
+                    generationConfig: {
+                        responseMimeType: "text/plain",
+                        temperature: 1 // [0.0, 2.0] -> Higher temperature means more diverse and creative responses. Lower temperature means more factural and logical answers.
+                    }
+                });
+                // const result = await model.generateContent([prompt, ...imageParts]);
                 boat.description = result.response.text();
 
                 Database.updateAll(boat, boatId);

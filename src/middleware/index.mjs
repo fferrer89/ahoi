@@ -53,9 +53,9 @@ export default function middlewares(req, res) {
     //         id: 1, username: 'joseph', userType: 'Boat Renter'
     //     }
     // };
-    // req.session = {
-    //     user: {
-    //         id: 3, username: 'John Inc & Boats', userType: 'Boat Owner'
-    //     }
-    // };
+    req.session = {
+        user: {
+            id: 3, username: 'John Inc & Boats', userType: 'Boat Owner'
+        }
+    };
 }
