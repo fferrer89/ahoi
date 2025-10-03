@@ -21,7 +21,7 @@ import StaticPageBuilder from "./static/static-pages-builder.mjs";
 
 // const COMM_PROTOCOL = 'https';
 const COMM_PROTOCOL = 'http'; // TODO: delete
-const HOSTNAME = process.env.HOSTNAME ? process.env.HOSTNAME : 'localhost';
+const HOSTNAME = process.env.HOSTNAME ?? 'localhost';
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 process.env.NODE_APP_ROOT_DIR = path.dirname(import.meta.dirname);
 // console.log(process.env.NODE_APP_ROOT_DIR) // /Users/kikoferrer/Documents/Apps/web-applications/ahoi
